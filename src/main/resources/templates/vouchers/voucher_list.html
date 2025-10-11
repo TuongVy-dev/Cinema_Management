@@ -56,17 +56,17 @@
                             <td th:text="${vouchers.getVoucherType()}"></td>
 
                             <td>
-                                <a class="btn btn-sm btn-outline-edit btn-info edit-voucher-btn">
+                                <a class="btn btn-outline-edit btn-info">
                                     <i class="fa fa-edit"></i> Edit
                                 </a>
 
-                                <button class="btn btn-sm btn-danger ms-2 delete-voucher-btn"
+                                <button class="btn btn-danger delete-voucher-btn btn-compact"
                                         data-bs-toggle="modal" data-bs-target="#deleteVoucherModal" data-id="01"
                                         data-code="WELCOME10">
                                     <i class="fa fa-trash"></i> Delete
                                 </button>
                                 <a th:href="@{/voucher/detail/{id} (id= ${vouchers.getVoucherId()})}"
-                                   class="btn btn-sm btn-light delete-voucher-btn">View Details</a>
+                                   class="btn btn-light btn-compact">View Details</a>
                             </td>
                         </tr>
                         </tbody>
