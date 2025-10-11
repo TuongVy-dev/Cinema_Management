@@ -1,10 +1,167 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" th:fragment="layout(title, content)">
+<head th:replace="~{fragment/frag :: head}">
 </head>
 <body>
+<div class="container-fluid position-relative d-flex p-0">
+    <div th:replace="~{fragment/frag :: sidebar}"></div>
 
+    <!-- Content -->
+    <div class="content">
+
+        <div th:replace="~{fragment/frag :: navbar}"></div>
+
+        <!-- Content slot - SAFE -->
+        <div th:if="${content != null}">
+            <th:block th:replace="${content}"></th:block>
+        </div>
+
+
+        <!-- FORM -->
+        <div class="container-fluid pt-4 px-4">
+            <div class="bg-secondary rounded p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h6 class="mb-0">Create New Voucher</h6>
+                    <a class="btn btn-light" href="/voucher">Back</a>
+                </div>
+
+                <form action="/voucher/create" method="post" id="voucherForm">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="voucherType" class="form-label">Voucher Type *</label>
+                            <select id="voucherType" name="voucherType" class="form-select bg-dark text-white" required>
+                                <option value="">-- Select Type --</option>
+                                <option value="code">Code</option>
+                                <option value="date">Date</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="discountType" class="form-label">Discount Type *</label>
+                            <select id="discountType" name="discountType" class="form-select bg-dark text-white" required>
+                                <option value="">-- Select Type --</option>
+                                <option value="percentage">Percentage (%)</option>
+                                <option value="amount">Fixed Amount (VND)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="voucherId" class="form-label">Voucher ID (Auto)</label>
+                        <input type="text" id="voucherId" name="voucherId" class="form-control bg-dark text-white" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="voucherName" class="form-label">Voucher Name *</label>
+                        <input type="text" id="voucherName" name="voucherName" class="form-control bg-dark text-white" required>
+                    </div>
+
+                    <!-- Code fields -->
+                    <div class="code-fields" style="display:none;">
+                        <div class="mb-3">
+                            <label for="code" class="form-label">Voucher Code *</label>
+                            <input type="text" id="code" name="code" class="form-control bg-dark text-white">
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="usageLimit" class="form-label">Usage Limit</label>
+                                <input type="number" id="usageLimit" name="usageLimit" class="form-control bg-dark text-white" min="0" placeholder="0 = unlimited">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="usedCount" class="form-label">Used Count</label>
+                                <input type="number" id="usedCount" name="usedCount" class="form-control bg-dark text-white" value="0" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Date fields -->
+                    <div class="date-fields" style="display:none;">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="startDate" class="form-label">Start Date *</label>
+                                <input type="date" id="startDate" name="startDate" class="form-control bg-dark text-white">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="endDate" class="form-label">End Date *</label>
+                                <input type="date" id="endDate" name="endDate" class="form-control bg-dark text-white">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="discountValue" class="form-label">Discount Value *</label>
+                        <input type="number" id="discountValue" name="discountValue" class="form-control bg-dark text-white" required min="1">
+                    </div>
+
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary">Create Voucher</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="container-fluid pt-4 px-4">
+            <div class="bg-secondary rounded-top p-4 text-center">
+                &copy; 2025 Cinema Management System
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const voucherType = document.getElementById('voucherType');
+    const discountType = document.getElementById('discountType');
+    const voucherId = document.getElementById('voucherId');
+    const codeFields = document.querySelector('.code-fields');
+    const dateFields = document.querySelector('.date-fields');
+
+    function toggleFields() {
+        if (voucherType.value === 'code') {
+            codeFields.style.display = 'block';
+            dateFields.style.display = 'none';
+        } else if (voucherType.value === 'date') {
+            codeFields.style.display = 'none';
+            dateFields.style.display = 'block';
+        } else {
+            codeFields.style.display = 'none';
+            dateFields.style.display = 'none';
+        }
+        generateVoucherId();
+    }
+
+    function generateVoucherId() {
+        const type = voucherType.value;
+        const discount = discountType.value;
+        let prefix = '';
+
+        if (type === 'date' && discount === 'percentage') prefix = 'VC10';
+        else if (type === 'date' && discount === 'amount') prefix = 'VC11';
+        else if (type === 'code' && discount === 'percentage') prefix = 'VC20';
+        else if (type === 'code' && discount === 'amount') prefix = 'VC21';
+
+        if (prefix) {
+            const randomNumber = Math.floor(1000 + Math.random() * 9000);
+            voucherId.value = prefix + randomNumber;
+        } else {
+            voucherId.value = '';
+        }
+    }
+
+    voucherType.addEventListener('change', toggleFields);
+    discountType.addEventListener('change', generateVoucherId);
+</script>
+
+<script src="/assets/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/js/dashboard.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/assets/lib/chart/chart.min.js}"></script>
+<script th:src="@{/assets/lib/easing/easing.min.js}"></script>
+<script th:src="@{/assets/lib/waypoints/waypoints.min.js}"></script>
+<script th:src="@{/assets/lib/owlcarousel/owl.carousel.min.js}"></script>
+<script th:src="@{/assets/lib/tempusdominus/js/moment.min.js}"></script>
+<script th:src="@{/assets/lib/tempusdominus/js/moment-timezone.min.js}"></script>
+<script th:src="@{/assets/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js}"></script>
+<script th:src="@{/assets/js/main.js}"></script>
 </body>
 </html>

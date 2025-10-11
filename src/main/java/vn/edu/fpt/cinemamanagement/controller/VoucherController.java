@@ -9,7 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 import vn.edu.fpt.cinemamanagement.service.VoucherService;
 
 @Controller
-@RequestMapping("/voucher")
+@RequestMapping("/vouchers")
 public class VoucherController {
 
     private VoucherService voucherService;
@@ -23,6 +23,11 @@ public class VoucherController {
     voucherService.getAllVouchers();
     model.addAttribute("vouchersList", voucherService.getAllVouchers());
     return "vouchers/voucher_list";
+    }
+
+    @GetMapping("/new")
+    public String newVoucher(Model model) {
+        return  "vouchers/voucher_create";
     }
 
     @GetMapping("/detail/{id}")
