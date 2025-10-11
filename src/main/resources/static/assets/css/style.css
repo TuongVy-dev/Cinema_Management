@@ -2398,6 +2398,9 @@ select:focus {
     gap: 0.5rem;
     flex-wrap: wrap;
 }
+h5{
+    color: #8d0d0d;
+}
 
 .tag {
     padding: 0.25rem 0.5rem;

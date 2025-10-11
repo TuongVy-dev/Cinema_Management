@@ -18,8 +18,8 @@ public class VoucherService {
    public  List<Voucher> findAllVoucher(){
         return voucherRepo.findAll();
    }
-     public Voucher findVoucherByID(String voucherId) {
-        return voucherRepo.findVoucherByID(voucherId);
-     }
+    public Voucher findVoucherById(String ID){
+        return voucherRepo.findById(ID).orElse(null);
+    }
 
 }

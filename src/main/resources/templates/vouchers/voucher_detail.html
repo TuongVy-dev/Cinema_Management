@@ -22,12 +22,25 @@
                 </div>
 
                 <!-- Form CODE -->
-                <p th:text="voucher."></p>
+                <h5 th:text="${voucher.getVoucherName()}"></h5>
+                <strong>Voucher ID:</strong> <span th:text=" ${voucher.getVoucherId()}"></span>
+                <br>
+                <strong>Voucher code:</strong> <span th:text=" ${voucher.getCode()}"></span>
+                <br>
+                <strong>Discount type:</strong> <span th:text=" ${voucher.getDiscountType()}"></span>
+                <br>
+                <strong>Voucher value:</strong> <span th:text=" ${voucher.getDiscountType().equalsIgnoreCase('amount') ? #numbers.formatDecimal(voucher.getVoucherValue(), 0, 'COMMA', 0, 'POINT') + ' VNĐ' : voucher.getVoucherValue() + '%'}"></span>
+                <br>
+                <strong>Voucher usage limit:</strong> <span th:text=" ${voucher.getUsageLimit()}"></span>
+            </div>
+        </div>
+    </div>
 
-<!-- Script -->
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="/assets/js/main.js"></script>
 
+    <!-- Script -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/main.js"></script>
+</div>
 </body>
 </html>

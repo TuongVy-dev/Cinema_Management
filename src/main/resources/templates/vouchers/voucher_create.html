@@ -27,14 +27,7 @@
 
                 <form action="/voucher/create" method="post" id="voucherForm">
                     <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="voucherType" class="form-label">Voucher Type *</label>
-                            <select id="voucherType" name="voucherType" class="form-select bg-dark text-white" required>
-                                <option value="">-- Select Type --</option>
-                                <option value="code">Code</option>
-                                <option value="date">Date</option>
-                            </select>
-                        </div>
+
                         <div class="col-md-6">
                             <label for="discountType" class="form-label">Discount Type *</label>
                             <select id="discountType" name="discountType" class="form-select bg-dark text-white" required>
@@ -46,7 +39,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="voucherId" class="form-label">Voucher ID (Auto)</label>
+                        <label for="voucherId" class="form-label">Voucher ID</label>
                         <input type="text" id="voucherId" name="voucherId" class="form-control bg-dark text-white" readonly>
                     </div>
 
@@ -74,20 +67,6 @@
                         </div>
                     </div>
 
-                    <!-- Date fields -->
-                    <div class="date-fields" style="display:none;">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="startDate" class="form-label">Start Date *</label>
-                                <input type="date" id="startDate" name="startDate" class="form-control bg-dark text-white">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="endDate" class="form-label">End Date *</label>
-                                <input type="date" id="endDate" name="endDate" class="form-control bg-dark text-white">
-                            </div>
-                        </div>
-                    </div>
-
                     <div class="mb-3">
                         <label for="discountValue" class="form-label">Discount Value *</label>
                         <input type="number" id="discountValue" name="discountValue" class="form-control bg-dark text-white" required min="1">
@@ -108,48 +87,6 @@
     </div>
 </div>
 
-<script>
-    const voucherType = document.getElementById('voucherType');
-    const discountType = document.getElementById('discountType');
-    const voucherId = document.getElementById('voucherId');
-    const codeFields = document.querySelector('.code-fields');
-    const dateFields = document.querySelector('.date-fields');
-
-    function toggleFields() {
-        if (voucherType.value === 'code') {
-            codeFields.style.display = 'block';
-            dateFields.style.display = 'none';
-        } else if (voucherType.value === 'date') {
-            codeFields.style.display = 'none';
-            dateFields.style.display = 'block';
-        } else {
-            codeFields.style.display = 'none';
-            dateFields.style.display = 'none';
-        }
-        generateVoucherId();
-    }
-
-    function generateVoucherId() {
-        const type = voucherType.value;
-        const discount = discountType.value;
-        let prefix = '';
-
-        if (type === 'date' && discount === 'percentage') prefix = 'VC10';
-        else if (type === 'date' && discount === 'amount') prefix = 'VC11';
-        else if (type === 'code' && discount === 'percentage') prefix = 'VC20';
-        else if (type === 'code' && discount === 'amount') prefix = 'VC21';
-
-        if (prefix) {
-            const randomNumber = Math.floor(1000 + Math.random() * 9000);
-            voucherId.value = prefix + randomNumber;
-        } else {
-            voucherId.value = '';
-        }
-    }
-
-    voucherType.addEventListener('change', toggleFields);
-    discountType.addEventListener('change', generateVoucherId);
-</script>
 
 <script src="/assets/js/bootstrap.bundle.min.js"></script>
 <script src="/assets/js/dashboard.js"></script>
