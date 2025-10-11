@@ -43,7 +43,6 @@
                             <th scope="col">Name</th>
                             <th scope="col">Discount Type</th>
                             <th scope="col">Value</th>
-                            <th scope="col">Voucher Type</th>
                             <th scope="col">Action</th>
                         </tr>
                         </thead>
@@ -53,7 +52,6 @@
                             <td th:text="${vouchers.getVoucherName()}"></td>
                             <td th:text="${vouchers.getDiscountType()}"></td>
                             <td th:text="${vouchers.getDiscountType().equalsIgnoreCase('amount') ? #numbers.formatDecimal(vouchers.getVoucherValue(), 0, 'COMMA', 0, 'POINT') + ' VNĐ' : vouchers.getVoucherValue() + '%'}"></td>
-                            <td th:text="${vouchers.getVoucherType()}"></td>
 
                             <td>
                                 <a class="btn btn-outline-edit btn-info">

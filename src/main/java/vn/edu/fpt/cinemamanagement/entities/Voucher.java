@@ -14,33 +14,24 @@ public class Voucher {
     @Column(name = "voucher_name")
     private String voucherName;
     private String code;
-    @Column(name = "voucher_type")
-    private String voucherType;
     @Column(name = "voucher_value")
     private Integer voucherValue;
     @Column(name = "usage_limit")
     private Integer usageLimit;
     @Column(name = "used_count")
     private Integer usedCount;
-    @Column(name = "start_date")
-    private Date startDate;
-    @Column(name = "end_date")
-    private Date endDate;
     @Column(name = "discount_type")
     private String discountType;
 
     public Voucher() {}
 
-    public Voucher(String voucherId, String voucherName, String code, String voucherType, Integer voucherValue, Integer usageLimit, Integer usedCount, Date startDate, Date endDate, String discountType) {
+    public Voucher(String voucherId, String voucherName, String code, Integer voucherValue, Integer usageLimit, Integer usedCount, String discountType) {
         this.voucherId = voucherId;
         this.voucherName = voucherName;
         this.code = code;
-        this.voucherType = voucherType;
         this.voucherValue = voucherValue;
         this.usageLimit = usageLimit;
         this.usedCount = usedCount;
-        this.startDate = startDate;
-        this.endDate = endDate;
         this.discountType = discountType;
     }
 
@@ -68,14 +59,6 @@ public class Voucher {
         this.code = code;
     }
 
-    public String getVoucherType() {
-        return voucherType;
-    }
-
-    public void setVoucherType(String voucherType) {
-        this.voucherType = voucherType;
-    }
-
     public Integer getVoucherValue() {
         return voucherValue;
     }
@@ -98,22 +81,6 @@ public class Voucher {
 
     public void setUsedCount(Integer usedCount) {
         this.usedCount = usedCount;
-    }
-
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
     }
 
     public String getDiscountType() {
