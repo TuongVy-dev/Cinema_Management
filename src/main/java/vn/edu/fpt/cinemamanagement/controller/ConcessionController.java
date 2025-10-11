@@ -10,7 +10,7 @@ import vn.edu.fpt.cinemamanagement.services.ConcessionService;
 import java.util.List;
 
 @Controller
-@RequestMapping("/dashboard/concession")
+@RequestMapping("/concessions")
 public class ConcessionController {
 
     private final ConcessionService service;
@@ -20,7 +20,7 @@ public class ConcessionController {
     }
 
     // LIST
-    @GetMapping
+    @GetMapping("")
     public String list(Model model) {
         List<ConcessionEntity> items = service.findAll();
         model.addAttribute("pageTitle", "Concessions");

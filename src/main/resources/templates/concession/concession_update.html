@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{dashboard/dashboard :: layout(~{::title}, ~{::main})}">
+<head><title>Edit Concession</title></head>
+<body>
+<main>
+    <div class="container-fluid pt-4 px-4">
+        <div class="bg-secondary rounded p-4">
+            <h6 class="mb-3">Edit Concession</h6>
+
+            <form th:action="@{|/dashboard/concession/${concession.concessionId}/edit|}" th:object="${concession}" method="post" class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">ID</label>
+                    <input class="form-control bg-dark border-0" th:value="${concession.concessionId}" readonly>
+                </div>
+
+                <div class="col-md-5">
+                    <label class="form-label">Name</label>
+                    <input class="form-control bg-dark border-0" th:field="*{name}" required>
+                    <div class="text-danger small" th:errors="*{name}"></div>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Price (VND)</label>
+                    <input class="form-control bg-dark border-0" th:field="*{price}" type="number" step="1000" min="0" required>
+                    <div class="text-danger small" th:errors="*{price}"></div>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Status</label>
+                    <select class="form-select bg-dark border-0" th:field="*{status}">
+                        <option th:value="true">Active</option>
+                        <option th:value="false">Inactive</option>
+                    </select>
+                    <div class="text-danger small" th:errors="*{status}"></div>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control bg-dark border-0" th:field="*{description}" rows="2"></textarea>
+                    <div class="text-danger small" th:errors="*{description}"></div>
+                </div>
+
+                <div class="col-12">
+                    <button class="btn btn-danger" type="submit">Update</button>
+                    <a class="btn btn-secondary" th:href="@{/dashboard/concession}">Cancel</a>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{dashboard/dashboard :: layout(~{::title}, ~{::main})}">
+<head><title>Concession Detail</title></head>
+<body>
+<main>
+    <div class="container-fluid pt-4 px-4">
+        <div class="bg-secondary rounded p-4">
+            <div class="d-flex align-items-center mb-3">
+                <h6 class="mb-0">Concession Detail</h6>
+                <a class="btn btn-primary ms-auto" th:href="@{|/dashboard/concession/${concession.concessionId}/edit|}">Edit</a>
+                <a class="btn btn-secondary ms-2" th:href="@{/dashboard/concession}">Back</a>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label class="text-white-50">ID</label>
+                    <div class="fw-semibold" th:text="${concession.concessionId}">PC0001</div>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="text-white-50">Name</label>
+                    <div class="fw-semibold" th:text="${concession.name}">Caramel Popcorn</div>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="text-white-50">Price</label>
+                    <div class="fw-semibold"
+                         th:text="${#numbers.formatDecimal(concession.price, 0, 'POINT', 0, 'COMMA')}">45,000</div>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="text-white-50">Status</label>
+                    <div>
+            <span class="badge"
+                  th:classappend="${concession.status} ? 'bg-success' : 'bg-secondary'"
+                  th:text="${concession.status} ? 'Active' : 'Inactive'">Active</span>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <label class="text-white-50">Description</label>
+                    <p class="mb-0" th:text="${concession.description}">...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

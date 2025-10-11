@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{dashboard/dashboard :: layout(~{::title}, ~{::main})}">
+<head><title>Create Concession</title></head>
+<body>
+<main>
+    <div class="container-fluid pt-4 px-4">
+        <div class="bg-secondary rounded p-4">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <h6 class="mb-0">Add Concession</h6>
+                <a class="btn btn-outline-light" th:href="@{/dashboard/concession}">Back</a>
+            </div>
+
+            <!-- 'type' là request param (PC/DR), KHÔNG bind vào entity -->
+            <form th:action="@{/dashboard/concession/create}" method="post" class="row g-3" th:object="${concession}">
+                <div class="col-md-3">
+                    <label class="form-label">Type</label>
+                    <select class="form-select" name="type" required>
+                        <option value="" disabled selected>-- Select --</option>
+                        <option value="PC">Popcorn</option>
+                        <option value="DR">Drink</option>
+                    </select>
+                    <div class="form-text">ID will be generated: Popcorn → <b>PCxxxx</b>, Drink → <b>DRxxxx</b>.</div>
+                </div>
+
+                <div class="col-md-5">
+                    <label class="form-label">Name</label>
+                    <input class="form-control" th:field="*{name}" required placeholder="Caramel Popcorn S / Coke 16oz"/>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Price (VND)</label>
+                    <input class="form-control" th:field="*{price}" type="number" step="1000" min="0" required/>
+                </div>
+
+                <div class="col-12">
+                    <div class="form-check">
+                        <input id="active" class="form-check-input" type="checkbox" th:field="*{status}"/>
+                        <label class="form-check-label" for="active">Active</label>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control" rows="2" th:field="*{description}" placeholder="Short description"></textarea>
+                </div>
+
+                <div class="col-12 text-end">
+                    <button type="submit" class="btn btn-danger">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+</body>
+</html>
