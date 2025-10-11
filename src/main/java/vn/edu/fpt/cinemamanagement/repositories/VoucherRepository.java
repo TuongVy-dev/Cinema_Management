@@ -7,5 +7,6 @@ import vn.edu.fpt.cinemamanagement.service.VoucherService;
 
 @Repository
 public interface VoucherRepository extends JpaRepository<Voucher, String> {
+    Voucher findVoucherByID(String voucherId);
 
 }
