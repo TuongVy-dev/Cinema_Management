@@ -4,10 +4,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/Dashboard")
+@RequestMapping("/dashboard")
 public class AdminController {
     @GetMapping
     public String adminHome() {
-        return "Dashboard/Dashboard"; // đúng 100% với tên file
+        return "dashboard/dashboard"; // đúng 100% với tên file
     }
 }

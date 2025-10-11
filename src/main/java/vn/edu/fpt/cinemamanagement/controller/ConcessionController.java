@@ -10,7 +10,7 @@ import vn.edu.fpt.cinemamanagement.services.ConcessionService;
 import java.util.List;
 
 @Controller
-@RequestMapping("/Dashboard/concession")
+@RequestMapping("/dashboard/concession")
 public class ConcessionController {
 
     private final ConcessionService service;
@@ -25,7 +25,7 @@ public class ConcessionController {
         List<ConcessionEntity> items = service.findAll();
         model.addAttribute("pageTitle", "Concessions");
         model.addAttribute("concessions", items);
-        return "Concession/concession_list";
+        return "concession/concession_list";
     }
 
     // CREATE - form
@@ -35,7 +35,7 @@ public class ConcessionController {
         c.setStatus(true);
         model.addAttribute("pageTitle", "Create Concession");
         model.addAttribute("concession", c);
-        return "Concession/concession_create";
+        return "concession/concession_create";
     }
 
     // CREATE - submit (type = "PC" | "DR")
@@ -48,7 +48,7 @@ public class ConcessionController {
             throw new IllegalArgumentException("Invalid type. Use PC (Popcorn) or DR (Drink).");
         }
         service.create(c, prefix);
-        return "redirect:/Dashboard/concession";
+        return "redirect:/dashboard/concession";
     }
 
     // DETAIL
@@ -57,7 +57,7 @@ public class ConcessionController {
         ConcessionEntity c = service.findById(id);
         model.addAttribute("pageTitle", "Concession Detail");
         model.addAttribute("concession", c);
-        return "Concession/concession_detail";
+        return "concession/concession_detail";
     }
 
     // EDIT - form
@@ -66,7 +66,7 @@ public class ConcessionController {
         ConcessionEntity c = service.findById(id);
         model.addAttribute("pageTitle", "Edit Concession");
         model.addAttribute("concession", c);
-        return "Concession/concession_update";
+        return "concession/concession_update";
     }
 
     // EDIT - submit
@@ -74,14 +74,14 @@ public class ConcessionController {
     public String update(@PathVariable("concessionId") String id,
                          @ModelAttribute("concession") ConcessionEntity c) {
         service.update(id, c);
-        return "redirect:/Dashboard/concession";
+        return "redirect:/dashboard/concession";
     }
 
     // DELETE
     @PostMapping("/{concessionId}/delete")
     public String delete(@PathVariable("concessionId") String id) {
         service.delete(id);
-        return "redirect:/Dashboard/concession";
+        return "redirect:/dashboard/concession";
     }
 }
 
