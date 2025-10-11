@@ -48,7 +48,7 @@ public class ConcessionController {
             throw new IllegalArgumentException("Invalid type. Use PC (Popcorn) or DR (Drink).");
         }
         service.create(c, prefix);
-        return "redirect:/dashboard/concession";
+        return "redirect:/concessions";
     }
 
     // DETAIL
@@ -74,14 +74,14 @@ public class ConcessionController {
     public String update(@PathVariable("concessionId") String id,
                          @ModelAttribute("concession") ConcessionEntity c) {
         service.update(id, c);
-        return "redirect:/dashboard/concession";
+        return "redirect:/concessions";
     }
 
     // DELETE
     @PostMapping("/{concessionId}/delete")
     public String delete(@PathVariable("concessionId") String id) {
         service.delete(id);
-        return "redirect:/dashboard/concession";
+        return "redirect:/concessions";
     }
 }
 

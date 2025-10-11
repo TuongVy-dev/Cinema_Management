@@ -8,7 +8,7 @@
         <div class="bg-secondary rounded p-4">
             <div class="d-flex align-items-center flex-wrap gap-2">
                 <h6 class="mb-0">Food &amp; Beverages</h6>
-                <a class="btn btn-danger ms-auto" th:href="@{/dashboard/concession/create}">
+                <a class="btn btn-danger ms-auto" th:href="@{/concessions/create}">
                     <i class="bi bi-plus-circle me-1"></i>Add item
                 </a>
             </div>
@@ -36,13 +36,13 @@
                     th:text="${c.status} ? 'Active' : 'Inactive'">Active</span>
                         </td>
                         <td class="text-end">
-                            <a class="btn btn-sm btn-outline-light"
-                               th:href="@{|/dashboard/concession/${c.concessionId}/detail|}">Detail</a>
-                            <a class="btn btn-sm btn-primary"
-                               th:href="@{|/dashboard/concession/${c.concessionId}/edit|}">Edit</a>
-                            <form th:action="@{|/dashboard/concession/${c.concessionId}/delete|}"
-                                  method="post" class="d-inline">
-                                <button class="btn btn-sm btn-danger" type="submit"
+                            <a class="btn btn-sm btn-outline-light btn-compact"
+                               th:href="@{|/concessions/${c.concessionId}/detail|}">Detail</a>
+                            <a class="btn btn-sm btn-primary btn-compact"
+                               th:href="@{|/concessions/${c.concessionId}/edit|}">Edit</a>
+                            <form th:action="@{|/concessions/${c.concessionId}/delete|}"
+                                  method="post" class="d-inline ">
+                                <button class="btn btn-sm btn-danger btn-compact" type="submit"
                                         onclick="return confirm('Delete this item?');">Delete</button>
                             </form>
                         </td>

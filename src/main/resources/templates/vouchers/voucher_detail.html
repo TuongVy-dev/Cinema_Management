@@ -22,16 +22,37 @@
                 </div>
 
                 <!-- Form CODE -->
-                <h5 th:text="${voucher.getVoucherName()}"></h5>
-                <strong>Voucher ID:</strong> <span th:text=" ${voucher.getVoucherId()}"></span>
-                <br>
-                <strong>Voucher code:</strong> <span th:text=" ${voucher.getCode()}"></span>
-                <br>
-                <strong>Discount type:</strong> <span th:text=" ${voucher.getDiscountType()}"></span>
-                <br>
-                <strong>Voucher value:</strong> <span th:text=" ${voucher.getDiscountType().equalsIgnoreCase('amount') ? #numbers.formatDecimal(voucher.getVoucherValue(), 0, 'COMMA', 0, 'POINT') + ' VNĐ' : voucher.getVoucherValue() + '%'}"></span>
-                <br>
-                <strong>Voucher usage limit:</strong> <span th:text=" ${voucher.getUsageLimit()}"></span>
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="text-white-50">ID</label>
+                        <div class="fw-semibold" th:text="${voucher.getVoucherId()}"></div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="text-white-50">Name</label>
+                        <div class="fw-semibold" th:text="${voucher.getVoucherName()}">Caramel Popcorn</div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="text-white-50">Code</label>
+                        <div class="fw-semibold" th:text="${voucher.getCode()}">Caramel Popcorn</div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="text-white-50">Discount type</label>
+                        <div class="fw-semibold"
+                             th:text="${voucher.getDiscountType()}"></div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="text-white-50">Voucher value</label>
+                        <div class="fw-semibold"
+                             th:text="${voucher.getDiscountType().equalsIgnoreCase('amount') ? #numbers.formatDecimal(voucher.getVoucherValue(), 0, 'COMMA', 0, 'POINT') + ' VNĐ' : voucher.getVoucherValue() + '%'}"></div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="text-white-50">Voucher value</label>
+                        <div class="fw-semibold"
+                             th:text="${voucher.getUsageLimit()}"></div>
+                    </div>
             </div>
         </div>
     </div>

@@ -8,11 +8,11 @@
         <div class="bg-secondary rounded p-4">
             <div class="d-flex align-items-center justify-content-between mb-3">
                 <h6 class="mb-0">Add Concession</h6>
-                <a class="btn btn-outline-light" th:href="@{/dashboard/concession}">Back</a>
+                <a class="btn btn-outline-light" th:href="@{/concessions}">Back</a>
             </div>
 
             <!-- 'type' là request param (PC/DR), KHÔNG bind vào entity -->
-            <form th:action="@{/dashboard/concession/create}" method="post" class="row g-3" th:object="${concession}">
+            <form th:action="@{/concessions/create}" method="post" class="row g-3" th:object="${concession}">
                 <div class="col-md-3">
                     <label class="form-label">Type</label>
                     <select class="form-select" name="type" required>

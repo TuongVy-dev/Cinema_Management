@@ -8,7 +8,7 @@
         <div class="bg-secondary rounded p-4">
             <h6 class="mb-3">Edit Concession</h6>
 
-            <form th:action="@{|/dashboard/concession/${concession.concessionId}/edit|}" th:object="${concession}" method="post" class="row g-3">
+            <form th:action="@{|/concessions/${concession.concessionId}/edit|}" th:object="${concession}" method="post" class="row g-3">
                 <div class="col-md-3">
                     <label class="form-label">ID</label>
                     <input class="form-control bg-dark border-0" th:value="${concession.concessionId}" readonly>
@@ -43,7 +43,7 @@
 
                 <div class="col-12">
                     <button class="btn btn-danger" type="submit">Update</button>
-                    <a class="btn btn-secondary" th:href="@{/dashboard/concession}">Cancel</a>
+                    <a class="btn btn-secondary" th:href="@{/concessions}">Cancel</a>
                 </div>
             </form>
 
