@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Voucher Management - Cinema Admin</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Voucher Management Dashboard" name="keywords">
+    <meta content="Voucher list with CRUD options" name="description">
+
+    <link href="img/favicon.ico" rel="icon">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap"
+          rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="/assets/css/dashboard.css" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+
+</head>
+
+<body>
+<div id="spinner"
+     class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+<div class="container-fluid position-relative d-flex p-0">
+    <div class="sidebar pe-4 pb-3">
+        <nav class="navbar bg-secondary navbar-dark">
+            <a href="/voucher" class="navbar-brand mx-4 mb-3">
+                <h5 class="text-primary">Vouchers Management</h5>
+            </a>
+
+            <div class="navbar-nav w-100">
+                <a href="/dashboard" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2 "></i>Dashboard</a>
+
+                <a href="staff_management.html" class="nav-item nav-link"><i class="fa fa-users me-2"></i>StaffManagement</a>
+
+                <a href="movie_management.html" class="nav-item nav-link"><i class="fa fa-film me-2"></i>Movie
+                    Management</a>
+
+                <a href="schedule_management.html" class="nav-item nav-link"><i class="fa fa-calendar-alt me-2"></i>Schedule
+                    Management</a>
+
+                <a href="room_management.html" class="nav-item nav-link"><i class="fa fa-chair me-2"></i>Room Management</a>
+
+                <a href="/voucher" class="nav-item nav-link active "><i class="fa fa-ticket-alt me-2"></i>Voucher
+                    Management</a>
+
+                <a href="food_management.html" class="nav-item nav-link "><i class="fa fa-hamburger me-2"></i>Food
+                    Management</a>
+            </div>
+        </nav>
+    </div>
+    <!-- CONTENT WRAPPER -->
+    <div class="content">
+        <nav class="navbar navbar-expand bg-secondary navbar-dark sticky-top px-4 py-0">
+            <a href="#" class="sidebar-toggler flex-shrink-0">
+                <i class="fa fa-bars"></i>
+            </a>
+
+            <div class="navbar-nav align-items-center ms-auto">
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                        <span class="d-none d-lg-inline-flex">John Doe</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
+                        <a href="login.html" class="dropdown-item">Log Out</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+
+        <div class="container-fluid pt-4 px-4">
+            <div class="bg-secondary rounded p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h6 class="mb-0">Vouchers List</h6>
+                    <div class="d-flex align-items-center">
+                        <div class="input-group me-3" style="width: 200px;">
+                            <input id="searchInput" class="form-control bg-dark border-0 text-white" type="search"
+                                   placeholder="Search Code" aria-label="Search">
+                            <button id="searchButton" class="btn btn-dark search-btn-custom" type="button">
+                                <i class="fa fa-search text-primary"></i>
+                            </button>
+                        </div>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#addVoucherModal">
+                            <i class="fa fa-plus me-2"></i>Add Voucher
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table text-start align-middle table-bordered table-hover mb-0">
+                        <thead>
+                        <tr class="text-white">
+                            <th scope="col">ID</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Discount Type</th>
+                            <th scope="col">Value</th>
+                            <th scope="col">Voucher Type</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody id="voucherTableBody">
+                        <tr th:each="vouchers : ${vouchersList}">
+                            <td th:text="${vouchers.getVoucherId()}"></td>
+                            <td th:text="${vouchers.getVoucherName()}"></td>
+                            <td th:text="${vouchers.getDiscountType()}"></td>
+                            <td th:text="${vouchers.getDiscountType().equalsIgnoreCase('amount') ? #numbers.formatDecimal(vouchers.getVoucherValue(), 0, 'COMMA', 0, 'POINT') + ' VNĐ' : vouchers.getVoucherValue() + '%'}"></td>
+                            <td th:text="${vouchers.getVoucherType()}"></td>
+
+                            <td>
+                                <a class="btn btn-sm btn-outline-edit btn-info edit-voucher-btn"
+                                   data-bs-toggle="modal" data-bs-target="#editVoucherModal">
+                                    <i class="fa fa-edit"></i> Edit
+                                </a>
+
+                                <button class="btn btn-sm btn-danger ms-2 delete-voucher-btn"
+                                        data-bs-toggle="modal" data-bs-target="#deleteVoucherModal" data-id="01"
+                                        data-code="WELCOME10">
+                                    <i class="fa fa-trash"></i> Delete
+                                </button>
+                                <a th:href="@{/voucher/detail/{id} (id= ${vouchers.getVoucherId()})}"
+                                   class="btn btn-sm btn-light delete-voucher-btn">View Details</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid pt-4 px-4">
+            <div class="bg-secondary rounded-top p-4">
+                <div class="row">
+                    <div class="col-12 col-sm-6 text-center text-sm-start">
+                        &copy; <span id="year"></span> <a href="#">Cinema Management System</a>, All Rights
+                        Reserved.
+                    </div>
+                    <div class="col-12 col-sm-6 text-center text-sm-end">
+                        Admin Dashboard | Powered by DarkPan
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+</div>
+
+<div class="modal fade" id="addVoucherModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-secondary text-white">
+            <div class="modal-header">
+                <h5 class="modal-title">Add New Voucher</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="addCode" class="form-label">Voucher Code *</label>
+                    <input type="text" id="addCode" class="form-control bg-dark border-0 text-white"
+                           placeholder="E.g., SUMMERSALE20" required>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="addDiscountType" class="form-label">Discount Type *</label>
+                        <select id="addDiscountType" class="form-select bg-dark border-0 text-white" required>
+                            <option value="">-- Select Type --</option>
+                            <option value="Percentage">Percentage (%)</option>
+                            <option value="Fixed">Fixed Amount (VND)</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="addDiscountValue" class="form-label">Discount Value *</label>
+                        <input type="number" id="addDiscountValue" class="form-control bg-dark border-0 text-white"
+                               placeholder="E.g., 10 or 50000" required min="1">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="addUsageLimit" class="form-label">Usage Limit (Total)</label>
+                    <input type="number" id="addUsageLimit" class="form-control bg-dark border-0 text-white"
+                           placeholder="E.g., 500 (Leave blank for unlimited)" min="0">
+                </div>
+
+                <div class="mb-3">
+                    <label for="addUsedCount" class="form-label">Used Count (Read-only)</label>
+                    <input type="text" id="addUsedCount" class="form-control bg-dark border-0 text-white" value="0"
+                           readonly>
+                </div>
+
+                <div class="mb-3">
+                    <label for="addManualStatus" class="form-label">Status *</label>
+                    <select id="addManualStatus" class="form-select bg-dark border-0 text-white" required>
+                        <option value="Active">Active (Hoạt động)</option>
+                        <option value="Inactive">Inactive (Ngừng hoạt động)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                <button class="btn btn-primary" id="saveNewVoucherBtn">Add Voucher</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editVoucherModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-secondary text-white">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Voucher: <span id="editVoucherCodeTitle"></span></h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editVoucherId">
+
+                <div class="mb-3">
+                    <label for="editCode" class="form-label">Voucher Code *</label>
+                    <input type="text" id="editCode" class="form-control bg-dark border-0 text-white" required>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="editDiscountType" class="form-label">Discount Type *</label>
+                        <select id="editDiscountType" class="form-select bg-dark border-0 text-white" required>
+                            <option value="Percentage">Percentage (%)</option>
+                            <option value="Fixed">Fixed Amount (VND)</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="editDiscountValue" class="form-label">Discount Value *</label>
+                        <input type="number" id="editDiscountValue" class="form-control bg-dark border-0 text-white"
+                               required min="1">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="editUsageLimit" class="form-label">Usage Limit (Total)</label>
+                    <input type="number" id="editUsageLimit" class="form-control bg-dark border-0 text-white"
+                           min="0">
+                </div>
+
+                <div class="mb-3">
+                    <label for="editUsedCount" class="form-label">Used Count (Read-only)</label>
+                    <input type="text" id="editUsedCount" class="form-control bg-dark border-0 text-white" readonly>
+                </div>
+
+                <div class="mb-3">
+                    <label for="editManualStatus" class="form-label">Status *</label>
+                    <select id="editManualStatus" class="form-select bg-dark border-0 text-white" required>
+                        <option value="Active">Active (Hoạt động)</option>
+                        <option value="Inactive">Inactive (Ngừng hoạt động)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                <button class="btn btn-success" id="saveEditVoucherBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteVoucherModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-secondary text-white">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Voucher</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the voucher **<span id="deleteVoucherCode"></span>** (ID: <span
+                        id="deleteVoucherIdDisplay"></span>)?</p>
+                <p class="text-warning small">**(Warning: Deleting a voucher that has been used may affect
+                    historical
+                    booking data).**</p>
+                <input type="hidden" id="deleteVoucherId">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                <button class="btn btn-danger" id="confirmDeleteVoucherBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js"></script>
+<script src="/assets/js/main.js"></script>
+<script src="/assets/js/dashboard.js"></script>
+</body>
+
+</html>

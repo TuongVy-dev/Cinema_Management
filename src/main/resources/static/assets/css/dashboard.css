@@ -1,0 +1,375 @@
+/*
+|====================================
+| 1. CORE UTILITIES (STATUS, BADGES, BUTTON GROUPS)
+|    Các style dùng chung cho trạng thái và nút hành động.
+|====================================
+*/
+
+/* --- Status Badges --- */
+.status-badge {
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    color: #fff;
+    min-width: 80px;
+    display: inline-block;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12),
+        0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+.status-active {
+    /* Bootstrap Success Color: Green */
+    background-color: #198754;
+}
+
+.status-inactive {
+    /* Bootstrap Secondary Color: Gray */
+    background-color: #6c757d;
+}
+
+/* --- Small/Custom Action Buttons (Base) --- */
+.btn-sm-custom {
+    padding: 5px 8px;
+    font-size: 12px;
+    border-radius: 5px;
+    font-weight: 500;
+    min-width: 65px;
+    text-align: center;
+}
+
+/* Base style for button action groups */
+.btn-action-group {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5px;
+}
+
+/* 1.1. Action Button - Edit (Solid Gray) */
+.btn-edit-custom {
+    color: #fff;
+    background-color: #6c757d;
+    border: 1px solid #6c757d;
+}
+
+.btn-edit-custom:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+    opacity: 1;
+}
+
+/* 1.2. Action Button - Delete (Solid Red) */
+.btn-delete-custom {
+    background-color: #dc3545;
+    color: #fff;
+    border: 1px solid #dc3545;
+}
+
+.btn-delete-custom:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+
+/*
+|====================================
+| 2. DASHBOARD / DARK THEME OVERRIDES (DarkPan)
+|    Fixes Z-index, modal hiển thị và màu sắc form control trong theme tối.
+|====================================
+*/
+
+/* --- Modal & Z-Index Fixes --- */
+.modal-backdrop {
+    z-index: 1040 !important;
+}
+
+.modal {
+    z-index: 2000 !important;
+    position: fixed !important;
+}
+
+/* Set dashboard components z-index lower than modal */
+.content,
+.sidebar {
+    z-index: 1 !important;
+}
+
+/* Modal Content Background and Text Color */
+.modal-content {
+    background-color: #333;
+    /* Darker shade for modal content */
+    color: #fff;
+}
+
+/* Fix form elements inside modal for dark theme visibility */
+.modal-content .form-control,
+.modal-content .form-select,
+.datetimepicker-input {
+    color: #fff !important;
+    background-color: #00040b !important;
+    /* Matches DarkPan dashboard background */
+    border: 1px solid #333;
+}
+
+/* Invert the Bootstrap close button color for dark theme */
+.btn-close-white {
+    filter: invert(1);
+}
+
+/* General layout fixes */
+body {
+    overflow: auto !important;
+    font-family: 'Open Sans', sans-serif;
+    /* Thống nhất font */
+    margin: 0;
+    padding: 0;
+}
+
+.content {
+    pointer-events: auto !important;
+}
+
+
+/*
+|====================================
+| 3. TOP ACTION BAR & SEARCH
+|====================================
+*/
+
+.top-action-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+/* Search input styling for DarkPan theme */
+.input-group input.form-control {
+    border-radius: 5px 0 0 5px !important;
+    color: #fff !important;
+    border-right: none;
+    background-color: #00040b !important;
+}
+
+/* Search button styling */
+.search-btn-custom {
+    border-radius: 0 5px 5px 0;
+}
+
+/* Primary Action Button (Red override, e.g., 'Add Movie') */
+.btn-action-primary {
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+    color: #fff !important;
+}
+
+.btn-action-primary:hover {
+    background-color: #c82333 !important;
+    border-color: #bd2130 !important;
+}
+
+
+/*
+|====================================
+| 4. MODULE SPECIFIC STYLES
+|====================================
+*/
+
+/* --- 4.1. Voucher Management Table --- */
+
+/* Outline Edit Button (Voucher Management) - Consistent Gray */
+.btn-outline-edit {
+    color: #6c757d;
+    border-color: #6c757d;
+    background-color: transparent;
+    /* Kế thừa btn-sm-custom */
+    padding: 5px 8px;
+    font-size: 12px;
+    border-radius: 5px;
+    font-weight: 500;
+}
+
+.btn-outline-edit:hover {
+    color: #fff;
+    background-color: #6c757d;
+}
+
+/* Prevent action column content from wrapping */
+#voucherTableBody td:last-child {
+    white-space: nowrap;
+}
+
+/* --- 4.2. Schedule Management Layout & Table --- */
+
+/* Sidebar/Nav active link color (Red) */
+.sidebar {
+    width: 250px;
+    background-color: rgb(25, 28, 36);
+    /***/
+    min-height: 100vh;
+}
+
+.navbar-nav .nav-link.active {
+    background-color: #ff4c60;
+    /* Custom active link color */
+    color: #fff;
+}
+
+.table-container {
+    padding: 15px;
+}
+
+#scheduleTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#scheduleTable th,
+#scheduleTable td {
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+
+/* --- 4.3. Loading Spinner --- */
+#spinner.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+}
+
+/* --- 4.4. Seat Map Styles (Optional, but included for completeness) --- */
+
+.seat-screen {
+    height: 14px;
+    border-radius: 10px;
+    text-align: center;
+    color: #fff;
+    background: linear-gradient(90deg, var(--primary, #9d1212), #e85c5c, var(--primary, #9d1212));
+    line-height: 14px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.seat-grid {
+    display: grid;
+    grid-template-columns: 40px repeat(var(--cols), 42px);
+    gap: 12px;
+    justify-content: center;
+}
+
+.seat-row-label {
+    color: var(--light, #6C7293);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+}
+
+.seat {
+    width: 42px;
+    height: 42px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    user-select: none;
+    background: #0f1015;
+    color: #e6e6e6;
+    border: 1px solid #2b2e36;
+    box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .4);
+}
+
+.seat.available {
+    background: #0f1015;
+}
+
+.seat.selected {
+    background: var(--primary, #9d1212);
+    border-color: #b41818;
+}
+
+.seat.booked {
+    background: #40444f;
+    color: #c9c9c9;
+}
+
+.seat.vip {
+    background: #ad8b21;
+    color: #1b1b1b;
+}
+
+.seat.empty {
+    background: transparent;
+    border: 1px dashed #3a3d46;
+    color: #3a3d46;
+}
+
+.legend {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.legend::before {
+    content: '';
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.legend-available::before {
+    background: #0f1015;
+    border: 1px solid #2b2e36;
+    box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .4);
+}
+
+.legend-selected::before {
+    background: var(--primary, #9d1212);
+}
+
+.legend-booked::before {
+    background: #40444f;
+}
+
+.legend-vip::before {
+    background: #ad8b21;
+}
+
+.legend-empty::before {
+    background: transparent;
+    border: 1px dashed #3a3d46;
+}
+
+.seat-tool.active {
+    outline: 2px solid var(--primary, #9d1212);
+}
+
+/* nhỏ xíu cho nút gọn (nếu chưa có trong style.css) */
+.btn-compact {
+    padding: .35rem .7rem;
+    font-weight: 600;
+}
+
+.btn-pill {
+    border-radius: 999px;
+}
+
+.card-like {
+    background: var(--secondary, #191C24);
+    border-radius: .75rem;
+    padding: 1.25rem;
+}

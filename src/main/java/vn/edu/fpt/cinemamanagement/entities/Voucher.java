@@ -1,0 +1,126 @@
+package vn.edu.fpt.cinemamanagement.entities;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+import java.util.Date;
+
+@Entity
+public class Voucher {
+    @Id
+    @Column(name = "voucher_id")
+    private String voucherId;
+    @Column(name = "voucher_name")
+    private String voucherName;
+    private String code;
+    @Column(name = "voucher_type")
+    private String voucherType;
+    @Column(name = "voucher_value")
+    private Integer voucherValue;
+    @Column(name = "usage_limit")
+    private Integer usageLimit;
+    @Column(name = "used_count")
+    private Integer usedCount;
+    @Column(name = "start_date")
+    private Date startDate;
+    @Column(name = "end_date")
+    private Date endDate;
+    @Column(name = "discount_type")
+    private String discountType;
+
+    public Voucher() {}
+
+    public Voucher(String voucherId, String voucherName, String code, String voucherType, Integer voucherValue, Integer usageLimit, Integer usedCount, Date startDate, Date endDate, String discountType) {
+        this.voucherId = voucherId;
+        this.voucherName = voucherName;
+        this.code = code;
+        this.voucherType = voucherType;
+        this.voucherValue = voucherValue;
+        this.usageLimit = usageLimit;
+        this.usedCount = usedCount;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.discountType = discountType;
+    }
+
+    public String getVoucherId() {
+        return voucherId;
+    }
+
+    public void setVoucherId(String voucherId) {
+        this.voucherId = voucherId;
+    }
+
+    public String getVoucherName() {
+        return voucherName;
+    }
+
+    public void setVoucherName(String voucherName) {
+        this.voucherName = voucherName;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getVoucherType() {
+        return voucherType;
+    }
+
+    public void setVoucherType(String voucherType) {
+        this.voucherType = voucherType;
+    }
+
+    public Integer getVoucherValue() {
+        return voucherValue;
+    }
+
+    public void setVoucherValue(Integer voucherValue) {
+        this.voucherValue = voucherValue;
+    }
+
+    public Integer getUsageLimit() {
+        return usageLimit;
+    }
+
+    public void setUsageLimit(Integer usageLimit) {
+        this.usageLimit = usageLimit;
+    }
+
+    public Integer getUsedCount() {
+        return usedCount;
+    }
+
+    public void setUsedCount(Integer usedCount) {
+        this.usedCount = usedCount;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getDiscountType() {
+        return discountType;
+    }
+
+    public void setDiscountType(String discountType) {
+        this.discountType = discountType;
+    }
+}
