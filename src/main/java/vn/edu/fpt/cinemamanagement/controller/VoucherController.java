@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import vn.edu.fpt.cinemamanagement.entities.Voucher;
-import vn.edu.fpt.cinemamanagement.service.VoucherService;
+import vn.edu.fpt.cinemamanagement.services.VoucherService;
 
 @Controller
 @RequestMapping("/vouchers")
