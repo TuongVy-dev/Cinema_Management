@@ -59,8 +59,8 @@
                                 </a>
 
                                 <button class="btn btn-danger delete-voucher-btn btn-compact"
-                                        data-bs-toggle="modal" data-bs-target="#deleteVoucherModal" data-id="01"
-                                        data-code="WELCOME10">
+                                        data-bs-toggle="modal" data-bs-target="#deleteVoucherModal"
+                                        th:attr="data-id=${vouchers.getVoucherId()}, data-code=${vouchers.getVoucherName()}">
                                     <i class="fa fa-trash"></i> Delete
                                 </button>
                                 <a th:href="@{/vouchers/detail/{id} (id= ${vouchers.getVoucherId()})}"
@@ -91,121 +91,7 @@
     <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 </div>
 
-<div class="modal fade" id="addVoucherModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content bg-secondary text-white">
-            <div class="modal-header">
-                <h5 class="modal-title">Add New Voucher</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label for="addCode" class="form-label">Voucher Code *</label>
-                    <input type="text" id="addCode" class="form-control bg-dark border-0 text-white"
-                           placeholder="E.g., SUMMERSALE20" required>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="addDiscountType" class="form-label">Discount Type *</label>
-                        <select id="addDiscountType" class="form-select bg-dark border-0 text-white" required>
-                            <option value="">-- Select Type --</option>
-                            <option value="Percentage">Percentage (%)</option>
-                            <option value="Fixed">Fixed Amount (VND)</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="addDiscountValue" class="form-label">Discount Value *</label>
-                        <input type="number" id="addDiscountValue" class="form-control bg-dark border-0 text-white"
-                               placeholder="E.g., 10 or 50000" required min="1">
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label for="addUsageLimit" class="form-label">Usage Limit (Total)</label>
-                    <input type="number" id="addUsageLimit" class="form-control bg-dark border-0 text-white"
-                           placeholder="E.g., 500 (Leave blank for unlimited)" min="0">
-                </div>
-
-                <div class="mb-3">
-                    <label for="addUsedCount" class="form-label">Used Count (Read-only)</label>
-                    <input type="text" id="addUsedCount" class="form-control bg-dark border-0 text-white" value="0"
-                           readonly>
-                </div>
-
-                <div class="mb-3">
-                    <label for="addManualStatus" class="form-label">Status *</label>
-                    <select id="addManualStatus" class="form-select bg-dark border-0 text-white" required>
-                        <option value="Active">Active (Hoạt động)</option>
-                        <option value="Inactive">Inactive (Ngừng hoạt động)</option>
-                    </select>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                <button class="btn btn-primary" id="saveNewVoucherBtn">Add Voucher</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="editVoucherModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content bg-secondary text-white">
-            <div class="modal-header">
-                <h5 class="modal-title">Edit Voucher: <span id="editVoucherCodeTitle"></span></h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <input type="hidden" id="editVoucherId">
-
-                <div class="mb-3">
-                    <label for="editCode" class="form-label">Voucher Code *</label>
-                    <input type="text" id="editCode" class="form-control bg-dark border-0 text-white" required>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="editDiscountType" class="form-label">Discount Type *</label>
-                        <select id="editDiscountType" class="form-select bg-dark border-0 text-white" required>
-                            <option value="Percentage">Percentage (%)</option>
-                            <option value="Fixed">Fixed Amount (VND)</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="editDiscountValue" class="form-label">Discount Value *</label>
-                        <input type="number" id="editDiscountValue" class="form-control bg-dark border-0 text-white"
-                               required min="1">
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label for="editUsageLimit" class="form-label">Usage Limit (Total)</label>
-                    <input type="number" id="editUsageLimit" class="form-control bg-dark border-0 text-white"
-                           min="0">
-                </div>
-
-                <div class="mb-3">
-                    <label for="editUsedCount" class="form-label">Used Count (Read-only)</label>
-                    <input type="text" id="editUsedCount" class="form-control bg-dark border-0 text-white" readonly>
-                </div>
-
-                <div class="mb-3">
-                    <label for="editManualStatus" class="form-label">Status *</label>
-                    <select id="editManualStatus" class="form-select bg-dark border-0 text-white" required>
-                        <option value="Active">Active (Hoạt động)</option>
-                        <option value="Inactive">Inactive (Ngừng hoạt động)</option>
-                    </select>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                <button class="btn btn-success" id="saveEditVoucherBtn">Save Changes</button>
-            </div>
-        </div>
-    </div>
-</div>
-
+<!--Delete voucher-->
 <div class="modal fade" id="deleteVoucherModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content bg-secondary text-white">
