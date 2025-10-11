@@ -15,11 +15,11 @@ public class VoucherService {
         this.voucherRepo = voucherRepo;
     }
 
-    public List<Voucher> getAllVouchers() {
+   public  List<Voucher> findAllVoucher(){
         return voucherRepo.findAll();
-    }
-     public Voucher findVoucherByID(String voucherId) {
-        return voucherRepo.findByVoucherId(voucherId);
-     }
+   }
+//     public Voucher findVoucherByID(String voucherId) {
+//        return voucherRepo.findByVoucherId(voucherId);
+//     }
 
 }

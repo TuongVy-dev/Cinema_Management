@@ -20,8 +20,8 @@ public class VoucherController {
 
     @GetMapping("")
     public String vouchersList(Model model) {
-    voucherService.getAllVouchers();
-    model.addAttribute("vouchersList", voucherService.getAllVouchers());
+    voucherService.findAllVoucher();
+    model.addAttribute("vouchersList", voucherService.findAllVoucher());
     return "vouchers/voucher_list";
     }
 
@@ -30,10 +30,10 @@ public class VoucherController {
         return  "vouchers/voucher_create";
     }
 
-    @GetMapping("/detail/{id}")
-    public String detailVoucher(Model model, @PathVariable("id") String id) {
-        model.addAttribute("voucher", voucherService.findVoucherByID(id));
-        return "vouchers/voucher_detail";
-    }
+//    @GetMapping("/detail/{id}")
+//    public String detailVoucher(Model model, @PathVariable("id") String id) {
+//        model.addAttribute("voucher", voucherService.findVoucherByID(id));
+//        return "vouchers/voucher_detail";
+//    }
 }
 
