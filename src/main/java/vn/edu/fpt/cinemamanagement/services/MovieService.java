@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.cinemamanagement.entities.Movie;
 import vn.edu.fpt.cinemamanagement.repositories.MovieRepository;
-
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -29,4 +29,9 @@ public class MovieService {
         movieRepository.delete(movie);
     }
 
+    //Huynh Anh add
+    @Transactional
+    public List<Movie> getNowShowingMovies() {
+        return movieRepository.findByReleaseDateLessThanEqual(LocalDate.now());
+    }
 }

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CGV Movies - Your Movie Experience Begins Here</title>
+    <meta name="description" content="Book movie tickets online at CGV. Watch the latest movies in premium cinemas with the best sound and picture quality.">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/assets/css/style.css}">
+</head>
+
+<body>
+
+<header class="header" role="banner">
+    <div class="header__container container">
+        <div class="header__left">
+            <a href="/static" class="header__logo" aria-label="CGV Home">
+                <img th:src="@{/assets/img/logo.svg}" alt="CGV Movies Logo" width="120" height="40">
+                <span class="header__logo-text">D&D</span>
+            </a>
+        </div>
+        <div class="header__center">
+            <nav class="nav" role="navigation">
+                <ul class="nav__list">
+                    <li class="nav__item"><a href="/Homepage" class="nav__link">Homepage</a></li>
+                    <li class="nav__item"><a href="/movies" class="nav__link">Movies</a></li>
+                    <li class="nav__item"><a href="/promotions" class="nav__link">Promotions</a></li>
+                    <li class="nav__item"><a href="/history" class="nav__link">Transaction History</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="header__right">
+            <a class="btn btn--outline" href="/login">Login</a>
+            <a class="btn" href="/register">Register</a>
+        </div>
+    </div>
+</header>
+
+<section class="hero" role="region" aria-label="Featured Movies">
+    <div class="hero__wrapper">
+        <div class="hero__slide is-active" style="background-image: url('/assets/img/slide-1.jpg');">
+            <div class="hero__content container">
+                <h2 class="hero__title">The Last Guardian</h2>
+                <a href="/booking/1" class="btn btn--hero">Book Ticket Now</a>
+            </div>
+        </div>
+
+        <div class="hero__slide" style="background-image: url('/assets/img/slide-2.jpg');">
+            <div class="hero__content container">
+                <h2 class="hero__title">Mortal Kombat</h2>
+                <a href="/booking/2" class="btn btn--hero">Buy Tickets</a>
+            </div>
+        </div>
+
+        <button class="hero__arrow hero__arrow--prev" aria-label="Previous Slide">&#10094;</button>
+        <button class="hero__arrow hero__arrow--next" aria-label="Next Slide">&#10095;</button>
+    </div>
+
+    <div class="hero__indicators container">
+        <span class="hero__dot is-active"></span>
+        <span class="hero__dot"></span>
+    </div>
+</section>
+
+<main role="main">
+    <section class="section" aria-labelledby="movie-grid-title">
+        <div class="container">
+            <div class="section__header">
+                <h1 id="movie-grid-title" class="section__title">Now Showing</h1>
+                <p class="section__subtitle">Book your favorite movie quickly</p>
+            </div>
+            <div class="movie-grid">
+                <!-- Loop Movie -->
+                <article class="movie-card" th:each="movie : ${nowShowing}">
+                    <div class="movie-card__top">
+                        <img th:src="@{'/assets/img/posters/' + ${movie.movieID} + '.jpg'}"
+                             th:alt="${movie.title} + ' poster'" class="movie-card__poster">
+                        <div class="movie-card__rating">
+                            ⭐ <span th:text="${movie.ageRating}">PG</span>
+                        </div>
+                        <div class="movie-card__badges">
+                            <span class="movie-card__badge">2D</span>
+                        </div>
+                    </div>
+                    <div class="movie-card__body">
+                        <h3 class="movie-card__title" th:text="${movie.title}">Movie Title</h3>
+                        <p class="movie-card__info" th:text="${movie.genre} + ' • ' + ${movie.duration} + ' mins'">Genre • Duration</p>
+                        <a th:href="@{'/booking/' + ${movie.movieID}}" class="movie-card__button">Booking Ticket</a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="footer">
+    <div class="container">
+        <div class="footer__section">
+            <h3>About CGV</h3>
+            <ul class="footer__list">
+                <li><a href="#" class="footer__list-link">About Us</a></li>
+                <li><a href="#" class="footer__list-link">Careers</a></li>
+                <li><a href="#" class="footer__list-link">News</a></li>
+                <li><a href="#" class="footer__list-link">Contact</a></li>
+            </ul>
+        </div>
+        <div class="footer__section">
+            <h3>Customer Service</h3>
+            <ul class="footer__list">
+                <li><a href="#" class="footer__list-link">Help Center</a></li>
+                <li><a href="#" class="footer__list-link">Ticket Refund</a></li>
+                <li><a href="#" class="footer__list-link">Terms & Conditions</a></li>
+                <li><a href="#" class="footer__list-link">Privacy Policy</a></li>
+            </ul>
+        </div>
+        <div class="footer__section">
+            <h3>Contact Info</h3>
+            <p>Hotline: 1900 6017</p>
+            <p>Email: support@cgv.vn</p>
+        </div>
+    </div>
+</footer>
+
+<!-- JS -->
+<script th:src="@{/assets/js/hero.js}"></script>
+
+</body>
+</html>

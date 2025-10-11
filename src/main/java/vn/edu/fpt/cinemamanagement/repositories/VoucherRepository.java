@@ -3,7 +3,7 @@ package vn.edu.fpt.cinemamanagement.repositories;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import vn.edu.fpt.cinemamanagement.entities.Voucher;
-import vn.edu.fpt.cinemamanagement.service.VoucherService;
+import vn.edu.fpt.cinemamanagement.services.VoucherService;
 
 @Repository
 public interface VoucherRepository extends JpaRepository<Voucher, String> {
