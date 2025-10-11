@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="~{fragment/frag :: head}"></head>
+<body>
+<div class="container-fluid position-relative d-flex p-0">
+    <div th:replace="~{fragment/frag :: sidebar}"></div>
+
+    <!-- Content -->
+    <div class="content">
+
+        <!-- Topbar -->
+        <div th:replace="~{fragment/frag :: navbar}"></div>
+
+        <div class="container-fluid pt-4 px-4">
+            <div class="bg-secondary rounded p-4">
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h6 class="mb-0">Movie Update Page</h6>
+                </div>
+
+                <div class="container bg-secondary text-white rounded p-4">
+                    <h2 class="text-primary mb-4">Update Movie</h2>
+
+                    <form th:action="@{/movies/save}" th:object="${movie}" method="post">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Movie ID:</label>
+                            <input type="text" th:field="*{movieID}" class="form-control" readonly>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Title:</label>
+                            <input type="text" th:field="*{title}" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Genre:</label>
+                            <input type="text" th:field="*{genre}" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Duration (minutes):</label>
+                            <input type="number" th:field="*{duration}" class="form-control" min="1" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Release Date:</label>
+                            <input type="date" th:field="*{releaseDate}" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Age Rating:</label>
+                            <input type="text" th:field="*{ageRating}" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Summary:</label>
+                            <textarea th:field="*{summary}" class="form-control" rows="3" required></textarea>
+                        </div>
+
+                        <div class="d-flex gap-2 mt-4">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fa fa-save"></i> Save Changes
+                            </button>
+                            <a class="btn btn-outline-light" href="#" onclick="window.history.go(-1); return false;">
+                                <i class="fa fa-arrow-left"></i> Back
+                            </a>
+                        </div>
+                    </form>
+                </div>
+
+
+            </div>
+        </div>
+
+        <div class="container-fluid pt-4 px-4">
+            <div class="bg-secondary rounded-top p-4">
+                <div class="row">
+                    <div class="col-12 col-sm-6 text-center text-sm-start">
+                        &copy; <span id="year"></span> <a href="#">Cinema Management System</a>, All Rights
+                        Reserved.
+                    </div>
+                    <div class="col-12 col-sm-6 text-center text-sm-end">
+                        Admin Dashboard | Powered by DarkPan
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+</div>
+
+<!-- jQuery and Bootstrap Bundle -->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Vendor JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js"></script>
+
+<!-- App JS (Static files in /static/js/) -->
+<script th:src="@{/assets/js/main.js}"></script>
+<script th:src="@{/assets/js/dashboard.js}"></script>
+</body>
+
+</html>
