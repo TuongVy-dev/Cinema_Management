@@ -32,6 +32,7 @@ public class VoucherController {
 
     @GetMapping("/detail/{id}")
     public String detailVoucher(Model model, @PathVariable("id") String id) {
+        model.addAttribute("voucher", voucherService.findVoucherByID(id));
         return "vouchers/voucher_detail";
     }
 }
