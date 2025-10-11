@@ -4,8 +4,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import vn.edu.fpt.cinemamanagement.entities.Voucher;
 import vn.edu.fpt.cinemamanagement.service.VoucherService;
 
 @Controller
@@ -28,6 +30,12 @@ public class VoucherController {
     @GetMapping("/new")
     public String newVoucher(Model model) {
         return  "vouchers/voucher_create";
+    }
+
+    @PostMapping("/create")
+    public String createVoucher(Voucher voucher) {
+
+        return  "redirect:/vouchers";
     }
 
     @GetMapping("/detail/{id}")
