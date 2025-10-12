@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Edit Room</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- THEME CSS -->
+    <link th:href="@{/assets/css/bootstrap.min.css}" rel="stylesheet" />
+    <link th:href="@{/assets/css/style.css}" rel="stylesheet" />
+</head>
+
+<body class="bg-dark text-white p-4">
+
+<div class="container">
+    <h4 class="mb-4">Edit Room</h4>
+
+    <form th:action="@{/rooms/save}" th:object="${room}" method="post" class="row g-3 bg-secondary p-4 rounded">
+        <div class="col-md-4">
+            <label class="form-label">Code</label>
+            <input th:field="*{roomId}" type="text" class="form-control bg-dark border-0" readonly>
+        </div>
+
+        <div class="col-md-8">
+            <label class="form-label">Name</label>
+            <input th:field="*{buildRoomName}" type="text"
+                   class="form-control bg-dark border-0"
+                   placeholder="Room 1"
+                   readonly>
+        </div>
+
+
+        <div class="col-md-4">
+            <label class="form-label">Type</label>
+            <select th:field="*{templateName}" class="form-select bg-dark border-0">
+                <option value="">-- Select --</option>
+                <option th:each="tpl : ${templates}"
+                        th:value="${tpl.name}"
+                        th:text="${tpl.name}"></option>
+            </select>
+        </div>
+
+<!--        <div class="col-md-4">-->
+<!--            <label class="form-label">Seats</label>-->
+<!--            <input th:field="*{totalSeats}" type="number" min="1" class="form-control bg-dark border-0">-->
+<!--        </div>-->
+
+        <div class="col-md-4">
+            <label class="form-label">Status</label>
+            <select th:field="*{status}" class="form-select bg-dark border-0">
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+            </select>
+        </div>
+
+<!--        <div class="col-12">-->
+<!--            <label class="form-label">Notes (optional)</label>-->
+<!--            <textarea th:field="*{buildRoomName}" class="form-control bg-dark border-0" rows="2"-->
+<!--                      placeholder="Screen size, projector, etc."></textarea>-->
+<!--        </div>-->
+
+        <div class="col-12 text-end mt-3">
+            <a th:href="@{/rooms}" class="btn btn-outline-light">Cancel</a>
+            <button type="submit" class="btn btn-danger">
+                <i class="bi bi-check2-circle me-1"></i> Save
+            </button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
