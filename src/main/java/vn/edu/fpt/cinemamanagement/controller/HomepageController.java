@@ -15,10 +15,10 @@ public class HomepageController {
     private MovieService movieService;
 
     //Huynh Anh add
-    @GetMapping({"/", "/Homepage"})
+    @GetMapping({"/", "/homepage"})
     public String homepage(Model model) {
         List<Movie> nowShowing = movieService.getNowShowingMovies();
         model.addAttribute("nowShowing", nowShowing);
-        return "Homepage/Homepage";
+        return "homepage/homepage";
     }
 }
