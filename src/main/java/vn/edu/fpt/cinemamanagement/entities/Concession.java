@@ -5,7 +5,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "Concession")
-public class ConcessionEntity {
+public class Concession {
 
     @Id
     @Column(name = "concession_id", length = 255, nullable = false)
@@ -23,7 +23,7 @@ public class ConcessionEntity {
     @Column(name = "status", nullable = false)
     private Boolean status = true;
 
-    public ConcessionEntity() {}
+    public Concession() {}
 
     public String getConcessionId() { return concessionId; }
     public void setConcessionId(String concessionId) { this.concessionId = concessionId; }
@@ -42,7 +42,7 @@ public class ConcessionEntity {
 
     @Override public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ConcessionEntity that)) return false;
+        if (!(o instanceof Concession that)) return false;
         return Objects.equals(concessionId, that.concessionId);
     }
     @Override public int hashCode() { return Objects.hash(concessionId); }

@@ -1,8 +1,8 @@
-<head th:fragment="head">
+<head th:fragment="head_admin">
     <meta charset="utf-8">
 
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title th:text="${pageTitle} ?: 'Admin'">Admin</title>
+    <title th:text="${pageTitle} ?: 'Admin'">Dashboard</title>
     <!-- ICON & FONTS -->
     <link rel="icon" th:href="@{/img/favicon.ico}"/>
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -38,27 +38,16 @@
     <!-- Sidebar -->
     <div class="sidebar pe-4 pb-3">
         <nav class="navbar bg-secondary navbar-dark">
-            <a th:href="@{/}" class="navbar-brand mx-4 mb-3">
-                <h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>Cinema Mg</h3>
+            <a th:href="@{/homepage}" class="navbar-brand mx-4 mb-3">
+                <h3 class="text-primary">Dashboard</h3>
             </a>
-
-            <div class="d-flex align-items-center ms-4 mb-4">
-                <div class="position-relative">
-                    <img class="rounded-circle" th:src="@{/img/user.jpg}" alt="" style="width:40px;height:40px"/>
-                    <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
-                </div>
-                <div class="ms-3">
-                    <h6 class="mb-0">John Doe</h6>
-                    <span>Admin</span>
-                </div>
-            </div>
 
             <div class="navbar-nav w-100">
                 <a th:href="@{/dashboard}" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-                <a th:href="@{/staff}" class="nav-item nav-link"><i class="fa fa-users me-2"></i>Staff</a>
-                <a th:href="@{/movies}" class="nav-item nav-link"><i class="fa fa-film me-2"></i>Movies</a>
+                <a th:href="@{/staffs}" class="nav-item nav-link"><i class="fa fa-users me-2"></i>Staff Management</a>
+                <a th:href="@{/movies}" class="nav-item nav-link"><i class="fa fa-film me-2"></i>Movies Management</a>
                 <a th:href="@{/schedules}" class="nav-item nav-link"><i
-                        class="fa fa-calendar-alt me-2"></i>Schedules</a>
+                        class="fa fa-calendar-alt me-2"></i>Schedules Management</a>
                 <a th:href="@{/rooms}" class="nav-item nav-link"><i class="fa fa-chair me-2"></i>Rooms</a>
                 <a th:href="@{/vouchers}" class="nav-item nav-link"><i class="fa fa-ticket-alt me-2"></i>Vouchers</a>
                 <a th:href="@{/concessions}" class="nav-item nav-link"><i

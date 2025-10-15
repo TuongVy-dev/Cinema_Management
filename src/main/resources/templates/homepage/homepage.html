@@ -20,14 +20,13 @@
         <div class="header__left">
             <a href="/static" class="header__logo" aria-label="CGV Home">
                 <img th:src="@{/assets/img/logo.svg}" alt="CGV Movies Logo" width="120" height="40">
-                <span class="header__logo-text">D&D</span>
             </a>
         </div>
         <div class="header__center">
             <nav class="nav" role="navigation">
                 <ul class="nav__list">
                     <li class="nav__item"><a href="/homepage" class="nav__link">Homepage</a></li>
-                    <li class="nav__item"><a href="/movies" class="nav__link">Movies</a></li>
+                    <li class="nav__item nav-item dropdown"><a href="/movies"  class="nav__link">Movies</a></li>
                     <li class="nav__item"><a href="/promotions" class="nav__link">Promotions</a></li>
                     <li class="nav__item"><a href="/history" class="nav__link">Transaction History</a></li>
                 </ul>

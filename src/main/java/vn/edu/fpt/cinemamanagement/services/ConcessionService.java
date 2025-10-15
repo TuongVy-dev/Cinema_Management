@@ -3,8 +3,8 @@ package vn.edu.fpt.cinemamanagement.services;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import vn.edu.fpt.cinemamanagement.entities.ConcessionEntity;
-import vn.edu.fpt.cinemamanagement.repositories.ConcessionReposive; // đúng tên interface của bạn
+import vn.edu.fpt.cinemamanagement.entities.Concession;
+import vn.edu.fpt.cinemamanagement.repositories.ConcessionRepository; // đúng tên interface của bạn
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -19,25 +19,25 @@ public class ConcessionService {
     private static final Pattern PC = Pattern.compile("^PC\\d{4}$");
     private static final Pattern DR = Pattern.compile("^DR\\d{4}$");
 
-    private final ConcessionReposive repo;
+    private final ConcessionRepository repo;
 
-    public ConcessionService(ConcessionReposive repo) { this.repo = repo; }
+    public ConcessionService(ConcessionRepository repo) { this.repo = repo; }
 
-    public List<ConcessionEntity> findAll() { return repo.findAll(); }
+    public List<Concession> findAll() { return repo.findAll(); }
 
-    public ConcessionEntity findById(String id) {
+    public Concession findById(String id) {
         return repo.findById(id).orElseThrow(() -> new NoSuchElementException("Not found: " + id));
     }
 
     /** Create: truyền "PC" (Popcorn) hoặc "DR" (Drink) để sinh ID */
-    public ConcessionEntity create(ConcessionEntity c, String prefix) {
+    public Concession create(Concession c, String prefix) {
         if (c.getStatus() == null) c.setStatus(true);
         c.setConcessionId(ensureIdWithPrefix(c.getConcessionId(), prefix));
         return repo.save(c);
     }
 
-    public ConcessionEntity update(String id, ConcessionEntity input) {
-        ConcessionEntity cur = findById(id); // ID immutable
+    public Concession update(String id, Concession input) {
+        Concession cur = findById(id); // ID immutable
         cur.setName(input.getName());
         cur.setPrice(input.getPrice());
         cur.setDescription(input.getDescription());
@@ -68,7 +68,7 @@ public class ConcessionService {
         if (!p.equals("PC") && !p.equals("DR"))
             throw new IllegalArgumentException("Invalid type/prefix: " + prefix);
 
-        Optional<ConcessionEntity> top =
+        Optional<Concession> top =
                 repo.findTopByConcessionIdStartingWithOrderByConcessionIdDesc(p);
 
         int next = top.map(e -> e.getConcessionId())
@@ -82,6 +82,6 @@ public class ConcessionService {
     }
 
     // (tuỳ: giữ tương thích)
-    public List<ConcessionEntity> list() { return findAll(); }
-    public ConcessionEntity get(String id) { return repo.findById(id).orElse(null); }
+    public List<Concession> list() { return findAll(); }
+    public Concession get(String id) { return repo.findById(id).orElse(null); }
 }

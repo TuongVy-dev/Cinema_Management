@@ -4,7 +4,7 @@ package vn.edu.fpt.cinemamanagement.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import vn.edu.fpt.cinemamanagement.entities.ConcessionEntity;
+import vn.edu.fpt.cinemamanagement.entities.Concession;
 import vn.edu.fpt.cinemamanagement.services.ConcessionService;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public class ConcessionController {
     // LIST
     @GetMapping("")
     public String list(Model model) {
-        List<ConcessionEntity> items = service.findAll();
+        List<Concession> items = service.findAll();
         model.addAttribute("pageTitle", "Concessions");
         model.addAttribute("concessions", items);
         return "concession/concession_list";
@@ -31,7 +31,7 @@ public class ConcessionController {
     // CREATE - form
     @GetMapping("/create")
     public String createForm(Model model) {
-        ConcessionEntity c = new ConcessionEntity();
+        Concession c = new Concession();
         c.setStatus(true);
         model.addAttribute("pageTitle", "Create Concession");
         model.addAttribute("concession", c);
@@ -40,7 +40,7 @@ public class ConcessionController {
 
     // CREATE - submit (type = "PC" | "DR")
     @PostMapping("/create")
-    public String create(@ModelAttribute("concession") ConcessionEntity c,
+    public String create(@ModelAttribute("concession") Concession c,
                          @RequestParam("type") String type) {
         String prefix = "PC".equalsIgnoreCase(type) ? "PC"
                 : "DR".equalsIgnoreCase(type) ? "DR" : "";
@@ -54,7 +54,7 @@ public class ConcessionController {
     // DETAIL
     @GetMapping("/{concessionId}/detail")
     public String detail(@PathVariable("concessionId") String id, Model model) {
-        ConcessionEntity c = service.findById(id);
+        Concession c = service.findById(id);
         model.addAttribute("pageTitle", "Concession Detail");
         model.addAttribute("concession", c);
         return "concession/concession_detail";
@@ -63,7 +63,7 @@ public class ConcessionController {
     // EDIT - form
     @GetMapping("/{concessionId}/edit")
     public String editForm(@PathVariable("concessionId") String id, Model model) {
-        ConcessionEntity c = service.findById(id);
+        Concession c = service.findById(id);
         model.addAttribute("pageTitle", "Edit Concession");
         model.addAttribute("concession", c);
         return "concession/concession_update";
@@ -72,7 +72,7 @@ public class ConcessionController {
     // EDIT - submit
     @PostMapping("/{concessionId}/edit")
     public String update(@PathVariable("concessionId") String id,
-                         @ModelAttribute("concession") ConcessionEntity c) {
+                         @ModelAttribute("concession") Concession c) {
         service.update(id, c);
         return "redirect:/concessions";
     }

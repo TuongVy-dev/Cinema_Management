@@ -16,7 +16,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping(value = "rooms")
-public class RoomPageController {
+public class RoomController {
     @Autowired
     private RoomService roomService;
     @Autowired
@@ -24,7 +24,7 @@ public class RoomPageController {
     @Autowired
     private TemplateSeatRepository templateSeatRepository;
 
-    public RoomPageController(
+    public RoomController(
             RoomService roomService,
             TemplateRepository templateRepository,
             TemplateSeatRepository templateSeatRepository) {
