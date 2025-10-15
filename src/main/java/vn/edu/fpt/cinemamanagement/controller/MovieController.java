@@ -27,7 +27,7 @@ public class MovieController {
     public String getMovieDetails(@PathVariable("id") String id, Model model) {
         Movie movie = movieService.findById(id);
         model.addAttribute("movie", movie);
-        return "movie_detail";
+        return "movies/movie_detail";
     }
     @RequestMapping(value = "create")
     public String createMovie(Model model) {

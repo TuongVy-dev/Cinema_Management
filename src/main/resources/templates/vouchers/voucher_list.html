@@ -1,21 +1,20 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en" th:fragment="layout(title, content)">
-<head th:replace="~{fragment/frag :: head_admin}">
+<head th:replace="~{fragment/frag :: head_dashboard}">
 </head>
 <body>
 <div class="container-fluid position-relative d-flex p-0">
-    <div th:replace="~{fragment/frag :: sidebar}"></div>
+    <div th:replace="~{fragment/frag :: sidebar_dashboard}"></div>
 
     <!-- Content -->
     <div class="content">
 
-        <div th:replace="~{fragment/frag :: navbar}"></div>
+        <div th:replace="~{fragment/frag :: navbar_dashboard}"></div>
 
         <!-- Content slot - SAFE -->
         <div th:if="${content != null}">
             <th:block th:replace="${content}"></th:block>
         </div>
-
 
         <div class="container-fluid pt-4 px-4">
             <div class="bg-secondary rounded p-4">
@@ -57,14 +56,14 @@
                                 <a class="btn btn-outline-edit btn-info">
                                     <i class="fa fa-edit"></i> Edit
                                 </a>
-
+                                <a th:href="@{/vouchers/detail/{id} (id= ${vouchers.getVoucherId()})}"
+                                   class="btn btn-light btn-compact">View Details
+                                </a>
                                 <button class="btn btn-danger delete-voucher-btn btn-compact"
                                         data-bs-toggle="modal" data-bs-target="#deleteVoucherModal"
                                         th:attr="data-id=${vouchers.getVoucherId()}, data-code=${vouchers.getVoucherName()}">
                                     <i class="fa fa-trash"></i> Delete
                                 </button>
-                                <a th:href="@{/vouchers/detail/{id} (id= ${vouchers.getVoucherId()})}"
-                                   class="btn btn-light btn-compact">View Details</a>
                             </td>
                         </tr>
                         </tbody>

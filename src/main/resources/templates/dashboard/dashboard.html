@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en" th:fragment="layout(title, content)">
-<head th:replace="~{fragment/frag :: head_admin}">
+<head th:replace="~{fragment/frag :: head_dashboard}">
 </head>
 <body>
 <div class="container-fluid position-relative d-flex p-0">
-     <div th:replace="~{fragment/frag :: sidebar}"></div>
+     <div th:replace="~{fragment/frag :: sidebar_dashboard}"></div>
 
     <!-- Content -->
     <div class="content">
 
-       <div th:replace="~{fragment/frag :: navbar}"></div>
+       <div th:replace="~{fragment/frag :: navbar_dashboard}"></div>
 
         <!-- Content slot - SAFE -->
         <div th:if="${content != null}">

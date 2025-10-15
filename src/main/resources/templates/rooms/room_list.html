@@ -1,16 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
-<head th:replace="~{fragment/frag :: head_admin}"></head>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" th:fragment="layout(title, content)">
+<head th:replace="~{fragment/frag :: head_dashboard}">
+</head>
 <body>
 <div class="container-fluid position-relative d-flex p-0">
-    <div th:replace="~{fragment/frag :: sidebar}"></div>
+    <div th:replace="~{fragment/frag :: sidebar_dashboard}"></div>
 
     <!-- Content -->
     <div class="content">
 
-        <!-- Topbar -->
-        <div th:replace="~{fragment/frag :: navbar}"></div>
-            <!-- HEADER + ADD -->
+        <div th:replace="~{fragment/frag :: navbar_dashboard}"></div>
+
+        <!-- Content slot - SAFE -->
+        <div th:if="${content != null}">
+            <th:block th:replace="${content}"></th:block>
+        </div>
+
+        <!-- HEADER + ADD -->
             <div class="container-fluid pt-4 px-4">
                 <div class="d-flex align-items-center justify-content-between mb-3">
                     <h6 class="mb-0">Room list</h6>
