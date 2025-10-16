@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" th:fragment="layout(title, content)">
+<head th:replace="~{fragment/frag :: head_dashboard}">
+</head>
+<body>
+<div class="container-fluid position-relative d-flex p-0">
+    <div th:replace="~{fragment/frag :: sidebar_dashboard}"></div>
+
+    <!-- Content -->
+    <div class="content">
+
+        <div th:replace="~{fragment/frag :: navbar_dashboard}"></div>
+
+        <!-- Content slot - SAFE -->
+        <div th:if="${content != null}">
+            <th:block th:replace="${content}"></th:block>
+        </div>
+
+        <div class="container-fluid pt-4 px-4">
+            <div class="bg-secondary rounded p-4">
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="mb-0">Edit Staff - <span th:text="${staff.staffID}"></span></h4>
+                    <a class="btn btn-light btn-compact" th:href="@{/staffs}"> <i class="fa fa-arrow-left me-1 "></i>
+                        Back</a>
+                </div>
+
+                <div class="container bg-secondary text-white rounded p-4">
+
+                    <!-- LỖI ĐÃ KHẮC PHỤC: Th:action phải trỏ đến endpoint update -->
+                    <form th:action="@{/staffs/update/{id}(id=${staff.staffID})}" th:object="${staff}" method="post">
+
+                        <!-- Staff ID -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Staff ID:</label>
+                            <input type="text" th:field="*{staffID}" class="form-control" readonly>
+                        </div>
+
+                        <!-- Full Name -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Full Name:</label>
+                            <!-- th:field giúp giữ lại giá trị khi có lỗi -->
+                            <input type="text" th:field="*{fullName}" class="form-control text-uppercase" required>
+                        </div>
+
+                        <!-- Position -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Position:</label>
+                            <input type="text" th:field="*{position}" class="form-control" required>
+                        </div>
+
+                        <!-- Username -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Username:</label>
+                            <input type="text" th:field="*{username}" class="form-control" required>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Password:</label>
+                            <!-- th:value giúp hiển thị chuỗi ***** hoặc mật khẩu mới (nếu nhập lỗi) -->
+                            <input type="password" name="password" class="form-control" th:value="${staff.password}"/>
+
+                            <div th:if="${errorPassword != null}" class="text-danger" th:text="${errorPassword}"></div>
+                            <small class="text-muted">Không cần nhập lại nếu không muốn thay đổi password.</small>
+                        </div>
+
+                        <!-- Phone -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Phone:</label>
+                            <input type="text" th:field="*{phone}" class="form-control" required>
+                            <small class="text-danger" th:if="${errorPhone}" th:text="${errorPhone}"></small>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Email:</label>
+                            <input type="email" th:field="*{email}" class="form-control" required>
+                            <small class="text-danger" th:if="${errorEmail}" th:text="${errorEmail}"></small>
+                        </div>
+
+                        <div class="d-flex gap-2 mt-4">
+                            <button type="submit" class="btn btn-sm btn-success">
+                                <i class="fa fa-save"></i> Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- jQuery and Bootstrap Bundle -->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Vendor JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js"></script>
+
+<!-- App JS (Static files in /static/js/) -->
+<script th:src="@{/assets/js/main.js}"></script>
+<script th:src="@{/assets/js/dashboard.js}"></script>
+</body>
+</html>
