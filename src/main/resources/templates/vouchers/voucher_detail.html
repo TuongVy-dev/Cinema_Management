@@ -58,9 +58,19 @@
                         <div class="fw-semibold"
                              th:text="${voucher.getUsageLimit()}"></div>
                     </div>
+                    <a class="btn btn-sm btn-success"
+                       th:href="@{/vouchers/update/{id}(id=${voucher.getVoucherId()})}">
+                        <i class="fa fa-edit"></i> Edit
+                    </a>
+                    <a class="btn btn-sm btn-danger"
+                       th:href="@{/movies/delete/{id}(id=${voucher.getVoucherId()})}">
+                        <i class="fa fa-trash"></i> Delete
+                    </a>
                 </div>
             </div>
         </div>
+
+
 
 
         <!-- Script -->

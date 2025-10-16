@@ -14,8 +14,8 @@ public class Voucher {
     @Column(name = "voucher_name")
     private String voucherName;
     private String code;
-    @Column(name = "voucher_value")
-    private Integer voucherValue;
+    @Column(name = "discount_value")
+    private Integer discountValue;
     @Column(name = "usage_limit")
     private Integer usageLimit;
     @Column(name = "used_count")
@@ -29,7 +29,7 @@ public class Voucher {
         this.voucherId = voucherId;
         this.voucherName = voucherName;
         this.code = code;
-        this.voucherValue = voucherValue;
+        this.discountValue = voucherValue;
         this.usageLimit = usageLimit;
         this.usedCount = usedCount;
         this.discountType = discountType;
@@ -60,11 +60,11 @@ public class Voucher {
     }
 
     public Integer getVoucherValue() {
-        return voucherValue;
+        return discountValue;
     }
 
     public void setVoucherValue(Integer voucherValue) {
-        this.voucherValue = voucherValue;
+        this.discountValue = voucherValue;
     }
 
     public Integer getUsageLimit() {

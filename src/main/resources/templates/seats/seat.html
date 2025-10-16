@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Seats - The Last Guardian - CGV Cinema</title>
+    <meta name="description" content="Select your seats for The Last Guardian at CGV Cinema. Choose from available seats with premium VIP options.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/assets/css/style.css}">
+    <script th:src="@{/assets/js/seat.js}" defer></script>
+</head>
+<body>
+<!-- Header -->
+<header th:replace="~{fragment/frag :: navbar_homepage}"></header>
+<!-- Main Content -->
+<main role="main">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" style="background-color: var(--dark-gray); padding: 1rem 0;" aria-label="Breadcrumb">
+        <div class="container">
+            <ol style="display: flex; list-style: none; gap: 0.5rem; color: var(--medium-gray);">
+                <li><a href="index.html" style="color: var(--accent);">Home</a></li>
+                <li aria-hidden="true">›</li>
+                <li><a href="movies.html" style="color: var(--accent);">Movies</a></li>
+                <li aria-hidden="true">›</li>
+                <li><a href="movie-detail.html" style="color: var(--accent);">The Last Guardian</a></li>
+                <li aria-hidden="true">›</li>
+                <li><a href="booking.html" style="color: var(--accent);">Book Tickets</a></li>
+                <li aria-hidden="true">›</li>
+                <li style="color: var(--white);">Select Seats</li>
+            </ol>
+        </div>
+    </nav>
+
+    <!-- Booking Summary -->
+    <section class="section" style="padding-top: 2rem; padding-bottom: 1rem;">
+        <div class="container">
+            <div class="booking-summary" style="background-color: var(--dark-gray); padding: 1.5rem; border-radius: var(--border-radius); display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem;">
+                <img src="assets/poster-placeholder.jpg" alt="The Last Guardian poster" style="width: 80px; height: 120px; border-radius: 4px; object-fit: cover;">
+                <div style="flex: 1;">
+                    <h2 style="color: var(--primary); margin-bottom: 0.5rem;">The Last Guardian</h2>
+                    <p style="color: var(--accent); margin-bottom: 0.5rem;">CGV Vincom Center • December 15, 2024 • 7:30 PM (VIP)</p>
+                    <p style="color: var(--light-gray);">2x Standard Tickets • Total: $28.60</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seat Selection -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <div class="seat-map">
+                <h2 class="seat-map__title">Select Your Seats</h2>
+                <p style="text-align: center; color: var(--light-gray); margin-bottom: 2rem;">Click on available seats to select them</p>
+
+                <!-- Screen -->
+                <div class="seat-map__screen">SCREEN</div>
+
+                <!-- Seat Map Grid -->
+                <div class="seat-map__grid" role="grid" aria-label="Cinema seat map">
+                    <!-- Row A -->
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="A1" aria-label="Seat A1, available">A1</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="A2" aria-label="Seat A2, available">A2</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="A3" aria-label="Seat A3, available">A3</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="A4" aria-label="Seat A4, available">A4</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="A5" aria-label="Seat A5, available">A5</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="A6" aria-label="Seat A6, available">A6</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="A7" aria-label="Seat A7, available">A7</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="A8" aria-label="Seat A8, available">A8</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="A9" aria-label="Seat A9, available">A9</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="A10" aria-label="Seat A10, available">A10</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="A11" aria-label="Seat A11, available">A11</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="A12" aria-label="Seat A12, available">A12</div>
+
+                    <!-- Row B -->
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="B1" aria-label="Seat B1, available">B1</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="B2" aria-label="Seat B2, available">B2</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="B3" aria-label="Seat B3, available">B3</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="B4" aria-label="Seat B4, available">B4</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="B5" aria-label="Seat B5, available">B5</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="B6" aria-label="Seat B6, available">B6</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="B7" aria-label="Seat B7, available">B7</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="B8" aria-label="Seat B8, available">B8</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="B9" aria-label="Seat B9, available">B9</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="B10" aria-label="Seat B10, available">B10</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="B11" aria-label="Seat B11, available">B11</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="B12" aria-label="Seat B12, available">B12</div>
+
+                    <!-- Row C -->
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="C1" aria-label="Seat C1, available">C1</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="C2" aria-label="Seat C2, available">C2</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="C3" aria-label="Seat C3, available">C3</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="C4" aria-label="Seat C4, available">C4</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="C5" aria-label="Seat C5, available">C5</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="C6" aria-label="Seat C6, available">C6</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="C7" aria-label="Seat C7, available">C7</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="C8" aria-label="Seat C8, available">C8</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="C9" aria-label="Seat C9, available">C9</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="C10" aria-label="Seat C10, available">C10</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="C11" aria-label="Seat C11, available">C11</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="C12" aria-label="Seat C12, available">C12</div>
+
+                    <!-- Row D -->
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="D1" aria-label="Seat D1, available">D1</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="D2" aria-label="Seat D2, available">D2</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="D3" aria-label="Seat D3, available">D3</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="D4" aria-label="Seat D4, available">D4</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="D5" aria-label="Seat D5, available">D5</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="D6" aria-label="Seat D6, available">D6</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="D7" aria-label="Seat D7, available">D7</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="D8" aria-label="Seat D8, available">D8</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="D9" aria-label="Seat D9, available">D9</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="D10" aria-label="Seat D10, available">D10</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="D11" aria-label="Seat D11, available">D11</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="D12" aria-label="Seat D12, available">D12</div>
+
+                    <!-- Row E -->
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="E1" aria-label="Seat E1, available">E1</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="E2" aria-label="Seat E2, available">E2</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="E3" aria-label="Seat E3, available">E3</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="E4" aria-label="Seat E4, available">E4</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="E5" aria-label="Seat E5, available">E5</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="E6" aria-label="Seat E6, available">E6</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="E7" aria-label="Seat E7, available">E7</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="E8" aria-label="Seat E8, available">E8</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="E9" aria-label="Seat E9, available">E9</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="E10" aria-label="Seat E10, available">E10</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="E11" aria-label="Seat E11, available">E11</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="E12" aria-label="Seat E12, available">E12</div>
+
+                    <!-- Row F -->
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="F1" aria-label="Seat F1, available">F1</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="F2" aria-label="Seat F2, available">F2</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="F3" aria-label="Seat F3, available">F3</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="F4" aria-label="Seat F4, available">F4</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="F5" aria-label="Seat F5, available">F5</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="F6" aria-label="Seat F6, available">F6</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="F7" aria-label="Seat F7, available">F7</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="F8" aria-label="Seat F8, available">F8</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="F9" aria-label="Seat F9, available">F9</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="F10" aria-label="Seat F10, available">F10</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="F11" aria-label="Seat F11, available">F11</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="F12" aria-label="Seat F12, available">F12</div>
+
+                    <!-- Row G -->
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="G1" aria-label="Seat G1, available">G1</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="G2" aria-label="Seat G2, available">G2</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="G3" aria-label="Seat G3, available">G3</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="G4" aria-label="Seat G4, available">G4</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="G5" aria-label="Seat G5, available">G5</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="G6" aria-label="Seat G6, available">G6</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="G7" aria-label="Seat G7, available">G7</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="G8" aria-label="Seat G8, available">G8</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="G9" aria-label="Seat G9, available">G9</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="G10" aria-label="Seat G10, available">G10</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="G11" aria-label="Seat G11, available">G11</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="G12" aria-label="Seat G12, available">G12</div>
+
+                    <!-- Row H -->
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="H1" aria-label="Seat H1, available">H1</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="H2" aria-label="Seat H2, available">H2</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="H3" aria-label="Seat H3, available">H3</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="H4" aria-label="Seat H4, available">H4</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="H5" aria-label="Seat H5, available">H5</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="H6" aria-label="Seat H6, available">H6</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="H7" aria-label="Seat H7, available">H7</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="H8" aria-label="Seat H8, available">H8</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="H9" aria-label="Seat H9, available">H9</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="H10" aria-label="Seat H10, available">H10</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="H11" aria-label="Seat H11, available">H11</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="H12" aria-label="Seat H12, available">H12</div>
+
+                    <!-- Row I -->
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="I1" aria-label="Seat I1, available">I1</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="I2" aria-label="Seat I2, available">I2</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="I3" aria-label="Seat I3, available">I3</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="I4" aria-label="Seat I4, available">I4</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="I5" aria-label="Seat I5, available">I5</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="I6" aria-label="Seat I6, available">I6</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="I7" aria-label="Seat I7, available">I7</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="I8" aria-label="Seat I8, available">I8</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="I9" aria-label="Seat I9, available">I9</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="I10" aria-label="Seat I10, available">I10</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="I11" aria-label="Seat I11, available">I11</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="I12" aria-label="Seat I12, available">I12</div>
+
+                    <!-- Row J -->
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="J1" aria-label="Seat J1, available">J1</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="J2" aria-label="Seat J2, available">J2</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="J3" aria-label="Seat J3, available">J3</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="J4" aria-label="Seat J4, available">J4</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="J5" aria-label="Seat J5, available">J5</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="J6" aria-label="Seat J6, available">J6</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="J7" aria-label="Seat J7, available">J7</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="J8" aria-label="Seat J8, available">J8</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="J9" aria-label="Seat J9, available">J9</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="J10" aria-label="Seat J10, available">J10</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="J11" aria-label="Seat J11, available">J11</div>
+                    <div class="seat seat--available" role="gridcell" tabindex="0" data-seat="J12" aria-label="Seat J12, available">J12</div>
+                </div>
+
+                <!-- Legend -->
+                <div class="seat-map__legend">
+                    <div class="legend-item">
+                        <div class="legend-item__color legend-item__color--available"></div>
+                        <span>Available</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-item__color legend-item__color--selected"></div>
+                        <span>Selected</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-item__color legend-item__color--booked"></div>
+                        <span>Booked</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-item__color legend-item__color--vip"></div>
+                        <span>VIP</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Selected Seats Summary -->
+            <div class="selected-seats" style="background-color: var(--dark-gray); padding: 1.5rem; border-radius: var(--border-radius); margin-top: 2rem;">
+                <h3 style="color: var(--primary); margin-bottom: 1rem;">Selected Seats</h3>
+                <div class="selected-seats__list" style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem;">
+                    <span class="selected-seat" style="background-color: var(--primary); color: white; padding: 0.5rem 1rem; border-radius: 4px; display: none;" data-seat="E8">E8</span>
+                    <span class="selected-seat" style="background-color: var(--primary); color: white; padding: 0.5rem 1rem; border-radius: 4px; display: none;" data-seat="E9">E9</span>
+                </div>
+                <p style="color: var(--light-gray); font-size: 0.9rem;">Click on seats to select them. You can select up to 8 seats.</p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem;">
+                <a class="btn btn--secondary btn--large" href="booking.html">Back to Booking</a>
+                <a class="btn btn--large" href="checkout.html">Proceed to Checkout</a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Footer -->
+<footer th:replace = "~{fragment/frag :: footer_homepage}" ></footer>
+</body>
+</html>
