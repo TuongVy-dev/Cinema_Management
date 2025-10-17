@@ -14,9 +14,10 @@ public class StaffController {
     @Autowired
     private StaffService staffService;
 
-    // --- List ---
+    // --- List all staff---
     @GetMapping
     public String getAllStaff(Model model) {
+        // add list of all staff to the model
         model.addAttribute("staffList", staffService.getAllStaff());
         return "staffs/staff_list";
     }
@@ -24,40 +25,38 @@ public class StaffController {
     // --- Create form ---
     @GetMapping("/create")
     public String createStaff(Model model) {
+       //add an empty Staff object to the model to bind form data
         model.addAttribute("staff", new Staff());
         return "staffs/staff_create";
     }
 
-    // --- Create Save ---
+    // --- Show Create form  ---
     @PostMapping("/save")
     public String saveStaff(@ModelAttribute Staff staff, Model model) {
         // Check validation before save: GỌI HÀM TỪ SERVICE
         boolean hasError = staffService.validateStaff(staff, model, false);
+        // If validation fails, return to the create form with error messages
         if (hasError) {
             model.addAttribute("staff", staff);
             return "staffs/staff_create"; // return  form create
         }
-
+// If validation passes, save the new staff to the database
         staffService.createStaff(staff);
+        // Redirect to the staff list page
         return "redirect:/staffs";
     }
-
-    // --- Update form ---
+    // --- Show Update Staff Form ---
     @GetMapping("/update/{id}")
     public String updateStaffForm(@PathVariable("id") String staffID, Model model) {
+        // Get the existing staff by ID
         Staff staff = staffService.getStaffByID(staffID);
         if (staff == null) {
             return "redirect:/staffs";
         }
-
-        // 1. DISPLAY: Mask the password with a string of ***** of the same length
-        if (staff.getPassword() != null && !staff.getPassword().isEmpty()) {
-            staff.setPassword("*".repeat(staff.getPassword().length()));
-        }
-
         model.addAttribute("staff", staff);
         return "staffs/staff_update";
     }
+
 
     // --- Update Save ---
     @PostMapping("/update/{id}")
@@ -67,34 +66,22 @@ public class StaffController {
             return "redirect:/staffs";
         }
 
-        // Ensure the staffID is correct
-        staff.setStaffID(staffID);
+        // Giữ lại ID, phone, email, password cũ
+        staff.setStaffID(existing.getStaffID());
+        staff.setPhone(existing.getPhone());
+        staff.setEmail(existing.getEmail());
+        staff.setPassword(existing.getPassword());
 
-        // Handle password logic before validation
-        int originalPasswordLength = existing.getPassword() != null ? existing.getPassword().length() : 0;
-        String obscuredPassword = "*".repeat(originalPasswordLength);
-
-        // If the entered password is a string of *****, restore the old password
-        if (staff.getPassword() != null && staff.getPassword().equals(obscuredPassword)) {
-            staff.setPassword(existing.getPassword());
-        }
-
-        // Validate: GỌI HÀM TỪ SERVICE
         boolean hasError = staffService.validateStaff(staff, model, true);
-
         if (hasError) {
-            // If validation fails, reset the password field to ***** before rendering the view again
-            staff.setPassword(obscuredPassword);
-
             model.addAttribute("staff", staff);
-            // return view update
             return "staffs/staff_update";
         }
 
         staffService.updateStaff(staff);
-
         return "redirect:/staffs";
     }
+
 
     // --- Delete ---
     @PostMapping("/delete/{id}")

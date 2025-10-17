@@ -31,19 +31,30 @@
                         <div class="col-md-6 mb-3">
                             <label for="fullName" class="form-label">Full Name *</label>
                             <input type="text" id="fullName" th:field="*{fullName}" class="form-control bg-dark text-white" required>
+                            <div th:if="${errorFullName != null}" class="text-danger" th:text="${errorFullName}"></div>
                         </div>
+
 
                         <div class="col-md-6 mb-3">
                             <label for="username" class="form-label">Username *</label>
                             <input type="text" id="username" th:field="*{username}" class="form-control bg-dark text-white" required>
+                            <div th:if="${errorUsername != null}" class="text-danger" th:text="${errorUsername}"></div>
                         </div>
+
                     </div>
 
                     <!-- Position & Phone -->
                     <div class="row mb-3">
+                        <!-- Position -->
                         <div class="col-md-6 mb-3">
                             <label for="position" class="form-label">Position *</label>
-                            <input type="text" id="position" th:field="*{position}" class="form-control bg-dark text-white" required>
+                            <select id="position" th:field="*{position}" class="form-select bg-dark text-white" required>
+                                <option value="">-- Select Position --</option>
+                                <option value="Cashier Staff">Cashier Staff</option>
+                                <option value="Redemption Staff">Redemption Staff</option>
+                                <option value="Check-in Ticket Staff">Check-in Ticket Staff</option>
+                                <option value="Concession Staff">Concession Staff</option>
+                            </select>
                         </div>
 
                         <div class="col-md-6 mb-3">
@@ -75,13 +86,6 @@
                     </div>
                 </form>
 
-            </div>
-        </div>
-
-        <!-- Footer -->
-        <div class="container-fluid pt-4 px-4">
-            <div class="bg-secondary rounded-top p-4 text-center">
-                &copy; 2025 Cinema Management System
             </div>
         </div>
     </div>

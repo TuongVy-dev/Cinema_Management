@@ -82,10 +82,16 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to delete staff **<span id="deleteStaffName"></span>** (ID: <span
-                            id="deleteStaffIdDisplay"></span>)?</p>
+                    <p>
+                        Are you sure you want to delete staff
+                        <strong class="text-warning fs-5"><span id="deleteStaffName"></span></strong>
+
+                        (ID:
+                        <strong class="text-warning"><span id="deleteStaffIdDisplay"></span></strong>)?
+                    </p>
+
                     <input type="hidden" id="deleteStaffId">
-                    <p class="text-warning small">**(Warning: Deleting this staff may affect past shift records or transaction history.**</p>
+                    <p class="text-warning small">**Warning: Deleting this staff may affect past shift records or transaction history.**</p>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
