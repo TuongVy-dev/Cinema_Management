@@ -32,27 +32,30 @@
 
                 <form action="/vouchers/update" method="post" id="voucherForm" th:object="${voucher}">
 
-                    <input type="hidden" th:field="*{discountType}" />
-                    <input type="hidden" th:field="*{usedCount}" />
+                    <input type="hidden" th:field="*{discountType}"/>
+                    <input type="hidden" th:field="*{usedCount}"/>
 
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="ID" class="form-label">ID</label>
-                            <input th:field="*{voucherId}" type="text" id="ID" name="voucherID" class="form-control bg-dark text-white"
+                            <input th:field="*{voucherId}" type="text" id="ID" name="voucherID"
+                                   class="form-control bg-dark text-white"
                                    readonly>
                         </div>
                     </div>
 
                     <div class="mb-3">
                         <label for="voucherName" class="form-label">Voucher Name</label>
-                        <input th:field="*{voucherName}" type="text" id="voucherName" name="voucherName" class="form-control bg-dark text-white"
+                        <input th:field="*{voucherName}" type="text" id="voucherName" name="voucherName"
+                               class="form-control bg-dark text-white"
                                required>
                         <div th:if="${errorName != null}" class="text-danger" th:text="${errorName}"></div>
                     </div>
 
                     <div class="mb-3">
                         <label for="code" class="form-label">Voucher Code</label>
-                        <input th:field="*{code}" type="text" id="code" name="code" class="form-control bg-dark text-white" required>
+                        <input th:field="*{code}" type="text" id="code" name="code"
+                               class="form-control bg-dark text-white" required>
                         <div th:if="${errorCode != null}" class="text-danger" th:text="${errorCode}"></div>
                     </div>
 
@@ -74,7 +77,8 @@
 
                         <div class="col-md-6">
                             <label for="discountType" class="form-label">Discount Type *</label>
-                            <select th:field="*{status}" id="discountType" name="discountType" class="form-select bg-dark text-white"
+                            <select th:field="*{status}" id="discountType" name="discountType"
+                                    class="form-select bg-dark text-white"
                                     required>
                                 <option value="true">Active</option>
                                 <option value="false">Inactive</option>
@@ -86,6 +90,7 @@
                         <button type="submit" class="btn btn-sm btn-success">
                             <i class="fa fa-save"></i> Save Changes
                         </button>
+                    </div>
                 </form>
             </div>
         </div>
