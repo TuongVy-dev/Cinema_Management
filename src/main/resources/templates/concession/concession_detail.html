@@ -1,52 +1,72 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{dashboard/dashboard :: layout(~{::title}, ~{::main})}">
-<head><title>Concession Detail</title></head>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" th:fragment="layout(title, content)">
+<head th:replace="~{fragment/frag :: head_dashboard}"></head>
 <body>
-<main>
-    <div class="container-fluid pt-4 px-4">
-        <div class="bg-secondary rounded p-4">
-            <div class="d-flex align-items-center mb-3">
-                <h6 class="mb-0">Concession Detail</h6>
-                <a class="btn btn-primary ms-auto btn-compact" th:href="@{|/concessions/${concession.concessionId}/edit|}">Edit</a>
-                <a class="btn btn-secondary ms-2 btn-compact" th:href="@{/concessions}">Back</a>
-            </div>
+<div class="container-fluid position-relative d-flex p-0">
+    <div th:replace="~{fragment/frag :: sidebar_dashboard}"></div>
 
-            <div class="col-12">
-                <label class="text-white-50">Image</label>
-                <div>
-                    <img th:if="${concession.img != null and !#strings.isEmpty(concession.img)}"
-                         th:src="${concession.img}" alt="img"
-                         style="width:160px;height:160px;object-fit:cover;border-radius:12px;"
-                         onerror="this.src='/img/placeholder.png'">
-                    <span th:if="${concession.img == null or #strings.isEmpty(concession.img)}" class="text-muted">No image</span>
-                </div>
-            </div>
+    <div class="content">
+        <div th:replace="~{fragment/frag :: navbar_dashboard}"></div>
 
-            <div class="row g-3">
-                <div class="col-md-3">
-                    <label class="text-white-50">ID</label>
-                    <div class="fw-semibold" th:text="${concession.concessionId}">PC0001</div>
+        <div class="container-fluid pt-4 px-4">
+            <div class="bg-secondary rounded p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h6 class="mb-0">Concession Details</h6>
+                    <a href="/concessions" class="btn btn-light btn-compact">
+                        <i class="fa fa-arrow-left me-1"></i> Back
+                    </a>
                 </div>
 
-                <div class="col-md-3">
-                    <label class="text-white-50">Name</label>
-                    <div class="fw-semibold" th:text="${concession.name}">Caramel Popcorn</div>
-                </div>
+                <div class="row g-3" th:object="${concession}">
+                    <div class="col-md-3">
+                        <label class="text-white-50">ID</label>
+                        <div class="fw-semibold" th:text="*{concessionId}"></div>
+                    </div>
 
-                <div class="col-md-3">
-                    <label class="text-white-50">Price</label>
-                    <div class="fw-semibold"
-                         th:text="${#numbers.formatDecimal(concession.price, 0, 'POINT', 0, 'COMMA')}">45,000</div>
-                </div>
+                    <div class="col-md-3">
+                        <label class="text-white-50">Name</label>
+                        <div class="fw-semibold" th:text="*{name}"></div>
+                    </div>
 
-                <div class="col-12">
-                    <label class="text-white-50">Description</label>
-                    <p class="mb-0" th:text="${concession.description}">...</p>
+                    <div class="col-md-3">
+                        <label class="text-white-50">Price</label>
+                        <div class="fw-semibold"
+                             th:text="${#numbers.formatDecimal(concession.price,0,'COMMA',0,'POINT')} + ' VNĐ'"></div>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="text-white-50">Description</label>
+                        <p class="mb-0" th:text="*{description}">...</p>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="text-white-50">Image</label>
+                        <div>
+                            <img th:if="${concession.img != null and !#strings.isEmpty(concession.img)}"
+                                 th:src="${concession.img}" alt="img"
+                                 style="width:160px;height:160px;object-fit:cover;border-radius:12px;"
+                                 onerror="this.src='/img/placeholder.png'">
+                            <span th:if="${concession.img == null or #strings.isEmpty(concession.img)}" class="text-muted">No image</span>
+                        </div>
+                    </div>
+
+                    <div class="col-12 d-flex gap-2">
+                        <a class="btn btn-success btn-compact"
+                           th:href="@{|/concessions/${concession.concessionId}/update|}">
+                            <i class="fa fa-edit"></i> Edit
+                        </a>
+                        <a class="btn btn-danger btn-compact"
+                           th:href="@{|/concessions/${concession.concessionId}/delete|}">
+                            <i class="fa fa-trash"></i> Delete
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</main>
+</div>
+
+<script src="/assets/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/js/dashboard.js"></script>
 </body>
 </html>
