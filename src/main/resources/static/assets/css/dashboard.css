@@ -360,7 +360,7 @@ body {
 
 /* nhỏ xíu cho nút gọn (nếu chưa có trong style.css) */
 .btn-compact {
-    padding: .35rem .7rem;
+    padding: .50rem .7rem;
     font-weight: 600;
 }
 

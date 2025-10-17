@@ -27,40 +27,61 @@
                 </div>
 
                 <!-- Form CODE -->
-                <div class="row g-3">
+                <div class="row g-3" th:object="${voucher}">
                     <div class="col-md-3">
                         <label class="text-white-50">ID</label>
-                        <div class="fw-semibold" th:text="${voucher.getVoucherId()}"></div>
+                        <div class="fw-semibold" th:text="*{voucherId}"></div>
                     </div>
 
                     <div class="col-md-3">
                         <label class="text-white-50">Name</label>
-                        <div class="fw-semibold" th:text="${voucher.getVoucherName()}">Caramel Popcorn</div>
+                        <div class="fw-semibold" th:text="*{voucherName}">Caramel Popcorn</div>
                     </div>
 
                     <div class="col-md-3">
                         <label class="text-white-50">Code</label>
-                        <div class="fw-semibold" th:text="${voucher.getCode()}">Caramel Popcorn</div>
+                        <div class="fw-semibold" th:text="*{code}">Caramel Popcorn</div>
                     </div>
 
                     <div class="col-md-3">
                         <label class="text-white-50">Discount type</label>
                         <div class="fw-semibold"
-                             th:text="${voucher.getDiscountType()}"></div>
+                             th:text="*{discountType}"></div>
                     </div>
                     <div class="col-md-3">
                         <label class="text-white-50">Voucher value</label>
                         <div class="fw-semibold"
-                             th:text="${voucher.getDiscountType().equalsIgnoreCase('amount') ? #numbers.formatDecimal(voucher.getVoucherValue(), 0, 'COMMA', 0, 'POINT') + ' VNĐ' : voucher.getVoucherValue() + '%'}"></div>
+                             th:text="${voucher.discountType.equalsIgnoreCase('amount') ? #numbers.formatDecimal(voucher.discountValue, 0, 'COMMA', 0, 'POINT') + ' VNĐ' : voucher.discountValue + '%'}"></div>
                     </div>
                     <div class="col-md-3">
-                        <label class="text-white-50">Voucher value</label>
+                        <label class="text-white-50">Usage Limit</label>
                         <div class="fw-semibold"
-                             th:text="${voucher.getUsageLimit()}"></div>
+                             th:text="*{usageLimit}"></div>
                     </div>
+                    <div class="col-md-3">
+                        <label class="text-white-50">Used Count</label>
+                        <div class="fw-semibold"
+                             th:text="*{usedCount}"></div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="text-white-50">Status</label>
+                        <div class="fw-semibold"
+                             th:text="${voucher.status ? 'Active' : 'Inactive'}"></div>
+                    </div>
+
+                    <a class="btn btn-sm btn-success"
+                       th:href="@{/vouchers/update/{id}(id=${voucher.getVoucherId()})}">
+                        <i class="fa fa-edit"></i> Edit
+                    </a>
+                    <a class="btn btn-sm btn-danger"
+                       th:href="@{/movies/delete/{id}(id=${voucher.getVoucherId()})}">
+                        <i class="fa fa-trash"></i> Delete
+                    </a>
                 </div>
             </div>
         </div>
+
+
 
 
         <!-- Script -->

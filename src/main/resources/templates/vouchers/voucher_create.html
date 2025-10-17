@@ -20,55 +20,56 @@
         <div class="container-fluid pt-4 px-4">
             <div class="bg-secondary rounded p-4">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h6 class="mb-0">Create New Voucher</h6>
-                    <a class="btn btn-light btn-compact" href="/vouchers">Back</a>
+                    <h6 class="mb-0">Create Voucher</h6>
+                    <a class="btn btn-light btn-compact" href="/vouchers"> <i class="fa fa-arrow-left me-1 "></i>
+                        Back</a>
                 </div>
 
-                <form action="/vouchers/create" method="post" id="voucherForm">
+
+                <div th:if="${error}" class="alert alert-danger" role="alert">
+                    <span th:text="${error}"></span>
+                </div>
+
+                <form action="/vouchers/create" method="post" id="voucherForm" th:object="${voucher}">
                     <div class="row mb-3">
 
                         <div class="col-md-6">
                             <label for="discountType" class="form-label">Discount Type *</label>
-                            <select id="discountType" name="discountType" class="form-select bg-dark text-white" required>
-                                <option value="">-- Select Type --</option>
-                                <option value="percentage">Percentage (%)</option>
-                                <option value="amount">Fixed Amount (VND)</option>
+                            <select th:field="*{discountType}" id="discountType" name="discountType" class="form-select bg-dark text-white"
+                                    required>
+                                <option value="Percentage">Percentage (%)</option>
+                                <option value="Amount">Fixed Amount (VNĐ)</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="mb-3">
-                        <label for="voucherId" class="form-label">Voucher ID</label>
-                        <input type="text" id="voucherId" name="voucherId" class="form-control bg-dark text-white" readonly>
+                        <label for="voucherName" class="form-label">Voucher Name *</label>
+                        <input th:field="*{voucherName}" type="text" id="voucherName" name="voucherName" class="form-control bg-dark text-white"
+                               required>
+                        <div th:if="${errorName != null}" class="text-danger" th:text="${errorName}"></div>
                     </div>
 
                     <div class="mb-3">
-                        <label for="voucherName" class="form-label">Voucher Name *</label>
-                        <input type="text" id="voucherName" name="voucherName" class="form-control bg-dark text-white" required>
+                        <label for="code" class="form-label">Voucher Code *</label>
+                        <input th:field="*{code}" type="text" id="code" name="code" class="form-control bg-dark text-white" required>
+                        <div th:if="${errorCode != null}" class="text-danger" th:text="${errorCode}"></div>
                     </div>
 
-                    <!-- Code fields -->
-                    <div class="code-fields" style="display:none;">
-                        <div class="mb-3">
-                            <label for="code" class="form-label">Voucher Code *</label>
-                            <input type="text" id="code" name="code" class="form-control bg-dark text-white">
-                        </div>
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="usageLimit" class="form-label">Usage Limit</label>
-                                <input type="number" id="usageLimit" name="usageLimit" class="form-control bg-dark text-white" min="0" placeholder="0 = unlimited">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="usedCount" class="form-label">Used Count</label>
-                                <input type="number" id="usedCount" name="usedCount" class="form-control bg-dark text-white" value="0" readonly>
-                            </div>
-                        </div>
+                    <div class="mb-3">
+                        <label for="usageLimit" class="form-label">Usage Limit</label>
+                        <input th:field="*{usageLimit}" type="number" id="usageLimit" name="usageLimit"
+                               class="form-control bg-dark text-white" min="1" placeholder="0" required>
+                        <div th:if="${errorUsage != null}" class="text-danger" th:text="${errorUsage}"></div>
                     </div>
+
 
                     <div class="mb-3">
                         <label for="discountValue" class="form-label">Discount Value *</label>
-                        <input type="number" id="discountValue" name="discountValue" class="form-control bg-dark text-white" required min="1">
+                        <input th:field="*{discountValue}" type="number" id="discountValue" name="discountValue"
+                               class="form-control bg-dark text-white" required min="1">
+                        <div th:if="${errorValue != null}" class="text-danger" th:text="${errorValue}"></div>
                     </div>
 
                     <div class="text-end">
@@ -78,11 +79,6 @@
             </div>
         </div>
 
-        <div class="container-fluid pt-4 px-4">
-            <div class="bg-secondary rounded-top p-4 text-center">
-                &copy; 2025 Cinema Management System
-            </div>
-        </div>
     </div>
 </div>
 

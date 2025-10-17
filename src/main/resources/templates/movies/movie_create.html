@@ -20,11 +20,11 @@
             <div class="bg-secondary rounded p-4">
 
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h6 class="mb-0">Movie Update Page</h6>
+                    <h4 class="mb-0">Create Movie</h4>
+                    <a class="btn btn-light btn-compact" href="/movies"> <i class="fa fa-arrow-left me-1 "></i> Back</a>
                 </div>
 
                 <div class="container bg-secondary text-white rounded p-4">
-                    <h2 class="text-primary mb-4">Create Movie</h2>
 
                     <form th:action="@{/movies/save}" th:object="${movie}" method="post">
                         <div class="mb-3">
@@ -77,22 +77,8 @@
             </div>
         </div>
 
-        <div class="container-fluid pt-4 px-4">
-            <div class="bg-secondary rounded-top p-4">
-                <div class="row">
-                    <div class="col-12 col-sm-6 text-center text-sm-start">
-                        &copy; <span id="year"></span> <a href="#">Cinema Management System</a>, All Rights
-                        Reserved.
-                    </div>
-                    <div class="col-12 col-sm-6 text-center text-sm-end">
-                        Admin Dashboard | Powered by DarkPan
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
-    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 </div>
 
 <!-- jQuery and Bootstrap Bundle -->

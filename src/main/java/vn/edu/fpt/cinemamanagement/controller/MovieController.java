@@ -46,6 +46,7 @@ public class MovieController {
         if (movie.getReleaseDate() == null) {
             movie.setReleaseDate(LocalDate.now());
         }
+       movie.setTitle(movie.getTitle().toUpperCase());
         movieService.save(movie);
     return "redirect:/movies";
     }

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" th:fragment="layout(title, content)">
+<head th:replace="~{fragment/frag :: head_dashboard}">
+</head>
+<body>
+<div class="container-fluid position-relative d-flex p-0">
+    <div th:replace="~{fragment/frag :: sidebar_dashboard}"></div>
+
+    <div class="content">
+
+        <div th:replace="~{fragment/frag :: navbar_dashboard}"></div>
+
+        <div th:if="${content != null}">
+            <th:block th:replace="${content}"></th:block>
+        </div>
+
+        <div class="container-fluid pt-4 px-4">
+            <div class="bg-secondary rounded p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h6 class="mb-0">Staff Details</h6>
+                    <a href="/staffs" class="btn btn-light btn-compact">
+                        <i class="fa fa-arrow-left me-1 "></i> Back
+                    </a>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="text-white-50">ID</label>
+                        <div class="fw-semibold" th:text="${staff.staffID}"></div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="text-white-50">Full Name</label>
+                        <div class="fw-semibold" th:text="${staff.fullName}">Nguyen Van A</div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="text-white-50">Username</label>
+                        <div class="fw-semibold" th:text="${staff.username}">nguyenvana</div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="text-white-50">Position</label>
+                        <div class="fw-semibold" th:text="${staff.position}">Manager</div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="text-white-50">Email</label>
+                        <div class="fw-semibold" th:text="${staff.email}">example@email.com</div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="text-white-50">Phone</label>
+                        <div class="fw-semibold" th:text="${staff.phone}">0123456789</div>
+                    </div>
+
+                    <a class="btn btn-sm btn-success"
+                       th:href="@{/staffs/update/{id}(id=${staff.staffID})}">
+                        <i class="fa fa-edit"></i> Edit
+                    </a>
+                    <button class="btn btn-sm btn-danger delete-staff-btn"
+                            data-bs-toggle="modal"
+                            data-bs-target="#deleteStaffModal"
+                            th:attr="data-id=${staff.staffID}, data-name=${staff.fullName}">
+                        <i class="fa fa-trash"></i> Delete
+                    </button>
+
+
+                </div>
+            </div>
+        </div>
+
+    </div> </div>
+
+<div class="modal fade" id="deleteStaffModal" tabindex="-1" aria-hidden="true"
+     data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-secondary text-white">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Staff</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Are you sure you want to delete staff
+                    <strong class="text-warning fs-5"><span id="deleteStaffName"></span></strong>
+
+                    (ID:
+                    <strong class="text-warning"><span id="deleteStaffIdDisplay"></span></strong>)?
+                </p>
+                <input type="hidden" id="deleteStaffId">
+                <p class="text-warning small">**Warning: Deleting this staff may affect past shift records or transaction history.**</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                <button class="btn btn-danger" id="confirmDeleteStaffBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js"></script>
+<script th:src="@{/assets/js/main.js}"></script>
+<script th:src="@{/assets/js/dashboard.js}"></script>
+<script th:src="@{/assets/js/staff.js}"></script>
+</body>
+</html>

@@ -39,15 +39,15 @@
     <div class="sidebar pe-4 pb-3">
         <nav class="navbar bg-secondary navbar-dark">
             <a th:href="@{/homepage}" class="navbar-brand mx-4 mb-3">
-                <h3 class="text-primary">Dashboard</h3>
+                <h2 class="text-primary">Dashboard</h2>
             </a>
 
             <div class="navbar-nav w-100">
                 <a th:href="@{/dashboard}" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-                <a th:href="@{/staffs}" class="nav-item nav-link"><i class="fa fa-users me-2"></i>Staff Management</a>
-                <a th:href="@{/movies}" class="nav-item nav-link"><i class="fa fa-film me-2"></i>Movies Management</a>
+                <a th:href="@{/staffs}" class="nav-item nav-link"><i class="fa fa-users me-2"></i>Staff</a>
+                <a th:href="@{/movies}" class="nav-item nav-link"><i class="fa fa-film me-2"></i>Movies</a>
                 <a th:href="@{/schedules}" class="nav-item nav-link"><i
-                        class="fa fa-calendar-alt me-2"></i>Schedules Management</a>
+                        class="fa fa-calendar-alt me-2"></i>Showtimes</a>
                 <a th:href="@{/rooms}" class="nav-item nav-link"><i class="fa fa-chair me-2"></i>Rooms</a>
                 <a th:href="@{/vouchers}" class="nav-item nav-link"><i class="fa fa-ticket-alt me-2"></i>Vouchers</a>
                 <a th:href="@{/concessions}" class="nav-item nav-link"><i
@@ -70,6 +70,66 @@
             <a th:href="@{/signin}" class="dropdown-item">Log Out</a>
         </div>
     </nav>
+</div>
+
+
+<div></div>
+
+<div th:fragment = "navbar_homepage">
+    <header class="header" role="banner">
+        <div class="header__container container">
+            <div class="header__left">
+                <a href="/static" class="header__logo" aria-label="CGV Home">
+                    <img th:src="@{/assets/img/logo.svg}" alt="CGV Movies Logo" width="120" height="40">
+                </a>
+            </div>
+            <div class="header__center">
+                <nav class="nav" role="navigation">
+                    <ul class="nav__list">
+                        <li class="nav__item"><a href="/homepage" class="nav__link">Homepage</a></li>
+                        <li class="nav__item nav-item dropdown"><a href="/movies"  class="nav__link">Movies</a></li>
+                        <li class="nav__item"><a href="/promotions" class="nav__link">Promotions</a></li>
+                        <li class="nav__item"><a href="/history" class="nav__link">Transaction History</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="header__right">
+                <a class="btn btn--outline" href="/login">Login</a>
+                <a class="btn" href="/register">Register</a>
+            </div>
+        </div>
+    </header>
+</div>
+
+<div th:fragment = "footer_homepage">
+    <footer class="footer" role="contentinfo">
+        <div class="footer__container">
+            <div class="footer__section">
+                <h3 class="footer__section-title">About CGV</h3>
+                <ul class="footer__list">
+                    <li class="footer__list-item">
+                        <a href="#" class="footer__list-link">About Us</a>
+                    </li>
+                    <li class="footer__list-item">
+                        <a href="#" class="footer__list-link">Contact</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="footer__section">
+                <h3 class="footer__section-title">Contact Info</h3>
+                <p class="footer__contact">Hotline: 1900 6017</p>
+                <p class="footer__contact">Email: support@cgv.vn</p>
+                <p style="color: var(--light-gray); margin-top: 1rem;">
+                    Available 24/7 for your convenience
+                </p>
+            </div>
+
+        </div>
+
+        <div class="footer__bottom">
+            <p>&copy; 2024 CGV Movies. All rights reserved. | Premium Cinema Experience</p>
+        </div>
+    </footer>
 </div>
 
 

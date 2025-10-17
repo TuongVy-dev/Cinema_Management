@@ -1,10 +1,115 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" th:fragment="layout(title, content)">
+<head th:replace="~{fragment/frag :: head_dashboard}">
 </head>
 <body>
+<div class="container-fluid position-relative d-flex p-0">
+    <div th:replace="~{fragment/frag :: sidebar_dashboard}"></div>
 
+    <!-- Content -->
+    <div class="content">
+
+        <div th:replace="~{fragment/frag :: navbar_dashboard}"></div>
+
+        <!-- Content slot - SAFE -->
+        <div th:if="${content != null}">
+            <th:block th:replace="${content}"></th:block>
+        </div>
+
+        <!-- FORM -->
+        <div class="container-fluid pt-4 px-4">
+            <div class="bg-secondary rounded p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h6 class="mb-0">Create Voucher</h6>
+                    <a class="btn btn-light btn-compact" href="/vouchers"> <i class="fa fa-arrow-left me-1 "></i>
+                        Back</a>
+                </div>
+
+
+                <div th:if="${error}" class="alert alert-danger" role="alert">
+                    <span th:text="${error}"></span>
+                </div>
+
+                <form action="/vouchers/update" method="post" id="voucherForm" th:object="${voucher}">
+
+                    <input type="hidden" th:field="*{discountType}"/>
+                    <input type="hidden" th:field="*{usedCount}"/>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="ID" class="form-label">ID</label>
+                            <input th:field="*{voucherId}" type="text" id="ID" name="voucherID"
+                                   class="form-control bg-dark text-white"
+                                   readonly>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="voucherName" class="form-label">Voucher Name</label>
+                        <input th:field="*{voucherName}" type="text" id="voucherName" name="voucherName"
+                               class="form-control bg-dark text-white"
+                               required>
+                        <div th:if="${errorName != null}" class="text-danger" th:text="${errorName}"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="code" class="form-label">Voucher Code</label>
+                        <input th:field="*{code}" type="text" id="code" name="code"
+                               class="form-control bg-dark text-white" required>
+                        <div th:if="${errorCode != null}" class="text-danger" th:text="${errorCode}"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="usageLimit" class="form-label">Usage Limit</label>
+                        <input th:field="*{usageLimit}" type="number" id="usageLimit" name="usageLimit"
+                               class="form-control bg-dark text-white" min="1" placeholder="0" required>
+                        <div th:if="${errorUsage != null}" class="text-danger" th:text="${errorUsage}"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="discountValue" class="form-label">Discount Value </label>
+                        <input th:field="*{discountValue}" type="number" id="discountValue" name="discountValue"
+                               class="form-control bg-dark text-white" required min="1">
+                        <div th:if="${errorValue != null}" class="text-danger" th:text="${errorValue}"></div>
+                    </div>
+
+                    <div class="row mb-3">
+
+                        <div class="col-md-6">
+                            <label for="discountType" class="form-label">Discount Type *</label>
+                            <select th:field="*{status}" id="discountType" name="discountType"
+                                    class="form-select bg-dark text-white"
+                                    required>
+                                <option value="true">Active</option>
+                                <option value="false">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2 mt-4">
+                        <button type="submit" class="btn btn-sm btn-success">
+                            <i class="fa fa-save"></i> Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script src="/assets/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/js/dashboard.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/assets/lib/chart/chart.min.js}"></script>
+<script th:src="@{/assets/lib/easing/easing.min.js}"></script>
+<script th:src="@{/assets/lib/waypoints/waypoints.min.js}"></script>
+<script th:src="@{/assets/lib/owlcarousel/owl.carousel.min.js}"></script>
+<script th:src="@{/assets/lib/tempusdominus/js/moment.min.js}"></script>
+<script th:src="@{/assets/lib/tempusdominus/js/moment-timezone.min.js}"></script>
+<script th:src="@{/assets/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js}"></script>
+<script th:src="@{/assets/js/main.js}"></script>
 </body>
 </html>

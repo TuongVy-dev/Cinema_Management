@@ -16,6 +16,7 @@ public class HomepageController {
     @Autowired
     private MovieService movieService;
 
+
     //Huynh Anh add
     @GetMapping("")
     public String homepage(Model model) {

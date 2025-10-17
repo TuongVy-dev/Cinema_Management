@@ -20,7 +20,7 @@
                 <div class="bg-secondary rounded p-4">
 
                     <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h6 class="mb-0">Movies Management</h6>
+                        <h4 class="mb-0">Movies Management</h4>
 
                         <div class="d-flex align-items-center">
                             <div class="d-flex align-items-center">
@@ -33,7 +33,7 @@
                                 </div>
                             </div>
 
-                            <a type="button" class="btn btn-primary btn-action-primary"
+                            <a type="button" class="btn btn-primary btn-compact"
                                th:href="@{/movies/create}">
                                 <i class="fa fa-plus me-2"></i>Add Movie
                             </a>
@@ -61,14 +61,15 @@
                                 <td th:text="*{releaseDate}"></td>
                                 <td>
                                     <div class="btn-action-group">
-                                        <a class="btn btn-sm btn-secondary btn-sm-custom view-movie-btn"
-                                                th:href="@{/movies/detail/{id}(id=*{movieID})}"><i
-                                                class="fa fa-eye"></i> View</a>
-                                        <a class="btn btn-sm-custom btn-outline-edit edit-movie-btn"
-                                                th:href="@{/movies/update/{id}(id=*{movieID})}">
+                                        <a class="btn btn-success btn-compact"
+                                           th:href="@{/movies/update/{id}(id=*{movieID})}">
                                             <i class="fa fa-edit"></i> Edit
                                         </a>
-                                        <a class="btn btn-sm-custom btn-delete-custom delete-movie-btn"
+                                        <a class="btn btn-light btn-compact"
+                                                th:href="@{/movies/detail/{id}(id=*{movieID})}"><i
+                                            <i class="bi bi-eye-fill"></i> Details
+
+                                        <a class="btn btn-danger delete-voucher-btn btn-compact"
                                                 th:href="@{/movies/delete/{id}(id=*{movieID})}"><i
                                                 class="fa fa-trash"></i>
                                             Delete</a>
@@ -80,23 +81,6 @@
                     </div>
                 </div>
             </div>
-
-            <div class="container-fluid pt-4 px-4">
-                <div class="bg-secondary rounded-top p-4">
-                    <div class="row">
-                        <div class="col-12 col-sm-6 text-center text-sm-start">
-                            &copy; <span id="year"></span> <a href="#">Cinema Management System</a>, All Rights
-                            Reserved.
-                        </div>
-                        <div class="col-12 col-sm-6 text-center text-sm-end">
-                            Admin Dashboard | Powered by DarkPan
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
     </div>
 
     <!-- jQuery and Bootstrap Bundle -->

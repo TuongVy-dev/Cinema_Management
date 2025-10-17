@@ -14,25 +14,27 @@ public class Voucher {
     @Column(name = "voucher_name")
     private String voucherName;
     private String code;
-    @Column(name = "voucher_value")
-    private Integer voucherValue;
+    @Column(name = "discount_value")
+    private Integer discountValue;
     @Column(name = "usage_limit")
     private Integer usageLimit;
     @Column(name = "used_count")
     private Integer usedCount;
     @Column(name = "discount_type")
     private String discountType;
+    private boolean status;
 
     public Voucher() {}
 
-    public Voucher(String voucherId, String voucherName, String code, Integer voucherValue, Integer usageLimit, Integer usedCount, String discountType) {
+    public Voucher(String voucherId, String voucherName, String code, Integer discountValue, Integer usageLimit, Integer usedCount, String discountType, boolean status) {
         this.voucherId = voucherId;
         this.voucherName = voucherName;
         this.code = code;
-        this.voucherValue = voucherValue;
+        this.discountValue = discountValue;
         this.usageLimit = usageLimit;
         this.usedCount = usedCount;
         this.discountType = discountType;
+        this.status = status;
     }
 
     public String getVoucherId() {
@@ -59,12 +61,12 @@ public class Voucher {
         this.code = code;
     }
 
-    public Integer getVoucherValue() {
-        return voucherValue;
+    public Integer getDiscountValue() {
+        return discountValue;
     }
 
-    public void setVoucherValue(Integer voucherValue) {
-        this.voucherValue = voucherValue;
+    public void setDiscountValue(Integer discountValue) {
+        this.discountValue = discountValue;
     }
 
     public Integer getUsageLimit() {
@@ -89,5 +91,13 @@ public class Voucher {
 
     public void setDiscountType(String discountType) {
         this.discountType = discountType;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 }

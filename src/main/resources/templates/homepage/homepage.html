@@ -6,38 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CGV Movies - Your Movie Experience Begins Here</title>
     <meta name="description" content="Book movie tickets online at CGV. Watch the latest movies in premium cinemas with the best sound and picture quality.">
-
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- CSS -->
     <link rel="stylesheet" th:href="@{/assets/css/style.css}">
 </head>
 
 <body>
 
-<header class="header" role="banner">
-    <div class="header__container container">
-        <div class="header__left">
-            <a href="/static" class="header__logo" aria-label="CGV Home">
-                <img th:src="@{/assets/img/logo.svg}" alt="CGV Movies Logo" width="120" height="40">
-            </a>
-        </div>
-        <div class="header__center">
-            <nav class="nav" role="navigation">
-                <ul class="nav__list">
-                    <li class="nav__item"><a href="/homepage" class="nav__link">Homepage</a></li>
-                    <li class="nav__item nav-item dropdown"><a href="/movies"  class="nav__link">Movies</a></li>
-                    <li class="nav__item"><a href="/promotions" class="nav__link">Promotions</a></li>
-                    <li class="nav__item"><a href="/history" class="nav__link">Transaction History</a></li>
-                </ul>
-            </nav>
-        </div>
-        <div class="header__right">
-            <a class="btn btn--outline" href="/login">Login</a>
-            <a class="btn" href="/register">Register</a>
-        </div>
-    </div>
-</header>
+<header th:replace="~{fragment/frag :: navbar_homepage}"></header>
 
 <section class="hero" role="region" aria-label="Featured Movies">
     <div class="hero__wrapper">
@@ -48,7 +23,7 @@
             </div>
         </div>
 
-        <div class="hero__slide" style="background-image: url('/assets/img/slide-2.jpg');">
+        <div class="hero__slide" style="background-image: url('/assets/img/slide-2">
             <div class="hero__content container">
                 <h2 class="hero__title">Mortal Kombat</h2>
                 <a href="/booking/2" class="btn btn--hero">Buy Tickets</a>
@@ -79,7 +54,7 @@
                         <img th:src="@{'/assets/img/posters/' + ${movie.movieID} + '.jpg'}"
                              th:alt="${movie.title} + ' poster'" class="movie-card__poster">
                         <div class="movie-card__rating">
-                            ⭐ <span th:text="${movie.ageRating}">PG</span>
+                            T<span th:text="${movie.ageRating}"></span>
                         </div>
                         <div class="movie-card__badges">
                             <span class="movie-card__badge">2D</span>
@@ -96,33 +71,7 @@
     </section>
 </main>
 
-<footer class="footer">
-    <div class="container">
-        <div class="footer__section">
-            <h3>About CGV</h3>
-            <ul class="footer__list">
-                <li><a href="#" class="footer__list-link">About Us</a></li>
-                <li><a href="#" class="footer__list-link">Careers</a></li>
-                <li><a href="#" class="footer__list-link">News</a></li>
-                <li><a href="#" class="footer__list-link">Contact</a></li>
-            </ul>
-        </div>
-        <div class="footer__section">
-            <h3>Customer Service</h3>
-            <ul class="footer__list">
-                <li><a href="#" class="footer__list-link">Help Center</a></li>
-                <li><a href="#" class="footer__list-link">Ticket Refund</a></li>
-                <li><a href="#" class="footer__list-link">Terms & Conditions</a></li>
-                <li><a href="#" class="footer__list-link">Privacy Policy</a></li>
-            </ul>
-        </div>
-        <div class="footer__section">
-            <h3>Contact Info</h3>
-            <p>Hotline: 1900 6017</p>
-            <p>Email: support@cgv.vn</p>
-        </div>
-    </div>
-</footer>
+<footer th:replace = "~{fragment/frag :: footer_homepage}" ></footer>
 
 <!-- JS -->
 <script th:src="@{/assets/js/hero.js}"></script>
