@@ -9,7 +9,18 @@
             <div class="d-flex align-items-center mb-3">
                 <h6 class="mb-0">Concession Detail</h6>
                 <a class="btn btn-primary ms-auto btn-compact" th:href="@{|/concessions/${concession.concessionId}/edit|}">Edit</a>
-                <a class="btn btn-secondary ms-2 btn-compact" th:href="@{/dashboard/concession}">Back</a>
+                <a class="btn btn-secondary ms-2 btn-compact" th:href="@{/concessions}">Back</a>
+            </div>
+
+            <div class="col-12">
+                <label class="text-white-50">Image</label>
+                <div>
+                    <img th:if="${concession.img != null and !#strings.isEmpty(concession.img)}"
+                         th:src="${concession.img}" alt="img"
+                         style="width:160px;height:160px;object-fit:cover;border-radius:12px;"
+                         onerror="this.src='/img/placeholder.png'">
+                    <span th:if="${concession.img == null or #strings.isEmpty(concession.img)}" class="text-muted">No image</span>
+                </div>
             </div>
 
             <div class="row g-3">
@@ -27,15 +38,6 @@
                     <label class="text-white-50">Price</label>
                     <div class="fw-semibold"
                          th:text="${#numbers.formatDecimal(concession.price, 0, 'POINT', 0, 'COMMA')}">45,000</div>
-                </div>
-
-                <div class="col-md-3">
-                    <label class="text-white-50">Status</label>
-                    <div>
-            <span class="badge"
-                  th:classappend="${concession.status} ? 'bg-success' : 'bg-secondary'"
-                  th:text="${concession.status} ? 'Active' : 'Inactive'">Active</span>
-                    </div>
                 </div>
 
                 <div class="col-12">

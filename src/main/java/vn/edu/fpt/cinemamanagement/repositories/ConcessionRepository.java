@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface ConcessionRepository extends JpaRepository<Concession, String> {
     Optional<Concession> findTopByConcessionIdStartingWithOrderByConcessionIdDesc(String prefix);
+
 }

@@ -7,7 +7,7 @@
     <div class="container-fluid pt-4 px-4">
         <div class="bg-secondary rounded p-4">
             <div class="d-flex align-items-center flex-wrap gap-2">
-                <h6 class="mb-0">Concessions Mangament</h6>
+                <h6 class="mb-0">Concessions Management</h6>
                 <a class="btn btn-danger ms-auto" th:href="@{/concessions/create}">
                     <i class="bi bi-plus-circle me-1"></i>Add item
                 </a>
@@ -17,43 +17,45 @@
                 <table class="table text-start align-middle table-bordered table-hover mb-0">
                     <thead>
                     <tr class="text-white">
+                        <th style="width:10%">Image</th>
                         <th style="width:16%">ID</th>
                         <th>Name</th>
                         <th style="width:12%" class="text-end">Price</th>
-                        <th style="width:12%">Status</th>
                         <th style="width:22%" class="text-end">Actions</th>
                     </tr>
                     </thead>
+
                     <tbody>
                     <tr th:each="c : ${concessions}">
+                        <td>
+                            <img th:if="${c.img != null and !#strings.isEmpty(c.img)}"
+                                 th:src="${c.img}" alt="img"
+                                 style="width:64px;height:64px;object-fit:cover;border-radius:8px;"
+                                 onerror="this.src='/img/placeholder.png'">
+                            <span th:if="${c.img == null or #strings.isEmpty(c.img)}" class="text-muted">No image</span>
+                        </td>
+
                         <td th:text="${c.concessionId}">PC0001</td>
                         <td th:text="${c.name}">Caramel Popcorn</td>
-                        <td class="text-end"
-                            th:text="${#numbers.formatDecimal(c.price, 0, 'POINT', 0, 'COMMA')}">45,000</td>
-                        <td>
-              <span class="badge"
-                    th:classappend="${c.status} ? 'bg-success' : 'bg-secondary'"
-                    th:text="${c.status} ? 'Active' : 'Inactive'">Active</span>
-                        </td>
+                        <td class="text-end" th:text="${#numbers.formatDecimal(c.price, 0, 'POINT', 0, 'COMMA')}">45,000</td>
                         <td class="text-end">
                             <a class="btn btn-sm btn-outline-light btn-compact"
                                th:href="@{|/concessions/${c.concessionId}/detail|}">Detail</a>
                             <a class="btn btn-sm btn-primary btn-compact"
                                th:href="@{|/concessions/${c.concessionId}/edit|}">Edit</a>
-                            <form th:action="@{|/concessions/${c.concessionId}/delete|}"
-                                  method="post" class="d-inline ">
+                            <form th:action="@{|/concessions/${c.concessionId}/delete|}" method="post" class="d-inline">
                                 <button class="btn btn-sm btn-danger btn-compact" type="submit"
                                         onclick="return confirm('Delete this item?');">Delete</button>
                             </form>
                         </td>
                     </tr>
+
                     <tr th:if="${#lists.isEmpty(concessions)}">
                         <td colspan="5" class="text-center">No data</td>
                     </tr>
                     </tbody>
                 </table>
             </div>
-
         </div>
     </div>
 </main>
