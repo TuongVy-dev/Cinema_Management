@@ -55,7 +55,7 @@
                             <tbody id="movieTableBody">
                             <tr th:each="movie : ${movies}" th:object="${movie}">
                                 <td th:text="*{movieID}"></td>
-                                <td th:text="*{title}" class="text-uppercase"></td>
+                                <td th:text="*{title}"></td>
                                 <td th:text="*{genre}"></td>
                                 <td th:text="*{duration}"></td>
                                 <td th:text="*{releaseDate}"></td>

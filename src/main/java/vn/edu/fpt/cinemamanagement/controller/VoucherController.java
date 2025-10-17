@@ -33,8 +33,16 @@ public class VoucherController {
     }
 
     @PostMapping("/create")
-    public String createVoucher(Voucher voucher) {
-
+    public String createVoucher(Voucher voucher, Model model) {
+        if(voucher.getDiscountType().equals("amount")) {
+            voucher.setVoucherId(voucherService.generateAmountVoucherID());
+        } else {
+            voucher.setVoucherId(voucherService.generatePercentageVoucherID());
+        }
+        voucher.setVoucherName(voucher.getVoucherName().toUpperCase());
+        voucher.setCode(voucher.getCode().toUpperCase());
+        voucher.setUsedCount(0);
+        voucherService.saveVoucher(voucher);
         return  "redirect:/vouchers";
     }
 

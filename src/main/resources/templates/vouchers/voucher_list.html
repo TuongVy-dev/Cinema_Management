@@ -35,27 +35,28 @@
                             <th scope="col">Name</th>
                             <th scope="col">Discount Type</th>
                             <th scope="col">Value</th>
+                            <th scope="col">Status</th>
                             <th scope="col">Action</th>
                         </tr>
                         </thead>
                         <tbody id="voucherTableBody">
                         <tr th:each="vouchers : ${vouchersList}">
-                            <td th:text="${vouchers.getVoucherId()}"></td>
-                            <td th:text="${vouchers.getVoucherName()}"></td>
-                            <td th:text="${vouchers.getDiscountType()}"></td>
-                            <td th:text="${vouchers.getDiscountType().equalsIgnoreCase('amount') ? #numbers.formatDecimal(vouchers.getVoucherValue(), 0, 'COMMA', 0, 'POINT') + ' VNĐ' : vouchers.getVoucherValue() + '%'}"></td>
-
+                            <td th:text="${vouchers.voucherId}"></td>
+                            <td th:text="${vouchers.voucherName}"></td>
+                            <td th:text="${vouchers.discountType}"></td>
+                            <td th:text="${vouchers.discountType.equalsIgnoreCase('amount') ? #numbers.formatDecimal(vouchers.discountValue, 0, 'COMMA', 0, 'POINT') + ' VNĐ' : vouchers.discountValue + '%'}"></td>
+                            <td th:text="${vouchers.isStatus() ? 'Active' : 'Inactive'}"></td>
                             <td>
                                 <a class="btn btn-success btn-compact">
                                     <i class="fa fa-edit"></i> Edit
                                 </a>
-                                <a th:href="@{/vouchers/detail/{id} (id= ${vouchers.getVoucherId()})}"
+                                <a th:href="@{/vouchers/detail/{id} (id= ${vouchers.voucherId})}"
                                    class="btn btn-light btn-compact">
                                     <i class="bi bi-eye-fill"></i> Details
                                 </a>
                                 <button class="btn btn-danger delete-voucher-btn btn-compact"
                                         data-bs-toggle="modal" data-bs-target="#deleteVoucherModal"
-                                        th:attr="data-id=${vouchers.getVoucherId()}, data-code=${vouchers.getVoucherName()}">
+                                        th:attr="data-id=${vouchers.voucherId}, data-code=${vouchers.voucherName}">
                                     <i class="fa fa-trash"></i> Delete
                                 </button>
                             </td>
@@ -65,27 +66,28 @@
                 </div>
             </div>
         </div>
-</div>
+    </div>
 
-<!--Delete voucher-->
-<div class="modal fade" id="deleteVoucherModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content bg-secondary text-white">
-            <div class="modal-header">
-                <h5 class="modal-title">Delete Voucher</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure you want to delete the voucher **<span id="deleteVoucherCode"></span>** (ID: <span
-                        id="deleteVoucherIdDisplay"></span>)?</p>
-                <p class="text-warning small">**(Warning: Deleting a voucher that has been used may affect
-                    historical
-                    booking data).**</p>
-                <input type="hidden" id="deleteVoucherId">
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                <button class="btn btn-danger" id="confirmDeleteVoucherBtn">Delete</button>
+    <!--Delete voucher-->
+    <div class="modal fade" id="deleteVoucherModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-secondary text-white">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete Voucher</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete the voucher **<span id="deleteVoucherCode"></span>** (ID: <span
+                            id="deleteVoucherIdDisplay"></span>)?</p>
+                    <p class="text-warning small">**(Warning: Deleting a voucher that has been used may affect
+                        historical
+                        booking data).**</p>
+                    <input type="hidden" id="deleteVoucherId">
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                    <button class="btn btn-danger" id="confirmDeleteVoucherBtn">Delete</button>
+                </div>
             </div>
         </div>
     </div>
@@ -97,6 +99,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js"></script>
 <script src="/assets/js/main.js"></script>
 <script src="/assets/js/dashboard.js"></script>
-</body>
 
+</body>
 </html>
