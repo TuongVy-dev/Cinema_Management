@@ -21,7 +21,7 @@
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h6 class="mb-0">Vouchers Management</h6>
                     <div class="d-flex align-items-center">
-                        <a th:href="@{vouchers/new}" class="btn btn-primary btn-compact">
+                        <a th:href="@{vouchers/create}" class="btn btn-primary btn-compact">
                             <i class="fa fa-plus me-2"></i>Add Voucher
                         </a>
                     </div>
@@ -47,7 +47,7 @@
                             <td th:text="${vouchers.discountType.equalsIgnoreCase('amount') ? #numbers.formatDecimal(vouchers.discountValue, 0, 'COMMA', 0, 'POINT') + ' VNĐ' : vouchers.discountValue + '%'}"></td>
                             <td th:text="${vouchers.isStatus() ? 'Active' : 'Inactive'}"></td>
                             <td>
-                                <a class="btn btn-success btn-compact">
+                                <a th:href="@{/vouchers/update/{id} (id= ${vouchers.voucherId})}" class="btn btn-success btn-compact">
                                     <i class="fa fa-edit"></i> Edit
                                 </a>
                                 <a th:href="@{/vouchers/detail/{id} (id= ${vouchers.voucherId})}"

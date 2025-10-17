@@ -60,11 +60,11 @@ public class StaffService {
     private String generateNewStaffID() {
         Staff lastStaff = staffRepo.findTopByOrderByStaffIDDesc();
         if (lastStaff == null) {
-            return "ST0001";
+            return "ST000001";
         }
-        String lastID = lastStaff.getStaffID(); // Ex: ST0009
+        String lastID = lastStaff.getStaffID();
         int number = Integer.parseInt(lastID.substring(2)) + 1;
-        return String.format("ST%04d", number); // -> ST0010
+        return String.format("ST%06d", number);
     }
 
 
