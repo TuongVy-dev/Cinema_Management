@@ -139,4 +139,8 @@ public class VoucherService {
 
         return isValid;
     }
+
+    public void delete(String id) {
+        voucherRepo.deleteById(id);
+    }
 }

@@ -316,6 +316,15 @@ function performVoucherSearch() {
     });
 }
 
+//open modal delete modal
+function openDeleteModal(id, name) {
+    document.getElementById('deleteVoucherId').value = id;
+    document.getElementById('deleteVoucherIdDisplay').textContent = id;
+    document.getElementById('deleteVoucherCode').textContent = name;
+
+    new bootstrap.Modal(document.getElementById('deleteVoucherModal')).show();
+}
+
 // ===================================
 // IV. GLOBAL SEARCH FOR STAFF + MOVIE + VOUCHER
 // ===================================
