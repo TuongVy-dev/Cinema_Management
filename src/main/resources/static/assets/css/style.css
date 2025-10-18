@@ -811,6 +811,7 @@ select:focus {
     display: flex;
     list-style: none;
     gap: var(--spacing-md);
+    padding-top: 12px;
 }
 
 .nav__item {
@@ -2424,4 +2425,145 @@ h5{
 .footer__note {
     color: var(--light-gray);
     margin-top: 1rem;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    border-bottom: 2px solid #ffffff; /* Gạch ngang mảnh đậm */
+}
+
+.voucher-container {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 1200px;
+    padding: 0;
+    margin: 0 8%;
+}
+
+.voucher {
+    background: #d62828;
+    color: #fff;
+    display: flex;
+    width: 340px;
+    height: 140px;
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+/* rãnh vé */
+.voucher::before,
+.voucher::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    background: #111;
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.voucher::before { left: -10px; }
+.voucher::after { right: -10px; }
+
+.voucher-left {
+    flex: 2;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.voucher-left h2 {
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.voucher-left p {
+    font-size: 13px;
+    margin-top: 6px;
+    line-height: 1.4;
+}
+
+.voucher-right {
+    flex: 1;
+    background: rgba(255,255,255,0.15);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 10px;
+    border-left: 2px dashed rgba(255,255,255,0.5);
+}
+
+.voucher-code {
+    font-size: 16px;
+    font-weight: bold;
+    background: #fff;
+    color: #d62828;
+    padding: 5px 10px;
+    border-radius: 6px;
+    letter-spacing: 1px;
+}
+
+.voucher-right small {
+    font-size: 11px;
+    margin-top: 4px;
+    opacity: 0.8;
+}
+/* Container căn giữa */
+.pagination {
+    display: flex;
+    justify-content: center;  /* căn giữa theo chiều ngang */
+    margin: 1.5rem 0;
+}
+
+/* Danh sách trang */
+.pagination ul {
+    display: flex;
+    list-style: none;
+    gap: 0.5rem;
+    padding: 0;
+    margin: 0;
+}
+
+/* Link trang */
+.pagination ul li a {
+    display: block;
+    padding: 0.4rem 0.8rem;
+    background-color: #d32f2f;
+    color: #870000;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background 0.2s;
+}
+
+/* Hover */
+.pagination ul li a:hover {
+    background-color: #9a0007;
+}
+
+/* Trang hiện tại */
+.pagination ul li.active a {
+    background-color: #9a0007;
+    font-weight: bold;
+}
+
+/* Trang bị disable (Previous/Next không click được) */
+.pagination ul li.disabled a {
+    background-color: #ccc;
+    color: #666;
+    pointer-events: none; /* không cho click */
+    cursor: default;
 }

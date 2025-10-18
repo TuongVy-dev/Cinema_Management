@@ -47,7 +47,8 @@
                             <td th:text="${vouchers.discountType.equalsIgnoreCase('amount') ? #numbers.formatDecimal(vouchers.discountValue, 0, 'COMMA', 0, 'POINT') + ' VNĐ' : vouchers.discountValue + '%'}"></td>
                             <td th:text="${vouchers.isStatus() ? 'Active' : 'Inactive'}"></td>
                             <td>
-                                <a th:href="@{/vouchers/update/{id} (id= ${vouchers.voucherId})}" class="btn btn-success btn-compact">
+                                <a th:href="@{/vouchers/update/{id} (id= ${vouchers.voucherId})}"
+                                   class="btn btn-success btn-compact">
                                     <i class="fa fa-edit"></i> Edit
                                 </a>
                                 <a th:href="@{/vouchers/detail/{id} (id= ${vouchers.voucherId})}"
@@ -63,6 +64,26 @@
                         </tr>
                         </tbody>
                     </table>
+
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+                            <!-- Previous -->
+                            <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                                <a class="page-link" th:href="@{/vouchers(page=${currentPage - 1})}">Pre</a>
+                            </li>
+
+                            <!-- Page numbers -->
+                            <li class="page-item" th:each="i : ${#numbers.sequence(startPage, endPage)}"
+                                th:classappend="${i == currentPage} ? 'active'">
+                                <a class="page-link" th:href="@{/vouchers(page=${i})}" th:text="${i}"></a>
+                            </li>
+
+                            <!-- Next -->
+                            <li class="page-item" th:classappend="${currentPage >= totalPages} ? 'disabled'">
+                                <a class="page-link" th:href="@{/vouchers(page=${currentPage + 1})}">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>
