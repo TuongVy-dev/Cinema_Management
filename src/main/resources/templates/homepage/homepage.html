@@ -8,6 +8,7 @@
     <meta name="description" content="Book movie tickets online at CGV. Watch the latest movies in premium cinemas with the best sound and picture quality.">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/assets/css/style.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
 </head>
 
 <body>
@@ -62,7 +63,7 @@
                     </div>
                     <div class="movie-card__body">
                         <h3 class="movie-card__title" th:text="${movie.title}">Movie Title</h3>
-                        <p class="movie-card__info" th:text="${movie.genre} + ' • ' + ${movie.duration} + ' mins'">Genre • Duration</p>
+                        <p class="movie-card__info" th:text="${movie.genre} + ' • ' + ${movie.duration} + ' minutes'">Genre • Duration</p>
                         <a th:href="@{'/booking/' + ${movie.movieID}}" class="movie-card__button">Booking Ticket</a>
                     </div>
                 </article>

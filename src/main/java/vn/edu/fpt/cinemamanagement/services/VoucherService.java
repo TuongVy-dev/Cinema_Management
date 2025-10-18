@@ -1,5 +1,7 @@
 package vn.edu.fpt.cinemamanagement.services;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import vn.edu.fpt.cinemamanagement.entities.Voucher;
@@ -17,8 +19,8 @@ public class VoucherService {
         this.voucherRepo = voucherRepo;
     }
 
-    public List<Voucher> findAllVoucher() {
-        return voucherRepo.findAll();
+    public Page<Voucher> findAllVoucher(Pageable pageable) {
+        return voucherRepo.findAll(pageable);
     }
 
     public Voucher findVoucherById(String ID) {
@@ -109,14 +111,12 @@ public class VoucherService {
             isValid = false;
         }
 
-
-
         //Validate DiscountValue
         try {
             if (voucher.getDiscountType().equalsIgnoreCase("percentage")) {
-                if (voucher.getDiscountValue() <= 0 || voucher.getDiscountValue() > 100) {
+                if (voucher.getDiscountValue() <= 0 || voucher.getDiscountValue() >= 100) {
                     model.addAttribute("errorValue",
-                            "Discount value must be greater than 0 and less than or equal to 100");
+                            "Discount value must be greater than 0 and less than 100");
                     isValid = false;
                 }
             } else {
@@ -135,8 +135,10 @@ public class VoucherService {
                     "Discount value is large");
             isValid = false;
         }
-
-
         return isValid;
+    }
+
+    public void delete(String id) {
+        voucherRepo.deleteById(id);
     }
 }
