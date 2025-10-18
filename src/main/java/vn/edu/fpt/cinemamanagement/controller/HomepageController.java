@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import vn.edu.fpt.cinemamanagement.entities.Movie;
@@ -63,5 +64,11 @@ public class HomepageController {
         model.addAttribute("endPage", endPage);
         model.addAttribute("totalPages", totalPages);
         return "vouchers/voucher_list_customer";
+    }
+
+    @GetMapping("/vouchers/detail/{id}")
+    public String voucherDetails(@PathVariable("id") String id, Model model) {
+        model.addAttribute("voucher", voucherService.findVoucherById(id));
+        return "vouchers/voucher_detail_customer";
     }
 }

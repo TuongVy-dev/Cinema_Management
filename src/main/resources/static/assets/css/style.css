@@ -2567,3 +2567,43 @@ h5{
     pointer-events: none; /* không cho click */
     cursor: default;
 }
+
+/*
+test
+ */
+/* Voucher Detail to hơn */
+.voucher-detail {
+    width: 70%;
+    height: auto;
+    min-height: 215px;
+    padding: 0;
+}
+
+.voucher-detail .voucher-left {
+    padding: 25px;
+}
+
+.voucher-detail .voucher-left h2 {
+    font-size: 27px;
+    margin-bottom: 10px;
+}
+
+.voucher-detail .voucher-left p {
+    font-size: 16px;
+    margin-bottom: 6px;
+}
+
+.voucher-detail .voucher-right {
+    padding: 20px 10px;
+}
+
+.voucher-detail .voucher-code {
+    font-size: 37px;
+    padding: 0px 17px;
+}
+
+.voucher-detail .btn {
+    font-size: 13px;
+    border-radius: 20px;
+}
+

@@ -1,10 +1,74 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CGV Movies - Your Movie Experience Begins Here</title>
+    <meta name="description"
+          content="Book movie tickets online at CGV. Watch the latest movies in premium cinemas with the best sound and picture quality.">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/assets/css/style.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
+
 </head>
+
 <body>
+
+<header th:replace="~{fragment/frag :: navbar_homepage}"></header>
+
+<!-- Main Content -->
+<main role="main" class="movies">
+    <section id="promotions" class="section">
+        <div class="container">
+            <div class="section__header section-header">
+                <h2 class="section__title">Voucher Detail</h2>
+                <a th:href="@{/homepage/vouchers}" class="btn btn-light btn-sm mt-2">
+                    ← Back
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" style="padding-top: 1rem;">
+        <div class="container d-flex justify-content-center">
+            <div class="voucher voucher-detail">
+                <!-- Bên trái -->
+                <div class="voucher-left">
+                    <h2 th:text="${voucher.voucherName}"></h2>
+                    <p>
+                        <strong>Discount Value: </strong>
+                        <span th:text="${voucher.discountType == 'amount' ? #numbers.formatDecimal(voucher.discountValue, 0, 'COMMA', 0, 'POINT') + ' VNĐ' : voucher.discountValue + '%'}">20%</span>
+                    </p>
+                    <p>
+                        <strong>Remaining Voucher: </strong>
+                        <span th:text="${voucher.usedCount + '/' + voucher.usageLimit}">2/10</span>
+                    </p>
+                    <p>
+                        <strong>Status: </strong>
+                        <span th:text="${voucher.status ? 'Available' : 'Not Available'}"></span>
+                    </p>
+
+                </div>
+
+                <!-- Bên phải -->
+                <div class="voucher-right">
+                    <div class="voucher-code" th:text="${voucher.code}"></div>
+                    <small>Voucher Code</small>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+</main>
+<script src="js/movies.js"></script>
+<footer th:replace="~{fragment/frag :: footer_homepage}"></footer>
+
+<!-- JS -->
+<script th:src="@{/assets/js/hero.js}"></script>
 
 </body>
 </html>

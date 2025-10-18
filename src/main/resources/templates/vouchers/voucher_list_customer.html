@@ -40,7 +40,7 @@
                     <div class="voucher-code" th:text="${voucher.getCode()}"></div>
                     <small>Voucher Code</small>
 
-                    <a th:href="@{/homepage/vouchers/detail/{id}(id=${voucher.voucherId})}" class="btn btn-primary btn-sm" style="margin-top: 0.5rem;">
+                    <a th:href="@{/homepage/vouchers/detail/{id} (id=${voucher.getVoucherId()})}" class="btn btn-primary btn-sm" style="margin-top: 0.5rem;">
                         Detail
                     </a>
                 </div>
