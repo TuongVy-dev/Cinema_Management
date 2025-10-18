@@ -2109,6 +2109,7 @@ select:focus {
     align-items: flex-start;
     gap: 10px;
     margin-bottom: 20px;
+    position: relative;
 }
 
 .form__checkbox {
@@ -2154,6 +2155,9 @@ select:focus {
     margin-bottom: 20px;
     text-align: center;
     display: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
 }
 
 .form__message--success {
@@ -2261,6 +2265,7 @@ select:focus {
 /* Form error states (Register/Login) */
 .form__input--error {
     border-color: #f44336 !important;
+    animation: shake 0.5s ease;
 }
 
 .form__error {
@@ -2268,6 +2273,8 @@ select:focus {
     color: #f44336;
     font-size: 14px;
     margin-top: 6px;
+    font-weight: 400;
+    line-height: 1.4;
 }
 
 .form__error--visible {
@@ -2606,4 +2613,65 @@ test
     font-size: 13px;
     border-radius: 20px;
 }
+.form__error.visible {
+    display: block !important;
+}
+.form__input--error:focus {
+    border-color: #f44336 !important;
+    box-shadow: 0 0 0 0.2rem rgba(244, 67, 54, 0.25) !important;
+}
+.form__message.hidden {
+    display: none !important;
+}
+.form__message--success::before {
+    content: "✓ ";
+    font-weight: bold;
+}
+.form__message--error::before {
+    content: "⚠ ";
+    font-weight: bold;
+}
+#termsError {
+    position: static;
+    margin-top: 5px;
+    margin-left: 0;
+}
+select.form__input--error {
+    border-color: #f44336 !important;
+    background-color: rgba(244, 67, 54, 0.05) !important;
+}
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
+.form__error.visible,
+.form__message.visible {
+    animation: slideDown 0.3s ease;
+}
+
+/* ============================================= */
+/* RESPONSIVE FIX CHO ERROR MESSAGES         */
+/* ============================================= */
+
+@media (max-width: 480px) {
+    .form__error {
+        font-size: 12px;
+    }
+
+    .form__message {
+        font-size: 13px;
+        padding: 10px 12px;
+    }
+}
