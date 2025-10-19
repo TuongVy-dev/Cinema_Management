@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Table(name = "Movie")
 public class Movie {
     @Id
-    @Column(name = "movie_id")
+    @Column(name = "movie_id", length = 8)
     private String movieID;
 
     private String title;
@@ -27,9 +27,12 @@ public class Movie {
     @Column(name = "age_rating")
     private int ageRating;
 
+    private String img;
+    private String trailer;
+
     public Movie(){
     }
-    public Movie(String movieID, String title, String genre, String summary, int duration, LocalDate  releaseDate, int ageRating) {
+    public Movie(String movieID, String title, String genre, String summary, int duration, LocalDate  releaseDate, int ageRating,  String img, String trailer) {
         this.movieID = movieID;
         this.title = title;
         this.genre = genre;
@@ -37,6 +40,8 @@ public class Movie {
         this.duration = duration;
         this.releaseDate = releaseDate;
         this.ageRating = ageRating;
+        this.img = img;
+        this.trailer = trailer;
     }
 
     public String getMovieID() {
@@ -93,5 +98,21 @@ public class Movie {
 
     public void setAgeRating(int ageRating) {
         this.ageRating = ageRating;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
+
+    public String getTrailer() {
+        return trailer;
+    }
+
+    public void setTrailer(String trailer) {
+        this.trailer = trailer;
     }
 }
