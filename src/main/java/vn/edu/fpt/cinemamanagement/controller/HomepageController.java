@@ -5,10 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.cinemamanagement.entities.Movie;
 import vn.edu.fpt.cinemamanagement.entities.Voucher;
 import vn.edu.fpt.cinemamanagement.services.MovieService;
@@ -27,9 +24,14 @@ public class HomepageController {
 
     //Huynh Anh add
     @GetMapping("")
-    public String homepage(Model model) {
+    public String homepage(
+            @CookieValue(value = "user_name", required = false) String username,
+            @CookieValue(value = "user_role", required = false) String role,Model model) {
         List<Movie> nowShowing = movieService.getNowShowingMovies();
         model.addAttribute("nowShowing", nowShowing);
+        //  Đưa username & role ra để Thymeleaf hiển thị
+        model.addAttribute("username", username);
+        model.addAttribute("role", role);
         return "homepage/homepage";
     }
 

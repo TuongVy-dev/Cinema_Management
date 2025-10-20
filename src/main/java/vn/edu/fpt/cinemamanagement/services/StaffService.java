@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model; // Cần import Model
 import vn.edu.fpt.cinemamanagement.entities.Staff;
 import vn.edu.fpt.cinemamanagement.repositories.StaffRepository;
+import vn.edu.fpt.cinemamanagement.utils.HashUtil;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,11 +32,19 @@ public class StaffService {
         if (staff.getStaffID() == null || staff.getStaffID().isEmpty()) {
             staff.setStaffID(generateNewStaffID());
         }
+        if (staff.getPassword() != null && !staff.getPassword().isEmpty()) {
+            String hashedPassword = HashUtil.hashPassword(staff.getPassword());
+            staff.setPassword(hashedPassword);
+        }
         staffRepo.save(staff);
     }
 
     // --- Update ---
     public void updateStaff(Staff staff) {
+        if (staff.getPassword() != null && !staff.getPassword().isEmpty()) {
+            String hashedPassword = HashUtil.hashPassword(staff.getPassword());
+            staff.setPassword(hashedPassword);
+        }
         if (staff.getStaffID() != null && staffRepo.existsById(staff.getStaffID())) {
             staffRepo.save(staff);
         }

@@ -1,102 +1,101 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en" th:fragment="layout(title, content)">
-<head th:replace="~{fragment/frag :: head_dashboard}"></head>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{dashboard/dashboard :: layout(~{::title}, ~{::main})}">
+<head><title>Create Concession</title></head>
 <body>
-<div class="container-fluid position-relative d-flex p-0">
-    <!-- Sidebar -->
-    <div th:replace="~{fragment/frag :: sidebar_dashboard}"></div>
+<main>
+    <div class="container-fluid pt-4 px-4">
+        <div class="bg-secondary rounded p-4">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <h6 class="mb-0">Add Concession</h6>
+                <a class="btn btn-outline-light" th:href="@{/concessions}">Back</a>
+            </div>
 
-    <!-- Content -->
-    <div class="content">
-        <div th:replace="~{fragment/frag :: navbar_dashboard}"></div>
+            <div class="alert alert-danger"
+                 th:if="${errors != null and errors['_global'] != null}"
+                 th:text="${errors['_global']}"></div>
 
-        <div class="container-fluid pt-4 px-4">
-            <div class="bg-secondary rounded p-4">
-
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h6 class="mb-0">Add Concession</h6>
-                    <a th:href="@{/concessions}" class="btn btn-light btn-compact">
-                        <i class="fa fa-arrow-left me-1"></i> Back
-                    </a>
+            <form th:action="@{/concessions/create}" method="post" class="row g-3" th:object="${concession}">
+                <div class="col-md-3">
+                    <label class="form-label">Type</label>
+                    <select class="form-select" name="type" required>
+                        <option value="" disabled selected>-- Select --</option>
+                        <option value="PC">Popcorn</option>
+                        <option value="DR">Drink</option>
+                    </select>
+                    <div class="text-danger small"
+                         th:text="${errors != null ? errors['type'] : ''}"></div>
+                    <div class="form-text">ID will be generated: Popcorn → <b>PCxxxx</b>, Drink → <b>DRxxxx</b>.</div>
                 </div>
 
-                <!-- Thông báo lỗi tổng -->
-                <div th:if="${errors != null and errors._global != null}"
-                     class="alert alert-danger" th:text="${errors._global}"></div>
+                <div class="col-md-5">
+                    <label class="form-label">Name</label>
+                    <input class="form-control" th:field="*{name}" required placeholder="Caramel Popcorn S / Coke 16oz"/>
+                    <div class="text-danger small"
+                         th:text="${errors != null ? errors['name'] : ''}"></div>
+                </div>
 
-                <!-- FORM CREATE -->
-                <form th:action="@{/concessions/create}" method="post" th:object="${concession}">
-                    <div class="row g-3">
-                        <div class="col-md-3">
-                            <label class="form-label">Type</label>
-                            <select class="form-select" name="type" required>
-                                <option value="" disabled selected>-- Select --</option>
-                                <option value="PC">Popcorn</option>
-                                <option value="DR">Drink</option>
-                            </select>
-                            <div class="form-text">ID auto: PCxxxx (Popcorn), DRxxxx (Drink)</div>
-                        </div>
+                <div class="col-md-4">
+                    <label class="form-label">Price (VND)</label>
+                    <input class="form-control" th:field="*{price}" type="number" step="1000" min="0" required/>
+                    <div class="text-danger small"
+                         th:text="${errors != null ? errors['price'] : ''}"></div>
+                </div>
 
-                        <div class="col-md-5">
-                            <label class="form-label">Name</label>
-                            <input class="form-control bg-dark text-white" th:field="*{name}" required
-                                   placeholder="Caramel Popcorn S / Coke 16oz">
-                            <div class="text-danger small" th:text="${errors?.name}"></div>
-                        </div>
+                <div class="col-12">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control" rows="2" th:field="*{description}" placeholder="Short description" required></textarea>
+                    <div class="text-danger small"
+                         th:text="${errors != null ? errors['description'] : ''}"></div>
+                </div>
 
-                        <div class="col-md-4">
-                            <label class="form-label">Price (VND)</label>
-                            <input class="form-control bg-dark text-white" th:field="*{price}"
-                                   type="number" step="1000" min="0" required>
-                            <div class="text-danger small" th:text="${errors?.price}"></div>
-                        </div>
+                <div class="col-12">
+                    <label class="form-label">Select Image</label>
+                    <input type="hidden" th:field="*{img}">
+                    <select class="form-select" name="imageFile" id="imageSelect" required>
+                        <option value="" disabled selected>-- Chọn một ảnh --</option>
+                        <option th:each="f : ${imageFiles}" th:value="${f}" th:text="${f}"></option>
+                    </select>
+                    <small class="text-muted">Ảnh nằm trong <code>/assets/img/concessions/</code>.</small>
 
-                        <div class="col-12">
-                            <label class="form-label">Description</label>
-                            <textarea class="form-control bg-dark text-white" rows="2"
-                                      th:field="*{description}" placeholder="Short description" required></textarea>
-                            <div class="text-danger small" th:text="${errors?.description}"></div>
-                        </div>
-
-                        <div class="col-12">
-                            <label class="form-label">Select Image</label>
-                            <!-- giữ giá trị bind của img để preview -->
-                            <input type="hidden" th:field="*{img}">
-                            <!-- tên tham số phải là imageFile để Controller nhận -->
-                            <select class="form-select bg-dark text-white" name="imageFile" required>
-                                <option value="" disabled selected>-- Choose an image --</option>
-                                <option th:each="f : ${imageFiles}" th:value="${f}" th:text="${f}"></option>
-                            </select>
-                            <small class="text-muted">Ảnh nằm trong <code>/assets/img/concessions/</code></small>
-
-                            <div class="mt-2">
-                                <img th:src="${#strings.isEmpty(concession.img) ? '/img/placeholder.png' : concession.img}"
-                                     alt="preview"
-                                     style="width:120px;height:120px;object-fit:cover;border-radius:10px;border:1px solid #555;"
-                                     onerror="this.onerror=null; this.src='/img/placeholder.png';">
-                            </div>
-                            <div class="text-danger small" th:text="${errors?.img}"></div>
-                        </div>
+                    <div class="mt-2">
+                        <img id="imagePreview"
+                             th:src="${#strings.isEmpty(concession.img) ? '/img/placeholder.png' : concession.img}"
+                             alt="preview"
+                             style="width:120px;height:120px;object-fit:cover;border-radius:10px;border:1px solid #555;"
+                             onerror="this.onerror=null; this.src='/img/placeholder.png';">
                     </div>
+                    <div class="text-danger small" th:text="${errors != null ? errors['img'] : ''}"></div>
 
-                    <div class="d-flex gap-2 mt-4">
-                        <a th:href="@{/concessions}" class="btn btn-light btn-compact">Cancel</a>
-                        <button type="submit" class="btn btn-danger btn-compact">
-                            <i class="fa fa-save me-1"></i> Save
-                        </button>
-                    </div>
-                </form>
-            </div>
+                </div>
+
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        const select = document.getElementById("imageSelect");
+                        const preview = document.getElementById("imagePreview");
+
+                        select.addEventListener("change", function () {
+                            let fileName = select.value;
+                            if (fileName) {
+                                // Nếu fileName đã chứa 'assets/', không cần thêm nữa
+                                if (fileName.includes('assets/')) {
+                                    preview.src = "/" + fileName;
+                                } else {
+                                    preview.src = "/assets/img/concessions/" + fileName;
+                                }
+                            } else {
+                                preview.src = "/assets/img/placeholder.png";
+                            }
+                        });
+                    });
+                </script>
+
+                <div class="col-12 text-end">
+                    <button type="submit" class="btn btn-danger">Save</button>
+                </div>
+            </form>
         </div>
     </div>
-</div>
-
-<!-- giữ nguyên các script dùng chung -->
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js"></script>
-<script src="/assets/js/main.js"></script>
-<script src="/assets/js/dashboard.js"></script>
+</main>
 </body>
 </html>

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.cinemamanagement.entities.Customer;
 import vn.edu.fpt.cinemamanagement.repositories.CustomerRepository;
+import vn.edu.fpt.cinemamanagement.utils.HashUtil;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -89,6 +90,9 @@ public class CustomerService {
         customer.setUser_id(newId);
 
         // TODO: Nên hash password trước khi lưu
+
+        String hashed = HashUtil.hashPassword(customer.getPassword());
+        customer.setPassword(hashed);
         // Ví dụ: customer.setPassword(BCrypt.hashpw(customer.getPassword(), BCrypt.gensalt()));
 
         customerRepository.save(customer);

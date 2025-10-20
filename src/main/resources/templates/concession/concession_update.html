@@ -1,84 +1,99 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en" th:fragment="layout(title, content)">
-<head th:replace="~{fragment/frag :: head_dashboard}"></head>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{dashboard/dashboard :: layout(~{::title}, ~{::main})}">
+<head>
+    <title>Edit Concession</title>
+</head>
 <body>
-<div class="container-fluid position-relative d-flex p-0">
-    <div th:replace="~{fragment/frag :: sidebar_dashboard}"></div>
+<main>
+    <div class="container-fluid pt-4 px-4">
+        <div class="bg-secondary rounded p-4">
+            <h6 class="mb-3">Edit Concession</h6>
 
-    <div class="content">
-        <div th:replace="~{fragment/frag :: navbar_dashboard}"></div>
+            <div th:if="${errors != null and errors._global != null}"
+                 class="alert alert-danger"
+                 th:text="${errors._global}"></div>
 
-        <div class="container-fluid pt-4 px-4">
-            <div class="bg-secondary rounded p-4">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h6 class="mb-0">Edit Concession</h6>
-                    <a class="btn btn-light btn-compact" href="/concessions">
-                        <i class="fa fa-arrow-left me-1"></i> Back
-                    </a>
+            <form th:action="@{|/concessions/edit/${concession.concessionId}|}"
+                  th:object="${concession}" method="post" class="row g-3">
+
+                <div class="col-md-3">
+                    <label class="form-label">ID</label>
+                    <input class="form-control bg-dark border-0" th:value="${concession.concessionId}" readonly>
+                    <div class="text-danger small" th:text="${errors?.concessionId}"></div>
                 </div>
 
-                <div th:if="${errors != null && errors._global != null}"
-                     class="alert alert-danger" th:text="${errors._global}"></div>
+                <div class="col-md-5">
+                    <label class="form-label">Name</label>
+                    <input class="form-control bg-dark border-0" th:field="*{name}" required>
+                    <div class="text-danger small" th:text="${errors?.name}"></div>
+                </div>
 
-                <form th:action="@{|/concessions/${concession.concessionId}/edit|}"
-                      th:object="${concession}" method="post">
-                    <div class="row g-3">
-                        <div class="col-md-3">
-                            <label class="form-label">ID</label>
-                            <input class="form-control bg-dark text-white" th:value="${concession.concessionId}" readonly>
-                            <div class="text-danger small" th:text="${errors?.concessionId}"></div>
-                        </div>
+                <div class="col-md-4">
+                    <label class="form-label">Price (VND)</label>
+                    <input class="form-control bg-dark border-0" th:field="*{price}"
+                           type="number" step="1000" min="0" required>
+                    <div class="text-danger small" th:text="${errors?.price}"></div>
+                </div>
 
-                        <div class="col-md-5">
-                            <label class="form-label">Name</label>
-                            <input class="form-control bg-dark text-white" th:field="*{name}" required>
-                            <div class="text-danger small" th:text="${errors?.name}"></div>
-                        </div>
+                <div class="col-12">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control bg-dark border-0" th:field="*{description}" rows="2" required></textarea>
+                    <div class="text-danger small" th:text="${errors?.description}"></div>
+                </div>
 
-                        <div class="col-md-4">
-                            <label class="form-label">Price (VND)</label>
-                            <input class="form-control bg-dark text-white" th:field="*{price}" type="number" step="1000" min="0" required>
-                            <div class="text-danger small" th:text="${errors?.price}"></div>
-                        </div>
+                <!-- IMAGE -->
+                <div class="col-12">
+                    <label class="form-label">Select Image</label>
+                    <input type="hidden" th:field="*{img}">
+                    <select class="form-select" id="imageSelect" name="imageFile">
+                        <option value="">-- Keep current image --</option>
+                        <option th:each="f : ${imageFiles}"
+                                th:value="${f}"
+                                th:selected="${concession.img != null and concession.img.endsWith('/' + f)}"
+                                th:text="${f}">
+                        </option>
+                    </select>
 
-                        <div class="col-12">
-                            <label class="form-label">Description</label>
-                            <textarea class="form-control bg-dark text-white" th:field="*{description}" rows="2" required></textarea>
-                            <div class="text-danger small" th:text="${errors?.description}"></div>
-                        </div>
-
-                        <div class="col-12">
-                            <label class="form-label">Select Image</label>
-                            <input type="hidden" th:field="*{img}">
-                            <select class="form-select bg-dark text-white" name="imageFile">
-                                <option value="">-- Keep current image --</option>
-                                <option th:each="f : ${imageFiles}"
-                                        th:value="${f}"
-                                        th:selected="${concession.img != null and concession.img.endsWith('/' + f)}"
-                                        th:text="${f}"></option>
-                            </select>
-                            <div class="mt-2">
-                                <img th:src="${#strings.isEmpty(concession.img) ? '/img/placeholder.png' : concession.img}"
-                                     alt="preview"
-                                     style="width:120px;height:120px;object-fit:cover;border-radius:10px;border:1px solid #555;"
-                                     onerror="this.onerror=null; this.src='/img/placeholder.png';">
-                            </div>
-                            <div class="text-danger small" th:text="${errors?.img}"></div>
-                        </div>
+                    <div class="mt-2">
+                        <img id="imagePreview"
+                             th:src="${#strings.isEmpty(concession.img) ? '/assets/img/placeholder.png' : concession.img}"
+                             alt="preview"
+                             style="width:120px;height:120px;object-fit:cover;border-radius:10px;border:1px solid #555;"
+                             onerror="this.onerror=null; this.src='/assets/img/placeholder.png';">
                     </div>
+                    <div class="text-danger small" th:text="${errors?.img}"></div>
+                </div>
 
-                    <div class="d-flex gap-2 mt-4">
-                        <button type="submit" class="btn btn-sm btn-success">
-                            <i class="fa fa-save"></i> Save Changes
-                        </button>
-                    </div>
-                </form>
-            </div>
+                <!-- ✅ Script fix -->
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        const select = document.getElementById("imageSelect");
+                        const preview = document.getElementById("imagePreview");
+
+                        select.addEventListener("change", function () {
+                            const fileName = select.value;
+                            if (fileName) {
+                                // Nếu value đã chứa "assets/", dùng trực tiếp
+                                if (fileName.includes('assets/')) {
+                                    preview.src = "/" + fileName;
+                                } else {
+                                    preview.src = "/assets/img/concessions/" + fileName;
+                                }
+                            } else {
+                                preview.src = "/assets/img/placeholder.png";
+                            }
+                        });
+                    });
+                </script>
+
+                <div class="col-12">
+                    <button class="btn btn-danger" type="submit">Update</button>
+                    <a class="btn btn-secondary" th:href="@{/concessions}">Cancel</a>
+                </div>
+            </form>
         </div>
     </div>
-</div>
-
-<script src="/assets/js/bootstrap.bundle.min.js"></script>
-<script src="/assets/js/dashboard.js"></script>
+</main>
 </body>
 </html>
