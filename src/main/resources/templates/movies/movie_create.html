@@ -26,45 +26,90 @@
 
                 <div class="container bg-secondary text-white rounded p-4">
 
-                    <form th:action="@{/movies/save}" th:object="${movie}" method="post">
+                    <form th:action="@{/movies/save}" th:object="${movie}" method="post" id="movieForm">
                         <div class="mb-3">
                             <label class="form-label fw-bold">Movie ID:</label>
-                            <input type="text" th:field="*{movieID}" class="form-control" required>
+                            <input type="text" th:field="*{movieID}" class="form-control" readonly>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label fw-bold">Title:</label>
                             <input type="text" th:field="*{title}" class="form-control" required>
+                            <div th:if="${errors['title']}" class="text-danger" th:text="${errors['title']}"></div>
                         </div>
+
 
                         <div class="mb-3">
                             <label class="form-label fw-bold">Genre:</label>
-                            <input type="text" th:field="*{genre}" class="form-control" required>
+                            <select th:field="*{genre}" class="form-select" >
+                                <option value="">-- Select a genre --</option>
+                                <option th:each="g : ${genres}"
+                                        th:value="${g}"
+                                        th:text="${g}">
+                                </option>
+                            </select>
+                            <div th:if="${errors['genre']}" class="text-danger" th:text="${errors['genre']}"></div>
                         </div>
+
 
                         <div class="mb-3">
                             <label class="form-label fw-bold">Duration (minutes):</label>
                             <input type="number" th:field="*{duration}" class="form-control" min="1" required>
+                            <div th:if="${errors['duration']}" class="text-danger" th:text="${errors['duration']}"></div>
+
                         </div>
+
+<!--                        <div class="mb-3">-->
+<!--                            <label class="form-label fw-bold">Release Date:</label>-->
+<!--                            <input type="date" th:field="*{releaseDate}" class="form-control" pattern="\d{4}-\d{2}-\d{2}" required>-->
+<!--                            <div th:if="${errors['releaseDate']}" class="text-danger" th:text="${errors['releaseDate']}"></div>-->
+<!--                            <div id="releaseDateError" class="form__error hidden"></div>-->
+<!--                        </div>-->
 
                         <div class="mb-3">
                             <label class="form-label fw-bold">Release Date:</label>
-                            <input type="date" th:field="*{releaseDate}" class="form-control" required>
+                            <input type="date" th:field="*{releaseDate}" class="form-control" required id="releaseDate">
+
+                            <!-- Backend validation message -->
+                            <div th:if="${errors['releaseDate']}" class="text-danger" th:text="${errors['releaseDate']}"></div>
+
+                            <!-- Front-end JS error -->
+                            <div id="releaseDateError" class="form__error hidden"></div>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label fw-bold">Age Rating:</label>
-                            <input type="text" th:field="*{ageRating}" class="form-control" required>
+                            <input type="number" th:field="*{ageRating}" class="form-control" required>
+                            <div th:if="${errors['ageRating']}" class="text-danger" th:text="${errors['ageRating']}"></div>
+
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label fw-bold">Summary:</label>
                             <textarea th:field="*{summary}" class="form-control" rows="3" required></textarea>
+                            <div th:if="${errors['summary']}" class="text-danger" th:text="${errors['summary']}"></div>
+
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Image:</label>
+                            <select th:field="*{img}" class="form-select">
+                                <option value="">-- Choose a poster --</option>
+                                <option th:each="poster : ${imgPaths}" th:value="${poster}" th:text="${poster}"></option>
+                            </select>
+                            <div th:if="${errors['img']}" class="text-danger" th:text="${errors['img']}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Trailer:</label>
+                            <input type="text" th:field="*{trailer}" class="form-control" required>
+                            <div th:if="${errors['trailer']}" class="text-danger" th:text="${errors['trailer']}"></div>
+
                         </div>
 
                         <div class="d-flex gap-2 mt-4">
                             <button type="submit" class="btn btn-success">
-                                <i class="fa fa-save"></i> Save Changes
+                                <i class="fa fa-save"></i> Create
                             </button>
                             <a class="btn btn-outline-light" href="#" onclick="window.history.go(-1); return false;">
                                 <i class="fa fa-arrow-left"></i> Back
@@ -80,6 +125,57 @@
     </div>
 
 </div>
+<script>
+    // Hiển thị lỗi front-end
+    function showError(fieldId, message) {
+        const errorDiv = document.getElementById(fieldId + 'Error');
+        if (!errorDiv) return;
+        errorDiv.textContent = message;
+        errorDiv.classList.remove('hidden');
+        errorDiv.classList.add('visible');
+    }
+
+    function hideError(fieldId) {
+        const errorDiv = document.getElementById(fieldId + 'Error');
+        if (!errorDiv) return;
+        errorDiv.textContent = '';
+        errorDiv.classList.remove('visible');
+        errorDiv.classList.add('hidden');
+    }
+
+    // Validate release date format ISO yyyy-MM-dd
+    function validateReleaseDate() {
+        const field = document.getElementById('releaseDate');
+        if (!field) return false;
+
+        const value = field.value.trim();
+        hideError('releaseDate');
+
+        if (value === '') return true; // required sẽ do HTML handle
+
+        const isoRegex = /^\d{4}-\d{2}-\d{2}$/;
+        if (!isoRegex.test(value)) {
+            showError('releaseDate', 'Please enter a valid date format (YYYY-MM-DD).');
+            return false;
+        }
+
+        return true;
+    }
+
+    // Gắn validate khi blur và submit
+    window.addEventListener('load', function() {
+        const field = document.getElementById('releaseDate');
+        const form = document.getElementById('movieForm');
+
+        field?.addEventListener('blur', validateReleaseDate);
+
+        form?.addEventListener('submit', function(e) {
+            if (!validateReleaseDate()) {
+                e.preventDefault(); // ngăn submit nếu format sai
+            }
+        });
+    });
+</script>
 
 <!-- jQuery and Bootstrap Bundle -->
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>

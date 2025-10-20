@@ -16,7 +16,8 @@
             <th:block th:replace="${content}"></th:block>
         </div>
 
-        <div class="container-fluid pt-4 px-4">
+
+        <div class="container-fluid pt-4 px-4" >
             <div class="bg-secondary rounded p-4">
 
                 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -25,7 +26,7 @@
                         Back</a>
                 </div>
 
-                <div class="container bg-secondary text-white rounded p-4">
+                <div class="container bg-secondary text-white rounded p-4" th:if="${movie != null}">
 
                     <form th:action="@{/movies/save}" th:object="${movie}" method="post">
                         <div class="mb-3">
@@ -36,31 +37,65 @@
                         <div class="mb-3">
                             <label class="form-label fw-bold">Title:</label>
                             <input type="text" th:field="*{title}" class="form-control" required>
+                            <div th:if="${errors['title']}" class="text-danger" th:text="${errors['title']}"></div>
                         </div>
+
 
                         <div class="mb-3">
                             <label class="form-label fw-bold">Genre:</label>
-                            <input type="text" th:field="*{genre}" class="form-control" required>
+                            <select th:field="*{genre}" class="form-select" >
+                                <option value="">-- Select a genre --</option>
+                                <option th:each="g : ${genres}"
+                                        th:value="${g}"
+                                        th:text="${g}">
+                                </option>
+                            </select>
+                            <div th:if="${errors['genre']}" class="text-danger" th:text="${errors['genre']}"></div>
                         </div>
+
 
                         <div class="mb-3">
                             <label class="form-label fw-bold">Duration (minutes):</label>
                             <input type="number" th:field="*{duration}" class="form-control" min="1" required>
+                            <div th:if="${errors['duration']}" class="text-danger" th:text="${errors['duration']}"></div>
+
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label fw-bold">Release Date:</label>
                             <input type="date" th:field="*{releaseDate}" class="form-control" required>
+                            <div th:if="${errors['releaseDate']}" class="text-danger" th:text="${errors['releaseDate']}"></div>
+
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label fw-bold">Age Rating:</label>
                             <input type="text" th:field="*{ageRating}" class="form-control" required>
+                            <div th:if="${errors['ageRating']}" class="text-danger" th:text="${errors['ageRating']}"></div>
+
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label fw-bold">Summary:</label>
                             <textarea th:field="*{summary}" class="form-control" rows="3" required></textarea>
+                            <div th:if="${errors['summary']}" class="text-danger" th:text="${errors['summary']}"></div>
+
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Image:</label>
+                            <select th:field="*{img}" class="form-select">
+                                <option value="">-- Choose a poster --</option>
+                                <option th:each="poster : ${imgPaths}" th:value="${poster}" th:text="${poster}"></option>
+                            </select>
+                            <div th:if="${errors['img']}" class="text-danger" th:text="${errors['img']}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Trailer:</label>
+                            <input type="text" th:field="*{trailer}" class="form-control" required>
+                            <div th:if="${errors['trailer']}" class="text-danger" th:text="${errors['trailer']}"></div>
+
                         </div>
 
                         <div class="d-flex gap-2 mt-4">
@@ -71,11 +106,11 @@
                         </div>
                     </form>
                 </div>
-
-
+                <p class="text-danger" th:if="${movie == null}" th:text="${error}"></p>
             </div>
         </div>
     </div>
+</div>
 
     <!-- jQuery and Bootstrap Bundle -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>

@@ -1,16 +1,23 @@
 package vn.edu.fpt.cinemamanagement.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.cinemamanagement.entities.Movie;
 import vn.edu.fpt.cinemamanagement.services.MovieService;
 
+import java.beans.PropertyEditorSupport;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "movies")
@@ -19,48 +26,86 @@ public class MovieController {
     private MovieService movieService;
 
     @RequestMapping
-    public String getAllMovies(Model model) {
-        model.addAttribute("movies", movieService.getAllMovies());
+    public String getAllMovies(Model model,  @RequestParam(name = "page", defaultValue = "1", required = false) int page) {
+        int size = 3;
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<Movie> movies = movieService.getAllMovies(pageable);
+        model.addAttribute("movies", movies);
+        int totalPages = movies.getTotalPages();
+
+        int visiblePages = 5;
+        int startPage, endPage;
+        if (totalPages <= visiblePages) {
+            startPage = 1; // 1-based
+            endPage = totalPages;
+        } else {
+            startPage = ((page - 1) / visiblePages) * visiblePages + 1;
+            endPage = Math.min(startPage + visiblePages - 1, totalPages);
+        }
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+        model.addAttribute("page", page);
+        model.addAttribute("totalPages", totalPages);
+        if (movies.isEmpty()) {
+            model.addAttribute("error", "Movie list is empty");
+        }
         return "movies/movie_list";
     }
     @RequestMapping(value = "/detail/{id}")
     public String getMovieDetails(@PathVariable("id") String id, Model model) {
         Movie movie = movieService.findById(id);
         model.addAttribute("movie", movie);
+        if (!movieService.existsByMovieID(id)) {
+            model.addAttribute("error", String.format("Movie with ID %s does not exist", id));
+        }
         return "movies/movie_detail";
     }
+
     @RequestMapping(value = "create")
     public String createMovie(Model model) {
-        model.addAttribute("movie", new Movie());
+        Movie movie = new Movie();
+        movie.setMovieID(movieService.generateMovieID());
+        model.addAttribute("movie", movie);
+
+        List<String> imgPaths = movieService.getImgPaths();
+        model.addAttribute("imgPaths", imgPaths);
+        model.addAttribute("errors", new HashMap<String, String>());
+        model.addAttribute("genres", movieService.getGenres());
         return "movies/movie_create";
     }
     @RequestMapping(value = "/update/{id}")
     public String updateMovie(@PathVariable("id") String id, Model model) {
-        model.addAttribute("movie", movieService.findById(id));
+         model.addAttribute("movie", movieService.findById(id));
+        if (!movieService.existsByMovieID(id)) {
+            model.addAttribute("error", String.format("Movie with ID %s does not exist", id));
+        }
+        List<String> imgPaths = movieService.getImgPaths();
+        model.addAttribute("imgPaths", imgPaths);
+        model.addAttribute("errors", new HashMap<String, String>());
+        model.addAttribute("genres", movieService.getGenres());
         return "movies/movie_update";
     }
 
-    @PostMapping(value = "save")
-    public String save(@ModelAttribute("movie") Movie movie) {
-        // kiểm tra nếu null thì gán tạm
-        if (movie.getReleaseDate() == null) {
-            movie.setReleaseDate(LocalDate.now());
-        }
-       movie.setTitle(movie.getTitle().toUpperCase());
-        movieService.save(movie);
+@PostMapping(value = "save")
+public String save(@ModelAttribute("movie") Movie movie, Model model) {
+    boolean isUpdate = movieService.existsByMovieID(movie.getMovieID());
+    var errors = movieService.saveOrUpdateMovie(movie, isUpdate);
+
+    if (!errors.isEmpty()) {
+        model.addAttribute("movie", movie); // ⚠️ cần có dòng này
+        model.addAttribute("errors", errors);
+        model.addAttribute("imgPaths", movieService.getImgPaths());
+        model.addAttribute("genres", movieService.getGenres());
+
+        return isUpdate ? "movies/movie_update" : "movies/movie_create";
+    }
+
     return "redirect:/movies";
-    }
+}
 
-    @RequestMapping(value = "/delete/{id}")
-    public String delete(@PathVariable("id") String id, Model model) {
-        Movie movie = movieService.findById(id);
-        model.addAttribute("movie", movie);
-        return  "movies/movie_delete";
-    }
-
-    @PostMapping(value = "/delete")
-    public String delete(@ModelAttribute("movie") Movie movie) {
-        movieService.delete(movie);
-        return "redirect:/movies";
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteMovie(@PathVariable("id") String id) {
+        movieService.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 }

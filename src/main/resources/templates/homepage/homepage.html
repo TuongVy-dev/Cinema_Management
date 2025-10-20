@@ -55,7 +55,9 @@
                 <!-- Loop Movie -->
                 <article class="movie-card" th:each="movie : ${nowShowing}">
                     <div class="movie-card__top">
-                        <img th:src="@{'/assets/img/posters/' + ${movie.movieID} + '.jpg'}"
+<!--                        <img th:src="@{'/assets/img/posters/' + ${movie.movieID} + '.jpg'}"-->
+                        <img th:src="@{${movie.img}}"
+
                              th:alt="${movie.title} + ' poster'" class="movie-card__poster">
                         <div class="movie-card__rating">
                             T<span th:text="${movie.ageRating}"></span>
