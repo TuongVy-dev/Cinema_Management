@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cashier - Seat Selection</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/assets/css/style.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/seat_template.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/cashier_seat.css}">
+</head>
+<body class="cashier-body">
+
+<!-- Main Container -->
+<div class="cashier-container">
+    
+    <!-- Header Section -->
+    <header class="cashier-header">
+        <div class="header-content">
+            <div class="header-left">
+                <h1 class="cashier-title">Seat Selection - Cashier</h1>
+                <p class="cashier-subtitle">Select seats for customer booking</p>
+            </div>
+            <div class="header-right">
+                <button class="btn-header" onclick="window.location.href='/staff_home'">
+                    ← Back to Dashboard
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <div class="cashier-grid">
+        
+        <!-- Left Panel - Seat Map -->
+        <div class="seat-panel">
+            
+            <!-- Movie Information -->
+            <div class="movie-info-card">
+                <div class="movie-info-content">
+                    <h2 class="movie-title" th:text="${movieTitle}">The Last Guardian</h2>
+                    <div class="movie-details">
+                        <span class="detail-item">
+                            <strong>Room:</strong> <span th:text="${roomName}">R001</span>
+                        </span>
+                        <span class="detail-item">
+                            <strong>Date:</strong> <span th:text="${date}">December 15, 2024</span>
+                        </span>
+                        <span class="detail-item">
+                            <strong>Time:</strong> <span th:text="${showtime}">7:30 PM</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seat Map Container -->
+            <div class="seat-map-container">
+                <h3 class="seat-map-title">Select Seats</h3>
+                
+                <!-- Screen -->
+                <div class="seat-map__screen">SCREEN</div>
+
+                <!-- Template Selection (Hidden inputs for template switching) -->
+                <input type="radio" id="tpl1" name="tpl" th:checked="${template == 'TM000001'}" hidden>
+                <input type="radio" id="tpl2" name="tpl" th:checked="${template == 'TM000002'}" hidden>
+                <input type="radio" id="tpl3" name="tpl" th:checked="${template == 'TM000003'}" hidden>
+                <input type="radio" id="tpl4" name="tpl" th:checked="${template == 'TM000004'}" hidden>
+
+                <!-- Templates Container -->
+                <div class="templates">
+                    
+                    <!-- TEMPLATE 1: Standard Grid Layout -->
+                    <div id="template-1" class="template-section" th:if="${template == 'TM000001'}">
+                        <div th:each="entry : ${groupSeat}">
+                            <div class="seat-map__grid">
+                                <div class="row">
+                                    <div th:each="seat : ${entry.value}" 
+                                         class="seat seat-clickable"
+                                         th:classappend="'seat--' + ${seat.seat_type}"
+                                         th:text="${seat.row_label} + ${seat.seat_number}"
+                                         th:attr="data-seat=${seat.row_label + seat.seat_number},
+                                                  data-type=${seat.seat_type},
+                                                  data-row=${seat.row_label},
+                                                  data-number=${seat.seat_number}">
+                                        A1
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TEMPLATE 2: Two Aisles Layout -->
+                    <div id="template-2" class="template-section" th:if="${template == 'TM000002'}">
+                        <div class="seat-map__grid seat-map__grid--t2">
+                            <div class="row" th:each="entry : ${groupSeat}">
+                                <div th:each="seat, iterStat : ${entry.value}">
+                                    <div class="seat seat-clickable"
+                                         th:classappend="'seat--' + ${seat.seat_type}"
+                                         th:text="${seat.row_label} + ${seat.seat_number}"
+                                         th:attr="data-seat=${seat.row_label + seat.seat_number},
+                                                  data-type=${seat.seat_type},
+                                                  data-row=${seat.row_label},
+                                                  data-number=${seat.seat_number}">
+                                        A1
+                                    </div>
+                                    <div class="aisle" th:if="${iterStat.index == 3 or iterStat.index == 6}"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TEMPLATE 3: VIP Front Layout -->
+                    <div id="template-3" class="template-section" th:if="${template == 'TM000003'}">
+                        <div th:each="entry : ${groupSeat}">
+                            <div class="seat-map__grid seat-map__grid--t3">
+                                <div th:each="seat : ${entry.value}"
+                                     class="seat seat-clickable"
+                                     th:classappend="'seat--' + ${seat.seat_type}"
+                                     th:text="${seat.row_label} + ${seat.seat_number}"
+                                     th:attr="data-seat=${seat.row_label + seat.seat_number},
+                                              data-type=${seat.seat_type},
+                                              data-row=${seat.row_label},
+                                              data-number=${seat.seat_number}">
+                                    A1
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TEMPLATE 4: Single Aisle Layout -->
+                    <div id="template-4" class="template-section" th:if="${template == 'TM000004'}">
+                        <div class="seat-map__grid seat-map__grid--t4">
+                            <div class="row" th:each="entry : ${groupSeat}">
+                                <div th:each="seat, iterStat : ${entry.value}">
+                                    <div class="seat seat-clickable"
+                                         th:classappend="'seat--' + ${seat.seat_type}"
+                                         th:text="${seat.row_label} + ${seat.seat_number}"
+                                         th:attr="data-seat=${seat.row_label + seat.seat_number},
+                                                  data-type=${seat.seat_type},
+                                                  data-row=${seat.row_label},
+                                                  data-number=${seat.seat_number}">
+                                        A1
+                                    </div>
+                                    <div class="aisle" th:if="${iterStat.index == 3}"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Legend -->
+                <div class="seat-map__legend">
+                    <div class="legend-item">
+                        <div class="legend-item__color legend-item__color--available"></div>
+                        <span>Standard</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-item__color legend-item__color--vip"></div>
+                        <span>VIP</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-item__color legend-item__color--selected"></div>
+                        <span>Selected</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-item__color legend-item__color--booked"></div>
+                        <span>Booked</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel - Booking Summary & Customer Info -->
+        <div class="booking-panel">
+            
+            <!-- Selected Seats Summary -->
+            <div class="summary-card">
+                <h3 class="summary-title">Selected Seats</h3>
+                <div id="selected-seats-list" class="selected-seats-list">
+                    <p class="no-seats-message">No seats selected</p>
+                </div>
+            </div>
+
+            <!-- Price Summary -->
+            <div class="summary-card">
+                <h3 class="summary-title">Price Summary</h3>
+                <div class="price-breakdown">
+                    <div class="price-row">
+                        <span>Standard Seats (<span id="standard-count">0</span>):</span>
+                        <span>$<span id="standard-total">0.00</span></span>
+                    </div>
+                    <div class="price-row">
+                        <span>VIP Seats (<span id="vip-count">0</span>):</span>
+                        <span>$<span id="vip-total">0.00</span></span>
+                    </div>
+                    <div class="price-row price-total">
+                        <span><strong>Total:</strong></span>
+                        <span><strong>$<span id="grand-total">0.00</span></strong></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customer Information Form -->
+            <div class="summary-card">
+                <h3 class="summary-title">Customer Information</h3>
+                <form id="customer-form" class="customer-form">
+                    <div class="form-group">
+                        <label for="customer-name" class="form-label">Full Name *</label>
+                        <input type="text" id="customer-name" name="customerName" 
+                               class="form-input" placeholder="Enter customer name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customer-phone" class="form-label">Phone Number *</label>
+                        <input type="tel" id="customer-phone" name="customerPhone" 
+                               class="form-input" placeholder="Enter phone number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customer-email" class="form-label">Email (Optional)</label>
+                        <input type="email" id="customer-email" name="customerEmail" 
+                               class="form-input" placeholder="Enter email address">
+                    </div>
+                </form>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button type="button" class="btn btn-secondary btn-full" id="clear-btn">
+                    Clear Selection
+                </button>
+                <button type="button" class="btn btn-primary btn-full" id="confirm-btn">
+                    Confirm Booking
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Hidden data for JavaScript -->
+<input type="hidden" id="room-id" th:value="${roomName}">
+<input type="hidden" id="standard-price" th:value="${standardPrice}">
+<input type="hidden" id="vip-price" th:value="${vipPrice}">
+<input type="hidden" id="template-id" th:value="${template}">
+
+<!-- JavaScript -->
+<script th:src="@{/assets/js/cashier_seat.js}"></script>
+
+</body>
+</html>
