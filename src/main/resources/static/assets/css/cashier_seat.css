@@ -1,0 +1,519 @@
+/* Cashier Seat Map Styles */
+
+:root {
+    --cashier-primary: #d32f2f;
+    --cashier-primary-dark: #b71c1c;
+    --cashier-secondary: #ff9800;
+    --cashier-success: #4caf50;
+    --cashier-bg: #121212;
+    --cashier-card-bg: #1e1e1e;
+    --cashier-border: #333;
+    --cashier-text: #ffffff;
+    --cashier-text-secondary: #b0b0b0;
+}
+
+/* Body and Container */
+.cashier-body {
+    background-color: var(--cashier-bg);
+    color: var(--cashier-text);
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+.cashier-container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0;
+}
+
+/* Header */
+.cashier-header {
+    background-color: var(--cashier-card-bg);
+    border-bottom: 3px solid var(--cashier-primary);
+    padding: 1.5rem 2rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-left {
+    flex: 1;
+}
+
+.cashier-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--cashier-primary);
+    margin: 0 0 0.25rem 0;
+}
+
+.cashier-subtitle {
+    font-size: 0.95rem;
+    color: var(--cashier-text-secondary);
+    margin: 0;
+}
+
+.header-right {
+    display: flex;
+    gap: 1rem;
+}
+
+.btn-header {
+    background-color: transparent;
+    border: 2px solid var(--cashier-border);
+    color: var(--cashier-text);
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-header:hover {
+    background-color: var(--cashier-primary);
+    border-color: var(--cashier-primary);
+    color: white;
+}
+
+/* Main Grid Layout */
+.cashier-grid {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    min-height: calc(100vh - 120px);
+}
+
+/* Seat Panel (Left) */
+.seat-panel {
+    background-color: var(--cashier-card-bg);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
+}
+
+/* Movie Info Card */
+.movie-info-card {
+    background: linear-gradient(135deg, var(--cashier-primary) 0%, var(--cashier-primary-dark) 100%);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
+}
+
+.movie-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: white;
+    margin: 0 0 1rem 0;
+}
+
+.movie-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.detail-item {
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 0.95rem;
+}
+
+.detail-item strong {
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 500;
+}
+
+/* Seat Map Container */
+.seat-map-container {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    padding: 2rem 1.5rem;
+}
+
+.seat-map-title {
+    text-align: center;
+    color: var(--cashier-primary);
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 0 0 1.5rem 0;
+}
+
+/* Seat Styles - Enhanced for Cashier */
+.seat-clickable {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.seat-clickable:hover:not(.seat--booked) {
+    transform: scale(1.15);
+    box-shadow: 0 4px 12px rgba(211, 47, 47, 0.5);
+}
+
+.seat--standard {
+    background-color: #2c2c2c;
+    color: white;
+    border: 2px solid #444;
+}
+
+.seat--standard:hover {
+    background-color: #3a3a3a;
+    border-color: var(--cashier-secondary);
+}
+
+.seat--vip {
+    background-color: var(--cashier-secondary);
+    color: #1a1a1a;
+    border: 2px solid #ff9800;
+    font-weight: 700;
+}
+
+.seat--vip:hover {
+    background-color: #ffb74d;
+}
+
+.seat--selected {
+    background-color: var(--cashier-primary) !important;
+    border-color: var(--cashier-primary) !important;
+    color: white !important;
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(211, 47, 47, 0.6);
+}
+
+.seat--booked {
+    background-color: #555 !important;
+    border-color: #666 !important;
+    color: #888 !important;
+    cursor: not-allowed !important;
+    opacity: 0.5;
+}
+
+/* Booking Panel (Right) */
+.booking-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.summary-card {
+    background-color: var(--cashier-card-bg);
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--cashier-border);
+}
+
+.summary-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--cashier-primary);
+    margin: 0 0 1rem 0;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--cashier-border);
+}
+
+/* Selected Seats List */
+.selected-seats-list {
+    min-height: 80px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.no-seats-message {
+    text-align: center;
+    color: var(--cashier-text-secondary);
+    font-style: italic;
+    padding: 2rem 0;
+    margin: 0;
+}
+
+.seat-tag {
+    display: inline-block;
+    background-color: var(--cashier-primary);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    margin: 0.25rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    position: relative;
+    padding-right: 2.5rem;
+}
+
+.seat-tag-remove {
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.seat-tag-remove:hover {
+    opacity: 1;
+}
+
+.seat-tag.vip {
+    background-color: var(--cashier-secondary);
+    color: #1a1a1a;
+}
+
+/* Price Breakdown */
+.price-breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    color: var(--cashier-text-secondary);
+    font-size: 0.95rem;
+}
+
+.price-total {
+    border-top: 2px solid var(--cashier-border);
+    padding-top: 1rem;
+    margin-top: 0.5rem;
+    font-size: 1.1rem;
+    color: var(--cashier-text);
+}
+
+.price-total strong {
+    color: var(--cashier-primary);
+}
+
+/* Customer Form */
+.customer-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-label {
+    font-weight: 600;
+    color: var(--cashier-text);
+    font-size: 0.9rem;
+}
+
+.form-input {
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 2px solid var(--cashier-border);
+    color: var(--cashier-text);
+    padding: 0.75rem;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--cashier-primary);
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.form-input::placeholder {
+    color: var(--cashier-text-secondary);
+    opacity: 0.6;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.btn {
+    padding: 1rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.btn-full {
+    width: 100%;
+}
+
+.btn-primary {
+    background-color: var(--cashier-primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--cashier-primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(211, 47, 47, 0.4);
+}
+
+.btn-primary:disabled {
+    background-color: #666;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-secondary {
+    background-color: transparent;
+    border: 2px solid var(--cashier-border);
+    color: var(--cashier-text);
+}
+
+.btn-secondary:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: var(--cashier-text-secondary);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .cashier-grid {
+        grid-template-columns: 1fr 350px;
+    }
+}
+
+@media (max-width: 992px) {
+    .cashier-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .booking-panel {
+        order: -1;
+    }
+    
+    .seat-panel {
+        margin-top: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .cashier-header {
+        padding: 1rem;
+    }
+    
+    .header-content {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    
+    .cashier-title {
+        font-size: 1.4rem;
+    }
+    
+    .cashier-grid {
+        padding: 1rem;
+        gap: 1rem;
+    }
+    
+    .movie-details {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .seat-map-container {
+        padding: 1rem;
+    }
+}
+
+/* Loading State */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+    position: relative;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(211, 47, 47, 0.3);
+    border-top-color: var(--cashier-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+/* Success/Error Messages */
+.message-box {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-weight: 500;
+    text-align: center;
+}
+
+.message-success {
+    background-color: rgba(76, 175, 80, 0.2);
+    border: 2px solid var(--cashier-success);
+    color: var(--cashier-success);
+}
+
+.message-error {
+    background-color: rgba(211, 47, 47, 0.2);
+    border: 2px solid var(--cashier-primary);
+    color: var(--cashier-primary);
+}
+
+/* Scrollbar Styling */
+.selected-seats-list::-webkit-scrollbar,
+.seat-panel::-webkit-scrollbar {
+    width: 8px;
+}
+
+.selected-seats-list::-webkit-scrollbar-track,
+.seat-panel::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+.selected-seats-list::-webkit-scrollbar-thumb,
+.seat-panel::-webkit-scrollbar-thumb {
+    background: var(--cashier-border);
+    border-radius: 4px;
+}
+
+.selected-seats-list::-webkit-scrollbar-thumb:hover,
+.seat-panel::-webkit-scrollbar-thumb:hover {
+    background: var(--cashier-text-secondary);
+}
