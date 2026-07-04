@@ -1,6 +1,7 @@
 package vn.edu.fpt.cinemamanagement.services;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import vn.edu.fpt.cinemamanagement.entities.Customer;
 import vn.edu.fpt.cinemamanagement.repositories.CustomerRepository;
 
@@ -292,6 +293,7 @@ public class CustomerService {
     /**
      * Reset password and update to DB
      */
+    @Transactional
     public Map<String, String> resetPassword(String id, String newPassword, String confirmPassword) {
         Map<String, String> errors = validateResetPassword(newPassword, confirmPassword);
 
@@ -299,11 +301,12 @@ public class CustomerService {
             return errors;
         }
 
-        Customer customer = customerRepository.findById(id).orElse(null);
-
-        customer.setPassword(encodePassword(newPassword));
-        customer.setVerify("active");
-        customerRepository.save(customer);
+        String encodedPassword = encodePassword(newPassword);
+        int updatedRows = customerRepository.updateResetPassword(id, encodedPassword);
+        if (updatedRows == 0) {
+            errors.put("customer", "Customer not found.");
+            return errors;
+        }
 
         return errors; // empty map = success
     }

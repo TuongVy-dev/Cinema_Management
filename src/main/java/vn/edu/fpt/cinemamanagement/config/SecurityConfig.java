@@ -43,11 +43,13 @@ public class SecurityConfig {
                         // Trang cho guest (không cần login)
                         .requestMatchers("/", "/homepage", "/homepage/**",
                                 "/movies/**",
-                                "/login", "/register", "/forget_password", "/sendmail", "/verify/**", "/rooms/seat", "/qrpayment/**", "/payments/paymentsuccess/**", "/ticket/**").permitAll()
+                                "/login", "/register", "/forget_password", "/api/auth/forgot-password", "/api/auth/reset-password",
+                                "/sendmail", "/verify/**", "/rooms/seat", "/qrpayment/**", "/payments/paymentsuccess/**", "/ticket/**").permitAll()
                         .requestMatchers("/booking/**").authenticated()
 
                         // Trang yêu cầu quyền
-                        .requestMatchers("/dashboard", "/api/vouchers/admin/**", "/api/showtime/admin/**" ).hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/dashboard", "/api/vouchers/admin/**", "/api/admin/**" ).hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/api/payments/**").authenticated()
                         // Lưu ý: sửa tên quyền cho đúng với DB của bạn
                         .requestMatchers("/staff_home")
                         .hasAnyAuthority("ROLE_CASHIER_STAFF", "ROLE_REDEMPTION_STAFF")
