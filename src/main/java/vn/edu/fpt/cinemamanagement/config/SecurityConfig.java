@@ -2,11 +2,17 @@ package vn.edu.fpt.cinemamanagement.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 public class SecurityConfig {
@@ -25,6 +31,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/api/concessions/**"))
                 // dùng service hiện có (optional nhưng nên có)
                 .userDetailsService(userDetailsService)
 
@@ -44,10 +52,14 @@ public class SecurityConfig {
                         // Lưu ý: sửa tên quyền cho đúng với DB của bạn
                         .requestMatchers("/staff_home")
                         .hasAnyAuthority("ROLE_CASHIER_STAFF", "ROLE_REDEMPTION_STAFF")
-
+                        .requestMatchers(HttpMethod.GET, "/api/concessions")
+                        .hasAnyAuthority("ROLE_ADMIN", "ROLE_CASHIER_STAFF")
+                        .requestMatchers("/api/concessions/**")
+                        .hasAuthority("ROLE_ADMIN")
                         // Các URL khác thì cần đăng nhập
                         .anyRequest().authenticated()
                 )
+
 
                 .formLogin(login -> login
                         .loginPage("/login")
@@ -80,11 +92,35 @@ public class SecurityConfig {
                         .deleteCookies("JSESSIONID")
                         .clearAuthentication(true)
                         .permitAll()
-                )
+                );
 
-                // tuỳ nhu cầu API/form, tạm tắt cho đơn giản
-                .csrf(csrf -> csrf.disable());
-
+        // tuỳ nhu cầu API/form, tạm tắt cho đơn giản
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        configuration.setAllowedOrigins(
+                List.of("http://localhost:5173")
+        );
+
+        configuration.setAllowedMethods(
+                List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")
+        );
+
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
+
+        source.registerCorsConfiguration(
+                "/api/**",
+                configuration
+        );
+
+        return source;
     }
 }

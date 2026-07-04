@@ -46,13 +46,17 @@ public class ShowtimeSeatService {
     public void createShowtimeSeats(String showtimeId, String templateId) {
         List<TemplateSeat> templateSeats = templateSeatService.findAllSeatsByTemplateID(templateId);
         for (TemplateSeat templateSeat : templateSeats) {
-            ShowtimeSeat seat = new ShowtimeSeat();
-            seat.setShowtimeSeatID(generateId());
-            seat.setShowtime(showtimeService.showtimeByID(showtimeId));
-            seat.setTemplateSeat(templateSeat);
-            seat.setStatus("available");
-            showtimeSeatRepository.save(seat);
+            createSingleShowtimeSeat(showtimeId, templateSeat);
         }
+    }
+
+    public void createSingleShowtimeSeat(String showtimeId, TemplateSeat templateSeat) {
+        ShowtimeSeat seat = new ShowtimeSeat();
+        seat.setShowtimeSeatID(generateId());
+        seat.setShowtime(showtimeService.showtimeByID(showtimeId));
+        seat.setTemplateSeat(templateSeat);
+        seat.setStatus("available");
+        showtimeSeatRepository.save(seat);
     }
 
     @Transactional
