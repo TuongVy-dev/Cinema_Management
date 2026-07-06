@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import vn.edu.fpt.cinemamanagement.entities.Movie;
 import java.time.LocalDate;
@@ -22,4 +23,7 @@ public interface MovieRepository extends JpaRepository<Movie, String> {
     boolean existsByTitleIgnoreCase(String title);
 
     Page<Movie> findByReleaseDateGreaterThan(LocalDate date, Pageable pageable);
+
+    @Query("SELECT m FROM Movie m WHERE LOWER(m.title) LIKE LOWER(CONCAT('%', :search, '%'))")
+    Page<Movie> searchByTitle(@Param("search") String search, Pageable pageable);
 }
