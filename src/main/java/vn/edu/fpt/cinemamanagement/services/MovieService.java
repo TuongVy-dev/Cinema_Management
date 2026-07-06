@@ -307,6 +307,55 @@ private void validateAgeRating(String ageRating, Map<String, String> errors) {
     }
 
 
+    // ============================================
+    // BUSINESS VALIDATION - REST API
+    // Format đã được validate ở MovieRequestDTO (Bean Validation),
+    // nên các method này chỉ kiểm tra rule nghiệp vụ rồi lưu.
+    // ============================================
+
+    @Transactional
+    public Map<String, String> createMovieBusiness(Movie movie) {
+        Map<String, String> errors = new HashMap<>();
+
+        validateImage(movie.getImg(), errors);
+        validateReleaseDate(movie.getReleaseDate(), errors, false, movie.getMovieID());
+        validateDuplicateTitle(movie.getTitle(), errors);
+
+        if (!errors.isEmpty()) {
+            return errors;
+        }
+
+        movie.setTitle(movie.getTitle().toUpperCase());
+        movieRepository.save(movie);
+        return errors; // Trống = thành công
+    }
+
+    @Transactional
+    public Map<String, String> updateMovieBusiness(Movie movie) {
+        Map<String, String> errors = new HashMap<>();
+
+        validateImage(movie.getImg(), errors);
+        validateReleaseDate(movie.getReleaseDate(), errors, true, movie.getMovieID());
+
+        Movie existing = movieRepository.findById(movie.getMovieID()).orElse(null);
+        if (existing == null) {
+            errors.put("movieID", "Movie not found for update.");
+        } else if (!movie.getTitle().equalsIgnoreCase(existing.getTitle())) {
+            // Chỉ kiểm tra trùng khi title thực sự đổi
+            if (movieRepository.existsByTitleIgnoreCase(movie.getTitle())) {
+                errors.put("title", "A movie with this title already exists.");
+            }
+        }
+
+        if (!errors.isEmpty()) {
+            return errors;
+        }
+
+        movie.setTitle(movie.getTitle().toUpperCase());
+        movieRepository.save(movie);
+        return errors; // Trống = thành công
+    }
+
     @Transactional
     public Page<Movie> getAllMovies(Pageable pageable) {
         return movieRepository.findAll(pageable);

@@ -1,5 +1,6 @@
-package vn.edu.fpt.cinemamanagement.controller;
+package vn.edu.fpt.cinemamanagement.controller.api;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
@@ -8,9 +9,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import vn.edu.fpt.cinemamanagement.dto.MovieDTO;
+import vn.edu.fpt.cinemamanagement.dto.request.MovieRequestDTO;
+import vn.edu.fpt.cinemamanagement.dto.response.MovieResponseDTO;
 import vn.edu.fpt.cinemamanagement.entities.Movie;
 import vn.edu.fpt.cinemamanagement.repositories.MovieRepository;
 import vn.edu.fpt.cinemamanagement.services.MovieService;
@@ -20,7 +24,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.time.LocalDate;
 import java.util.*;
 
 @RestController
@@ -35,7 +38,7 @@ public class MovieRestController {
     private MovieRepository movieRepository;
 
     @GetMapping
-    public ResponseEntity<Page<MovieDTO>> listMovies(
+    public ResponseEntity<Page<MovieResponseDTO>> listMovies(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String search) {
@@ -48,17 +51,17 @@ public class MovieRestController {
             movies = movieService.getAllMovies(pageable);
         }
 
-        Page<MovieDTO> dtoPage = movies.map(MovieDTO::fromEntity);
+        Page<MovieResponseDTO> dtoPage = movies.map(MovieResponseDTO::fromEntity);
         return ResponseEntity.ok(dtoPage);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MovieDTO> getMovie(@PathVariable String id) {
+    public ResponseEntity<MovieResponseDTO> getMovie(@PathVariable String id) {
         Movie movie = movieService.findById(id);
         if (movie == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(MovieDTO.fromEntity(movie));
+        return ResponseEntity.ok(MovieResponseDTO.fromEntity(movie));
     }
 
     @GetMapping("/next-id")
@@ -71,74 +74,84 @@ public class MovieRestController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> createMovie(
-            @RequestParam String title,
-            @RequestParam String genre,
-            @RequestParam(required = false) String summary,
-            @RequestParam int duration,
-            @RequestParam String releaseDate,
-            @RequestParam String ageRating,
-            @RequestParam(required = false) String trailer,
+            @Valid @ModelAttribute MovieRequestDTO request,
+            BindingResult bindingResult,
             @RequestParam(value = "image", required = false) MultipartFile image) {
-        Movie movie = new Movie();
-        movie.setMovieID(movieService.generateMovieID());
-        movie.setTitle(title != null ? title.trim() : "");
-        movie.setGenre(genre);
-        movie.setSummary(summary != null ? summary.trim() : "");
-        movie.setDuration(duration);
-        movie.setReleaseDate(LocalDate.parse(releaseDate));
-        movie.setAgeRating(ageRating);
-        movie.setTrailer(trailer != null ? trailer.trim() : "");
 
-        if (image != null && !image.isEmpty()) {
-            String imagePath = saveImage(image);
-            movie.setImg(imagePath);
-        } else {
-            movie.setImg("");
+        // 1️⃣ FORMAT validate (Bean Validation) → trả lỗi ngay nếu có
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(toErrorMap(bindingResult));
         }
 
-        Map<String, String> errors = movieService.createMovie(movie);
+        // 2️⃣ Map DTO → entity
+        Movie movie = new Movie();
+        movie.setMovieID(movieService.generateMovieID());
+        movie.setTitle(request.title().trim());
+        movie.setGenre(request.genre());
+        movie.setSummary(request.summary() != null ? request.summary().trim() : "");
+        movie.setDuration(request.duration());
+        movie.setReleaseDate(request.releaseDate());
+        movie.setAgeRating(request.ageRating());
+        movie.setTrailer(request.trailer() != null ? request.trailer().trim() : "");
+        movie.setImg(image != null && !image.isEmpty() ? saveImage(image) : "");
+
+        // 3️⃣ BUSINESS validate + save (trong service)
+        Map<String, String> errors = movieService.createMovieBusiness(movie);
         if (!errors.isEmpty()) {
             return ResponseEntity.badRequest().body(errors);
         }
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(MovieDTO.fromEntity(movie));
+        return ResponseEntity.status(HttpStatus.CREATED).body(MovieResponseDTO.fromEntity(movie));
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateMovie(
             @PathVariable String id,
-            @RequestParam String title,
-            @RequestParam String genre,
-            @RequestParam(required = false) String summary,
-            @RequestParam int duration,
-            @RequestParam String releaseDate,
-            @RequestParam String ageRating,
-            @RequestParam(required = false) String trailer,
+            @Valid @ModelAttribute MovieRequestDTO request,
+            BindingResult bindingResult,
             @RequestParam(value = "image", required = false) MultipartFile image) {
+
         Movie existing = movieService.findById(id);
         if (existing == null) {
             return ResponseEntity.notFound().build();
         }
 
-        existing.setTitle(title != null ? title.trim() : "");
-        existing.setGenre(genre);
-        existing.setSummary(summary != null ? summary.trim() : "");
-        existing.setDuration(duration);
-        existing.setReleaseDate(LocalDate.parse(releaseDate));
-        existing.setAgeRating(ageRating);
-        existing.setTrailer(trailer != null ? trailer.trim() : "");
-
-        if (image != null && !image.isEmpty()) {
-            String imagePath = saveImage(image);
-            existing.setImg(imagePath);
+        // 1️⃣ FORMAT validate (Bean Validation)
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(toErrorMap(bindingResult));
         }
 
-        Map<String, String> errors = movieService.updateMovie(existing);
+        // 2️⃣ Map DTO → entity (giữ ảnh cũ nếu không upload ảnh mới)
+        existing.setTitle(request.title().trim());
+        existing.setGenre(request.genre());
+        existing.setSummary(request.summary() != null ? request.summary().trim() : "");
+        existing.setDuration(request.duration());
+        existing.setReleaseDate(request.releaseDate());
+        existing.setAgeRating(request.ageRating());
+        existing.setTrailer(request.trailer() != null ? request.trailer().trim() : "");
+        if (image != null && !image.isEmpty()) {
+            existing.setImg(saveImage(image));
+        }
+
+        // 3️⃣ BUSINESS validate + save (trong service)
+        Map<String, String> errors = movieService.updateMovieBusiness(existing);
         if (!errors.isEmpty()) {
             return ResponseEntity.badRequest().body(errors);
         }
 
-        return ResponseEntity.ok(MovieDTO.fromEntity(existing));
+        return ResponseEntity.ok(MovieResponseDTO.fromEntity(existing));
+    }
+
+    /**
+     * Gom lỗi Bean Validation về dạng { field: message } (mỗi field 1 message)
+     * để đồng nhất với shape lỗi mà frontend đang đọc.
+     */
+    private Map<String, String> toErrorMap(BindingResult bindingResult) {
+        Map<String, String> errors = new HashMap<>();
+        for (FieldError fieldError : bindingResult.getFieldErrors()) {
+            errors.putIfAbsent(fieldError.getField(), fieldError.getDefaultMessage());
+        }
+        return errors;
     }
 
     @DeleteMapping("/{id}")
