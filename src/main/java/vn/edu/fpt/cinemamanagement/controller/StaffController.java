@@ -59,12 +59,12 @@ public class StaffController {
     // --- Create form ---
     @GetMapping("/create")
     public String createStaff(Model model) {
-       //add an empty Staff object to the model to bind form data
+        // add an empty Staff object to the model to bind form data
         model.addAttribute("staff", new Staff());
         return "staffs/staff_create";
     }
 
-    // --- Show Create form  ---
+    // --- Show Create form ---
     @PostMapping("/save")
     public String saveStaff(@ModelAttribute Staff staff, Model model) {
         // Check validation before save: GỌI HÀM TỪ SERVICE
@@ -72,13 +72,14 @@ public class StaffController {
         // If validation fails, return to the create form with error messages
         if (hasError) {
             model.addAttribute("staff", staff);
-            return "staffs/staff_create"; // return  form create
+            return "staffs/staff_create"; // return form create
         }
-    // If validation passes, save the new staff to the database
+        // If validation passes, save the new staff to the database
         staffService.createStaff(staff);
         // Redirect to the staff list page
         return "redirect:/staffs";
     }
+
     // --- Show Update Staff Form - edit để id không tồn tại hiển thị thông báo---
     @GetMapping("/update/{id}")
     public String updateStaffForm(@PathVariable("id") String staffID, Model model) {
@@ -96,7 +97,6 @@ public class StaffController {
         model.addAttribute("staff", staff);
         return "staffs/staff_update";
     }
-
 
     // --- Update Save ---
     @PostMapping("/update/{id}")
@@ -122,7 +122,6 @@ public class StaffController {
         return "redirect:/staffs";
     }
 
-
     // --- Delete ---
     @PostMapping("/delete/{id}")
     public String deleteStaff(@PathVariable("id") String staffID) {
@@ -130,7 +129,7 @@ public class StaffController {
         return "redirect:/staffs";
     }
 
-    // --- Detail  - edit để báo thông báo khi id không tồn tại---
+    // --- Detail - edit để báo thông báo khi id không tồn tại---
     @GetMapping("/detail/{id}")
     public String staffDetail(@PathVariable("id") String staffID, Model model) {
         Staff staff = staffService.getStaffByID(staffID);
@@ -152,7 +151,8 @@ public class StaffController {
     // ===========================
     @GetMapping("/staff_profile")
     public String viewProfile(Model model, Principal principal) {
-        if (principal == null) return "redirect:/login";
+        if (principal == null)
+            return "redirect:/login";
 
         String username = principal.getName(); // lấy username đăng nhập
         Staff staff = staffService.getAllStaff().stream()
