@@ -107,7 +107,7 @@
         <a href="#" class="sidebar-toggler flex-shrink-0"><i class="fa fa-bars"></i></a>
 
         <div class="navbar-nav align-items-center ms-auto">
-            <a sec:authorize="hasAnyRole('CASHIER_STAFF','REDEMPTION_STAFF')" th:href="@{/staffs/staff_profile}"
+            <a sec:authorize="hasAnyRole('CASHIER_STAFF','REDEMPTION_STAFF')" href="http://localhost:5173/staffs/profile"
                 class="dropdown-item">My Profile</a>
             <a sec:authorize="hasRole('ADMIN')" th:href="@{/homepage}" class="dropdown-item">Homepage</a>
 

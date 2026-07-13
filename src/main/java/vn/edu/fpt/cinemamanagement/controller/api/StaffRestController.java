@@ -10,6 +10,7 @@ import vn.edu.fpt.cinemamanagement.entities.Staff;
 import vn.edu.fpt.cinemamanagement.repositories.StaffRepository;
 import vn.edu.fpt.cinemamanagement.services.StaffService;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -229,5 +230,76 @@ public class StaffRestController {
         }
 
         return errors;
+    }
+
+    // ========================== GET MY PROFILE ==========================
+    @GetMapping("/me")
+    public ResponseEntity<?> getMyProfile(Principal principal) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("message", "Not authenticated."));
+        }
+        Staff staff = staffRepository.findByUsername(principal.getName()).orElse(null);
+        if (staff == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", "Staff profile not found."));
+        }
+        return ResponseEntity.ok(staff);
+    }
+
+    // ========================== UPDATE MY PROFILE (phone & email only) ==========================
+    @PatchMapping("/me")
+    public ResponseEntity<?> updateMyProfile(Principal principal, @RequestBody Map<String, String> body) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("message", "Not authenticated."));
+        }
+        Staff staff = staffRepository.findByUsername(principal.getName()).orElse(null);
+        if (staff == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", "Staff profile not found."));
+        }
+
+        Map<String, String> errors = new HashMap<>();
+
+        String newPhone = body.get("phone");
+        String newEmail = body.get("email");
+
+        // --- Validate phone ---
+        if (newPhone == null || newPhone.isEmpty()) {
+            errors.put("phone", "Phone cannot be empty");
+        } else if (!newPhone.matches("^0\\d{9}$")) {
+            errors.put("phone", "Phone must be 10 digits starting with 0");
+        } else {
+            Staff existingByPhone = staffRepository.findByPhone(newPhone);
+            if (existingByPhone != null && !existingByPhone.getStaffID().equals(staff.getStaffID())) {
+                errors.put("phone", "Phone already exists");
+            }
+        }
+
+        // --- Validate email ---
+        if (newEmail == null || newEmail.isEmpty()) {
+            errors.put("email", "Email cannot be empty");
+        } else {
+            newEmail = newEmail.toLowerCase();
+            if (!newEmail.matches("^[\\w.-]+@[\\w.-]+\\.\\w{2,}$")) {
+                errors.put("email", "Invalid email format");
+            } else {
+                Staff existingByEmail = staffRepository.findByEmail(newEmail);
+                if (existingByEmail != null && !existingByEmail.getStaffID().equals(staff.getStaffID())) {
+                    errors.put("email", "Email already exists");
+                }
+            }
+        }
+
+        if (!errors.isEmpty()) {
+            return ResponseEntity.badRequest().body(errors);
+        }
+
+        staff.setPhone(newPhone);
+        staff.setEmail(newEmail.toLowerCase());
+        staffRepository.save(staff);
+
+        return ResponseEntity.ok(Map.of("message", "Profile updated successfully."));
     }
 }
