@@ -1,6 +1,8 @@
 package vn.edu.fpt.cinemamanagement.entities;
 
 import jakarta.persistence.*;
+import vn.edu.fpt.cinemamanagement.converters.BookingStatusConverter;
+import vn.edu.fpt.cinemamanagement.enums.BookingStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -20,8 +22,9 @@ public class Booking {
     @Column(name = "total_amount")
     private BigDecimal totalAmount;
 
+    @Convert(converter = BookingStatusConverter.class)
     @Column(name = "status")
-    private String status;
+    private BookingStatus status;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -35,10 +38,7 @@ public class Booking {
     public Booking() {
     }
 
-    public Booking(String id, String userId, String voucherId,
-                   BigDecimal totalAmount, String status,
-                   LocalDateTime createdAt, List<BookingDetail> bookingDetails,
-                   Payment payment) {
+    public Booking(String id, String userId, String voucherId, BigDecimal totalAmount, BookingStatus status, LocalDateTime createdAt, List<BookingDetail> bookingDetails, Payment payment) {
         this.id = id;
         this.userId = userId;
         this.voucherId = voucherId;
@@ -48,7 +48,6 @@ public class Booking {
         this.bookingDetails = bookingDetails;
         this.payment = payment;
     }
-
 
     public String getId() {
         return id;
@@ -82,11 +81,11 @@ public class Booking {
         this.totalAmount = totalAmount;
     }
 
-    public String getStatus() {
+    public BookingStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(BookingStatus status) {
         this.status = status;
     }
 

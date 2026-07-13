@@ -13,10 +13,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import vn.edu.fpt.cinemamanagement.entities.*;
+import vn.edu.fpt.cinemamanagement.enums.SeatStatus;
 import vn.edu.fpt.cinemamanagement.services.*;
+import vn.edu.fpt.cinemamanagement.services.impl.ConcessionService;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -104,7 +105,7 @@ public class BookingController {
         List<ShowtimeSeat> showtimeSeats = showtimeSeatService.getAllByShowtimeId(showtimeId);
 
         // Tạo map: TemplateSeatID → status (để dễ lookup)
-        Map<String, String> seatStatusMap = showtimeSeats.stream()
+        Map<String, SeatStatus> seatStatusMap = showtimeSeats.stream()
                 .collect(Collectors.toMap(s -> s.getTemplateSeat().getId(), ShowtimeSeat::getStatus));
 
         // Sắp xếp theo hàng, số ghế
@@ -127,7 +128,7 @@ public class BookingController {
 
     @PostMapping("/concessions")
     public String concessionsPage(@RequestParam Map<String, String> params, Model model){
-        model.addAttribute("concessions" , concessionService.findAll());
+//        model.addAttribute("concessions" , concessionService.findAll());
 
         Showtime showtime = showtimeService.showtimeByID(params.get("showtimeId"));
 
@@ -170,12 +171,12 @@ public class BookingController {
             }
         }
 
-        List<Concession> concessions = new ArrayList<>();
-        if (!concessionIds.isEmpty()) {
-            for (String concessionId : concessionIds) {
-                 concessions.add(concessionService.findById(concessionId));
-            }
-        }
+//        List<Concession> concessions = new ArrayList<>();
+//        if (!concessionIds.isEmpty()) {
+//            for (String concessionId : concessionIds) {
+//                 concessions.add(concessionService.findById(concessionId));
+//            }
+//        }
 
         List<Voucher> availableVouchers = bookingService.getAvailableVouchers();
 
@@ -187,7 +188,7 @@ public class BookingController {
         model.addAttribute("endtime", params.get("endtime"));
         model.addAttribute("selectedConcessionIds", params.get("selectedConcessionIds"));
         model.addAttribute("concessionIds", concessionIds);
-        model.addAttribute("concessions", concessions);
+//        model.addAttribute("concessions", concessions);
         model.addAttribute("quantities", quantities);
         model.addAttribute("availableVouchers", availableVouchers);
 
