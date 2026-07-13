@@ -10,7 +10,7 @@ import vn.edu.fpt.cinemamanagement.entities.BookingDetail;
 import java.util.List;
 
 @Repository
-public interface BookingDetailRepository extends JpaRepository<BookingDetail, Integer> {
+public interface BookingDetailRepository extends JpaRepository<BookingDetail, String> {
     BookingDetail findTopByOrderByBookingDetailIdDesc();
     List<BookingDetail> findByBookingId(String bookingId);
 

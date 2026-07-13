@@ -1,6 +1,8 @@
 package vn.edu.fpt.cinemamanagement.entities;
 
 import jakarta.persistence.*;
+import vn.edu.fpt.cinemamanagement.converters.SeatStatusConverter;
+import vn.edu.fpt.cinemamanagement.enums.SeatStatus;
 
 @Entity
 @Table(name = "Showtime_Seat")
@@ -18,12 +20,14 @@ public class ShowtimeSeat {
     @JoinColumn(name = "template_seat_id", referencedColumnName = "template_seat_id", nullable = false)
     private TemplateSeat templateSeat;
 
-    private String status;
+    @Convert(converter = SeatStatusConverter.class)
+    @Column(name = "status")
+    private SeatStatus status;
 
     public ShowtimeSeat() {
     }
 
-    public ShowtimeSeat(String showtimeSeatID, Showtime showtime, TemplateSeat templateSeat, String status) {
+    public ShowtimeSeat(String showtimeSeatID, Showtime showtime, TemplateSeat templateSeat, SeatStatus status) {
         this.showtimeSeatID = showtimeSeatID;
         this.showtime = showtime;
         this.templateSeat = templateSeat;
@@ -54,11 +58,11 @@ public class ShowtimeSeat {
         this.templateSeat = templateSeat;
     }
 
-    public String getStatus() {
+    public SeatStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(SeatStatus status) {
         this.status = status;
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import vn.edu.fpt.cinemamanagement.entities.Showtime;
 import vn.edu.fpt.cinemamanagement.entities.ShowtimeSeat;
 import vn.edu.fpt.cinemamanagement.entities.TemplateSeat;
+import vn.edu.fpt.cinemamanagement.enums.SeatStatus;
 import vn.edu.fpt.cinemamanagement.repositories.ShowtimeSeatRepository;
 import vn.edu.fpt.cinemamanagement.repositories.TemplateSeatRepository;
 
@@ -36,10 +37,10 @@ public class ShowtimeSeatService {
             return prefix + "000001";
         }
 
-        // Lấy phần số ở cuối ID
+        // Láº¥y pháº§n sá»‘ á»Ÿ cuá»‘i ID
         int number = Integer.parseInt(lastId.substring(prefix.length())) + 1;
 
-        // Format lại đúng 6 chữ số sau prefix
+        // Format láº¡i Ä‘Ãºng 6 chá»¯ sá»‘ sau prefix
         return String.format("%s%06d", prefix, number);
     }
 
@@ -55,7 +56,7 @@ public class ShowtimeSeatService {
         seat.setShowtimeSeatID(generateId());
         seat.setShowtime(showtimeService.showtimeByID(showtimeId));
         seat.setTemplateSeat(templateSeat);
-        seat.setStatus("available");
+        seat.setStatus(SeatStatus.AVAILABLE);
         showtimeSeatRepository.save(seat);
     }
 
@@ -65,7 +66,7 @@ public class ShowtimeSeatService {
                 .map(showtimeSeat -> {
                     TemplateSeat templateSeat = showtimeSeat.getTemplateSeat();
                     if (templateSeat != null) {
-                        return templateSeat.getRowLabel() + templateSeat.getSeatNumber(); // ví dụ: "A" + "1" → "A1"
+                        return templateSeat.getRowLabel() + templateSeat.getSeatNumber(); // vÃ­ dá»¥: "A" + "1" â†’ "A1"
                     }
                     return "Unknown Seat";
                 })

@@ -1,10 +1,11 @@
 package vn.edu.fpt.cinemamanagement.repositories;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import vn.edu.fpt.cinemamanagement.entities.ShowtimeSeat;
-import vn.edu.fpt.cinemamanagement.entities.TemplateSeat;
 
 import java.util.List;
 
@@ -15,6 +16,18 @@ public interface ShowtimeSeatRepository extends JpaRepository<ShowtimeSeat, Stri
     String findLastId();
 
     List<ShowtimeSeat> getAllByShowtime_ShowtimeId(String showtimeShowtimeId);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("""
+        SELECT ss FROM ShowtimeSeat ss
+        WHERE ss.showtime.showtimeId = :showtimeId
+          AND ss.showtimeSeatID IN :showtimeSeatIds
+    """)
+    List<ShowtimeSeat> findByShowtimeIdAndIdsForUpdate(
+            @Param("showtimeId") String showtimeId,
+            @Param("showtimeSeatIds") List<String> showtimeSeatIds
+    );
+
     @Query("""
         SELECT ss FROM ShowtimeSeat ss
         JOIN ss.templateSeat ts

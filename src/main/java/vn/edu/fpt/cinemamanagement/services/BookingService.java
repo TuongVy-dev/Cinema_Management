@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import vn.edu.fpt.cinemamanagement.entities.*;
+import vn.edu.fpt.cinemamanagement.enums.BookingStatus;
+import vn.edu.fpt.cinemamanagement.enums.SeatStatus;
 import vn.edu.fpt.cinemamanagement.repositories.*;
 
 import java.math.BigDecimal;
@@ -29,7 +31,7 @@ public class BookingService {
     @Autowired
     private VoucherRepository voucherRepository;
 
-    // 🔹 Hàm sinh ID cho BookingDetail
+    // ðŸ”¹ HÃ m sinh ID cho BookingDetail
     private String generateBookingDetailId() {
         BookingDetail lastDetail = bookingDetailRepository.findTopByOrderByBookingDetailIdDesc();
         if (lastDetail == null) {
@@ -42,7 +44,7 @@ public class BookingService {
     @Transactional
     public Booking createBooking(String showtimeId,List<String> seatIds, List<String> concessionIds, List<String> qtyList, String userId) {
 
-        // --- (1) Tạo Booking ---
+        // --- (1) Táº¡o Booking ---
         Booking booking = new Booking();
         Booking lastBooking = bookingRepository.findTopByOrderByIdDesc();
         String newId = (lastBooking == null)
@@ -50,7 +52,7 @@ public class BookingService {
                 : String.format("BK%06d", Integer.parseInt(lastBooking.getId().substring(2)) + 1);
 
         booking.setId(newId);
-        booking.setStatus("Booked");
+        booking.setStatus(BookingStatus.BOOKED);
         booking.setCreatedAt(LocalDateTime.now());
         booking.setUserId(userId);
         booking = bookingRepository.saveAndFlush(booking);
@@ -62,13 +64,13 @@ public class BookingService {
         System.out.println("Seat IDs: " + seatIds);
         System.out.println("Concession IDs: " + concessionIds + " | qtyList: " + qtyList);
 
-        // --- (2) Lưu chi tiết GHẾ ---
+        // --- (2) LÆ°u chi tiáº¿t GHáº¾ ---
         if (seatIds != null) {
             for (String seatLabel : seatIds) { // C2, C3, ...
                 String row = seatLabel.substring(0, 1);
                 int number = Integer.parseInt(seatLabel.substring(1));
 
-                // 🔹 Tìm ghế đúng trong suất chiếu đó
+                // ðŸ”¹ TÃ¬m gháº¿ Ä‘Ãºng trong suáº¥t chiáº¿u Ä‘Ã³
                 ShowtimeSeat showtimeSeat = showtimeSeatRepository.findSeatInShowtime(showtimeId, row, number);
 
                 if (showtimeSeat != null) {
@@ -82,20 +84,20 @@ public class BookingService {
                     detail.setTotalPrice(seatPrice);
                     bookingDetailRepository.save(detail);
 
-                    // cập nhật trạng thái ghế
-                    showtimeSeat.setStatus("pending");
+                    // cáº­p nháº­t tráº¡ng thÃ¡i gháº¿
+                    showtimeSeat.setStatus(SeatStatus.PENDING);
                     showtimeSeatRepository.saveAndFlush(showtimeSeat);
 
                     totalPrice = totalPrice.add(seatPrice);
-                    System.out.println("✅ Added seat: " + seatLabel + " | Price: " + seatPrice);
+                    System.out.println("âœ… Added seat: " + seatLabel + " | Price: " + seatPrice);
                 } else {
-                    System.out.println("⚠️ Seat not found for showtimeId=" + showtimeId + " seat=" + seatLabel);
+                    System.out.println("âš ï¸ Seat not found for showtimeId=" + showtimeId + " seat=" + seatLabel);
                 }
             }
         }
 
 
-        // --- (3) Lưu chi tiết ĐỒ ĂN ---
+        // --- (3) LÆ°u chi tiáº¿t Äá»’ Ä‚N ---
         if (concessionIds != null && qtyList != null) {
             for (int i = 0; i < concessionIds.size(); i++) {
                 String conId = concessionIds.get(i);
@@ -114,25 +116,25 @@ public class BookingService {
                     bookingDetailRepository.save(detail);
 
                     totalPrice = totalPrice.add(c.getPrice().multiply(BigDecimal.valueOf(qty)));
-                    System.out.println("✅ Added concession: " + conId + " x " + qty);
+                    System.out.println("âœ… Added concession: " + conId + " x " + qty);
                 }
             }
         }
 
-        // --- (4) Cập nhật tổng tiền ---
+        // --- (4) Cáº­p nháº­t tá»•ng tiá»n ---
         booking.setTotalAmount(totalPrice);
         bookingRepository.saveAndFlush(booking);
-        System.out.println("💰 TOTAL PRICE = " + totalPrice);
+        System.out.println("ðŸ’° TOTAL PRICE = " + totalPrice);
 
         return booking;
     }
 
     @Transactional
     public Booking applyVoucherAndUpdateTotal(Booking booking, double finalTotal, String voucherCode) {
-        // cập nhật tổng tiền đã giảm
+        // cáº­p nháº­t tá»•ng tiá»n Ä‘Ã£ giáº£m
         booking.setTotalAmount(BigDecimal.valueOf(finalTotal));
 
-        // nếu muốn lưu thông tin voucher vào booking và tăng used_count
+        // náº¿u muá»‘n lÆ°u thÃ´ng tin voucher vÃ o booking vÃ  tÄƒng used_count
         if (voucherCode != null && !voucherCode.isBlank()) {
             booking.setTotalAmount(BigDecimal.valueOf(finalTotal));
             if (voucherCode != null && !voucherCode.isBlank()) {
@@ -144,7 +146,7 @@ public class BookingService {
             }
         }
 
-        // lưu lại booking với tổng tiền mới
+        // lÆ°u láº¡i booking vá»›i tá»•ng tiá»n má»›i
         return bookingRepository.save(booking);
     }
 
@@ -152,7 +154,7 @@ public class BookingService {
         return voucherRepository.findAvailableVouchers();
     }
     public Booking findById(String id) {
-        return bookingRepository.findById(id);
+        return bookingRepository.findById(id).orElse(null);
     }
 
 
@@ -168,7 +170,7 @@ public class BookingService {
     }
 
     public Booking findBookingById(String id) {
-        Booking booking = bookingRepository.findById(id);
+        Booking booking = bookingRepository.findById(id).orElse(null);
         return booking;
     }
 

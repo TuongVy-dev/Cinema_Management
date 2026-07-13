@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import vn.edu.fpt.cinemamanagement.entities.*;
+import vn.edu.fpt.cinemamanagement.enums.SeatStatus;
 import vn.edu.fpt.cinemamanagement.services.*;
 import vn.edu.fpt.cinemamanagement.services.impl.ConcessionService;
 
@@ -104,7 +105,7 @@ public class BookingController {
         List<ShowtimeSeat> showtimeSeats = showtimeSeatService.getAllByShowtimeId(showtimeId);
 
         // Tạo map: TemplateSeatID → status (để dễ lookup)
-        Map<String, String> seatStatusMap = showtimeSeats.stream()
+        Map<String, SeatStatus> seatStatusMap = showtimeSeats.stream()
                 .collect(Collectors.toMap(s -> s.getTemplateSeat().getId(), ShowtimeSeat::getStatus));
 
         // Sắp xếp theo hàng, số ghế

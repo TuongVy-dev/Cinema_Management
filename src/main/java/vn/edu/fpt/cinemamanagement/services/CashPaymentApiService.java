@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.edu.fpt.cinemamanagement.entities.*;
+import vn.edu.fpt.cinemamanagement.enums.BookingStatus;
+import vn.edu.fpt.cinemamanagement.enums.SeatStatus;
 import vn.edu.fpt.cinemamanagement.repositories.*;
 
 import java.math.BigDecimal;
@@ -29,12 +31,17 @@ public class CashPaymentApiService {
 
     @Transactional
     public Map<String, Object> processCashPayment(String bookingId, long cashGiven, Staff staff) {
-        Booking booking = bookingRepository.findById(bookingId);
-        if (booking == null) {
-            throw new IllegalArgumentException("Booking not found.");
-        }
-        if ("PAID".equalsIgnoreCase(booking.getStatus())) {
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new IllegalArgumentException("Booking not found."));
+        if (BookingStatus.PAID.equals(booking.getStatus())) {
             throw new IllegalArgumentException("Booking is already paid.");
+        }
+
+        if (BookingStatus.CANCELLED.equals(booking.getStatus())) {
+            throw new IllegalArgumentException("Cannot pay a cancelled booking.");
+        }
+
+        if (!BookingStatus.BOOKED.equals(booking.getStatus())) {
+            throw new IllegalArgumentException("Booking is not ready for payment.");
         }
 
         long total = booking.getTotalAmount().longValue();
@@ -55,7 +62,7 @@ public class CashPaymentApiService {
         paymentRepository.save(payment);
 
         // 2. Update Booking status
-        booking.setStatus("PAID");
+        booking.setStatus(BookingStatus.PAID);
         bookingRepository.save(booking);
 
         // 3. Update ShowtimeSeat to unavailable
@@ -63,7 +70,7 @@ public class CashPaymentApiService {
         for (BookingDetail d : details) {
             ShowtimeSeat seat = d.getShowtimeSeat();
             if (seat != null) {
-                seat.setStatus("unavailable");
+                seat.setStatus(SeatStatus.UNAVAILABLE);
                 showtimeSeatRepository.save(seat);
             }
         }

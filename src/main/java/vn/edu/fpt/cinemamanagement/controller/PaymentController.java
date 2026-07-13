@@ -8,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vn.edu.fpt.cinemamanagement.entities.*;
+import vn.edu.fpt.cinemamanagement.enums.BookingStatus;
+import vn.edu.fpt.cinemamanagement.enums.SeatStatus;
 import vn.edu.fpt.cinemamanagement.repositories.*;
 import vn.edu.fpt.cinemamanagement.services.BookingService;
 import vn.edu.fpt.cinemamanagement.services.PaymentService;
@@ -42,7 +44,7 @@ public class PaymentController {
 
     @GetMapping("/ebanking/{bookingId}/{staffId}")
     public String ebanking(@PathVariable String bookingId, @PathVariable String staffId, Model model) {
-        Booking booking = bookingRepository.findById(bookingId);
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new RuntimeException("Booking not found"));
 
         String paymentId = UUID.randomUUID().toString().substring(0, 8);
 
@@ -75,7 +77,7 @@ public class PaymentController {
 
         // Cập nhật booking
         Booking booking = payment.getBooking();
-        booking.setStatus("paid");
+        booking.setStatus(BookingStatus.PAID);
         bookingRepository.save(booking);
 
         // Cập nhật trạng thái ghế
@@ -83,7 +85,7 @@ public class PaymentController {
         for (BookingDetail d : details) {
             ShowtimeSeat seat = d.getShowtimeSeat();
             if (seat != null) {  // chỉ cập nhật khi là ghế
-                seat.setStatus("unavailable");
+                seat.setStatus(SeatStatus.UNAVAILABLE);
                 showtimeSeatRepository.save(seat);
             }
         }
@@ -111,7 +113,7 @@ public class PaymentController {
 
     @GetMapping("/ebanking/{bookingId}")
     public String customerEbanking(@PathVariable String bookingId, Model model) {
-        Booking booking = bookingRepository.findById(bookingId);
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new RuntimeException("Booking not found"));
 
         String paymentId = UUID.randomUUID().toString().substring(0, 8);
 
@@ -190,14 +192,14 @@ public class PaymentController {
         paymentRepository.save(payment);
 
         // Cập nhật Booking
-        booking.setStatus("PAID");
+        booking.setStatus(BookingStatus.PAID);
         bookingRepository.save(booking);
 
         List<BookingDetail> details = bookingDetailRepository.findByBooking(booking);
         for (BookingDetail d : details) {
             ShowtimeSeat seat = d.getShowtimeSeat();
             if (seat != null) {  // chỉ cập nhật khi là ghế
-                seat.setStatus("unavailable");
+                seat.setStatus(SeatStatus.UNAVAILABLE);
                 showtimeSeatRepository.save(seat);
             }
         }

@@ -1,6 +1,8 @@
 package vn.edu.fpt.cinemamanagement.entities;
 
 import jakarta.persistence.*;
+import vn.edu.fpt.cinemamanagement.converters.SeatTypeConverter;
+import vn.edu.fpt.cinemamanagement.enums.SeatType;
 
 import java.util.List;
 
@@ -17,8 +19,9 @@ public class TemplateSeat {
     private String rowLabel;
     @Column(name = "seat_number")
     private int seatNumber;
+    @Convert(converter = SeatTypeConverter.class)
     @Column(name = "seat_type")
-    private String seatType;
+    private SeatType seatType;
 
     @OneToMany(mappedBy = "templateSeat", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ShowtimeSeat> showtimeSeats;
@@ -26,12 +29,13 @@ public class TemplateSeat {
     public TemplateSeat() {
     }
 
-    public TemplateSeat(String id, Template template, String rowLabel, int seatNumber, String seatType) {
+    public TemplateSeat(String id, Template template, String rowLabel, int seatNumber, SeatType seatType, List<ShowtimeSeat> showtimeSeats) {
         this.id = id;
         this.template = template;
         this.rowLabel = rowLabel;
         this.seatNumber = seatNumber;
         this.seatType = seatType;
+        this.showtimeSeats = showtimeSeats;
     }
 
     public String getId() {
@@ -66,11 +70,11 @@ public class TemplateSeat {
         this.seatNumber = seatNumber;
     }
 
-    public String getSeatType() {
+    public SeatType getSeatType() {
         return seatType;
     }
 
-    public void setSeatType(String seatType) {
+    public void setSeatType(SeatType seatType) {
         this.seatType = seatType;
     }
 

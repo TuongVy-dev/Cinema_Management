@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.cinemamanagement.entities.*;
+import vn.edu.fpt.cinemamanagement.enums.SeatStatus;
 import vn.edu.fpt.cinemamanagement.services.*;
 
 import java.time.LocalDate;
@@ -102,7 +103,7 @@ public class StaffHomeController {
         List<ShowtimeSeat> showtimeSeats = cashierShowTimeSeatService.createShowtimeSeats(showtimeId);
 
         // Tạo map trạng thái ghế: TemplateSeatID → status
-        Map<String, String> seatStatusMap = showtimeSeats.stream()
+        Map<String, SeatStatus> seatStatusMap = showtimeSeats.stream()
                 .collect(Collectors.toMap(
                         s -> s.getTemplateSeat().getId(),
                         ShowtimeSeat::getStatus

@@ -7,6 +7,7 @@ import org.springframework.util.StringUtils;
 import vn.edu.fpt.cinemamanagement.dto.response.ConcessionResponse;
 import vn.edu.fpt.cinemamanagement.dto.response.PageResponseDTO;
 import vn.edu.fpt.cinemamanagement.entities.Concession;
+import vn.edu.fpt.cinemamanagement.exception.ValidationException;
 import vn.edu.fpt.cinemamanagement.repositories.ConcessionRepository;
 import vn.edu.fpt.cinemamanagement.services.IConcessionService;
 import vn.edu.fpt.cinemamanagement.dto.request.ConcessionRequestDTO;
@@ -66,7 +67,7 @@ public class ConcessionService implements IConcessionService {
         validateConcession(concession, true, errors);
 
         if (!errors.isEmpty()) {
-            throw new IllegalArgumentException(errors.toString());
+            throw new ValidationException(errors);
         }
 
         concession.setConcessionId(nextId(request.type().toUpperCase(Locale.ROOT)));
@@ -92,7 +93,7 @@ public class ConcessionService implements IConcessionService {
         validateConcession(old, false, errors);
 
         if (!errors.isEmpty()) {
-            throw new IllegalArgumentException(errors.toString());
+            throw new ValidationException(errors);
         }
 
         Concession saved = repo.save(old);
@@ -192,8 +193,8 @@ public class ConcessionService implements IConcessionService {
             errors.put("name", "Name must be 2-50 English letters, numbers or spaces");
         }
 
-        if (concession.getPrice() == null || concession.getPrice().compareTo(BigDecimal.ZERO) < 0) {
-            errors.put("price", "Price must be >= 0");
+        if (concession.getPrice() == null || concession.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
+            errors.put("price", "Price must be greater than 0");
         }
 
         if (!StringUtils.hasText(concession.getDescription())) {

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import vn.edu.fpt.cinemamanagement.entities.Concession;
 import vn.edu.fpt.cinemamanagement.entities.Showtime;
 import vn.edu.fpt.cinemamanagement.entities.ShowtimeSeat;
+import vn.edu.fpt.cinemamanagement.enums.SeatStatus;
 import vn.edu.fpt.cinemamanagement.repositories.ConcessionRepository;
 import vn.edu.fpt.cinemamanagement.repositories.ShowtimeSeatRepository;
 import vn.edu.fpt.cinemamanagement.entities.TemplateSeat;
@@ -107,8 +108,8 @@ public class CashierShowTimeSeatService {
 
         for (ShowtimeSeat seat : seats) {
             String code = seat.getTemplateSeat().getRowLabel() + seat.getTemplateSeat().getSeatNumber();
-            if (selectedSeatCodes.contains(code) && "PENDING".equals(seat.getStatus())) {
-                seat.setStatus("UNAVAILABLE");
+            if (selectedSeatCodes.contains(code) && SeatStatus.PENDING.equals(seat.getStatus())) {
+                seat.setStatus(SeatStatus.UNAVAILABLE);
             }
         }
 
@@ -122,8 +123,8 @@ public class CashierShowTimeSeatService {
     public void releaseStatusSeats(String showtimeId) {
         List<ShowtimeSeat> seats = showtimeSeatRepository.getAllByShowtime_ShowtimeId(showtimeId);
         for (ShowtimeSeat seat : seats) {
-            if ("PENDING".equals(seat.getStatus())) {
-                seat.setStatus("AVAILABLE");
+            if (SeatStatus.PENDING.equals(seat.getStatus())) {
+                seat.setStatus(SeatStatus.AVAILABLE);
             }
         }
         showtimeSeatRepository.saveAll(seats);
