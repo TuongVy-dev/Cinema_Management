@@ -1,14 +1,21 @@
 package vn.edu.fpt.cinemamanagement.services;
 
 import vn.edu.fpt.cinemamanagement.dto.RoomDetailDTO;
+import vn.edu.fpt.cinemamanagement.dto.response.RoomResponseDTO;
+import vn.edu.fpt.cinemamanagement.dto.response.SeatTemplateResponseDTO;
 import vn.edu.fpt.cinemamanagement.entities.Room;
 import vn.edu.fpt.cinemamanagement.entities.Template;
+import vn.edu.fpt.cinemamanagement.entities.TemplateSeat;
 import vn.edu.fpt.cinemamanagement.repositories.RoomRepository;
 import vn.edu.fpt.cinemamanagement.repositories.TemplateSeatRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,6 +36,71 @@ public class RoomService {
  public List<Room> getAllRooms(){
 return roomRepository.findAll();
  }
+    // ============================================
+    // REST API - View Rooms
+    // ============================================
+
+    /** Danh sách room cho REST API (mirror kiến trúc của Movie). */
+    @Transactional
+    public List<RoomResponseDTO> getRoomResponses() {
+        return roomRepository.findAll().stream()
+                .map(this::toRoomResponse)
+                .collect(Collectors.toList());
+    }
+
+    /** Lấy 1 room theo id cho REST API. */
+    @Transactional
+    public RoomResponseDTO getRoomResponseById(String roomId) {
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy phòng có ID: " + roomId));
+        return toRoomResponse(room);
+    }
+
+    private RoomResponseDTO toRoomResponse(Room room) {
+        Template template = room.getTemplate();
+        long totalSeats = template != null
+                ? templateSeatService.countTotalSeatsByTemplateID(template.getId())
+                : 0L;
+        return RoomResponseDTO.of(room, buildRoomName(room.getId()), totalSeats);
+    }
+
+    /**
+     * Sơ đồ ghế của template gắn với 1 room (cho màn View Seat Template).
+     * Mirror logic của RoomController.showTemplateSeat: sort theo rowLabel +
+     * seatNumber rồi gom nhóm theo hàng.
+     */
+    @Transactional
+    public SeatTemplateResponseDTO getSeatTemplate(String roomId) {
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy phòng có ID: " + roomId));
+
+        Template template = room.getTemplate();
+        if (template == null) {
+            throw new IllegalArgumentException("Phòng chưa được gán template: " + roomId);
+        }
+
+        List<TemplateSeat> seats = templateSeatService.findAllSeatsByTemplateID(template.getId());
+        seats.sort(Comparator.comparing(TemplateSeat::getRowLabel)
+                .thenComparing(TemplateSeat::getSeatNumber));
+
+        // Gom nhóm theo hàng, giữ thứ tự hàng (LinkedHashMap)
+        Map<String, List<SeatTemplateResponseDTO.Seat>> grouped = new LinkedHashMap<>();
+        for (TemplateSeat s : seats) {
+            grouped.computeIfAbsent(s.getRowLabel(), k -> new ArrayList<>())
+                    .add(new SeatTemplateResponseDTO.Seat(
+                            s.getRowLabel(),
+                            s.getSeatNumber(),
+                            s.getSeatType(),
+                            s.getRowLabel() + s.getSeatNumber()));
+        }
+
+        List<SeatTemplateResponseDTO.Row> rows = grouped.entrySet().stream()
+                .map(e -> new SeatTemplateResponseDTO.Row(e.getKey(), e.getValue()))
+                .collect(Collectors.toList());
+
+        return new SeatTemplateResponseDTO(room.getId(), template.getId(), rows);
+    }
+
     @Transactional
     public List<RoomDetailDTO> getRoomDetails() {
         return roomRepository.findAll().stream()
