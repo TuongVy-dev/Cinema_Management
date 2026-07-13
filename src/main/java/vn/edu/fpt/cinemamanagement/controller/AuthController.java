@@ -12,12 +12,11 @@ import vn.edu.fpt.cinemamanagement.services.CustomerService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import vn.edu.fpt.cinemamanagement.services.MailService;
+import vn.edu.fpt.cinemamanagement.services.ResetPasswordTokenService;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
 
@@ -29,6 +28,8 @@ public class AuthController {
     private AuthService authService;
     @Autowired
     private MailService mailService;
+    @Autowired
+    private ResetPasswordTokenService resetPasswordTokenService;
 
     // ========================== LOGIN ==========================
     public AuthController(AuthService authService) {
@@ -103,25 +104,14 @@ public class AuthController {
             model.addAttribute("customer", new Customer());
             return "auth/forget_password";
         }
+        long resetTimestamp = resetPasswordTokenService.currentTimestamp();
         customer.setVerify("resetPassword");
-        customer.setResetRequestedAt(LocalDateTime.now());
+        customer.setResetRequestedAt(resetPasswordTokenService.toLocalDateTime(resetTimestamp));
         customerService.save(customer);
 
-        String input = "wait" + customer.getUser_id();
-        String fi;
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] digest = md.digest(input.getBytes());
-            StringBuilder sb = new StringBuilder();
-            for (byte b : digest) sb.append(String.format("%02x", b));
-            fi = sb.toString();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-
         String title = "Reset Your Password";
-        String link = "http://localhost:8080/verify/done/" + customer.getUser_id() + "/" + fi;
+        String token = resetPasswordTokenService.createToken(customer.getUser_id(), resetTimestamp);
+        String link = "http://localhost:5173/reset-password/" + customer.getUser_id() + "/" + resetTimestamp + "/" + token;
 
 
         String content =
