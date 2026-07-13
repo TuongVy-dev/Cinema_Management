@@ -1,123 +1,103 @@
 package vn.edu.fpt.cinemamanagement.controller;
 
+import java.util.Map;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-import vn.edu.fpt.cinemamanagement.entities.Voucher;
-import vn.edu.fpt.cinemamanagement.services.VoucherService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
-@RequestMapping("/vouchers")
+import vn.edu.fpt.cinemamanagement.dto.PageResponseDTO;
+import vn.edu.fpt.cinemamanagement.entities.Voucher;
+import vn.edu.fpt.cinemamanagement.services.IVoucherService;
+
+@RestController
+@RequestMapping("/api/vouchers")
 public class VoucherController {
 
-    private VoucherService voucherService;
+    private final IVoucherService voucherService;
 
-    public VoucherController(VoucherService voucherService) {
+    public VoucherController(IVoucherService voucherService) {
         this.voucherService = voucherService;
     }
 
+    @GetMapping("/admin")
+    public PageResponseDTO<Voucher> voucherList(
+            @RequestParam(value = "page", defaultValue = "1") Integer page,
+            @RequestParam(value = "size", defaultValue = "5") Integer size
+    ) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<Voucher> pageRes = voucherService.findAllVoucher(pageable);
+        return PageResponseDTO.of(pageRes);
+    }
 
-    @GetMapping("")
-    public String vouchersList(Model model, @RequestParam(name = "page", defaultValue = "1", required = false) int page) {
-        int size = 10;
+    @GetMapping("/admin/{id}")
+    public ResponseEntity<?> detailVoucher(@PathVariable String id) {
+        Voucher voucher = voucherService.findVoucherById(id);
 
-        // Spring Data bắt đầu từ 0
-        int pageIndex = page - 1;
-        Pageable pageable = PageRequest.of(pageIndex, size);
-        Page<Voucher> voucherPage = voucherService.findAllVoucher(pageable);
-
-        model.addAttribute("vouchersList", voucherPage.getContent());
-
-        int totalPages = voucherPage.getTotalPages();
-        int currentPage = page; // vẫn giữ 1-based cho Thymeleaf
-
-        int visiblePages = 5;
-        int startPage, endPage;
-
-        if (totalPages <= visiblePages) {
-            startPage = 1; // 1-based
-            endPage = totalPages;
-        } else {
-            startPage = ((currentPage - 1) / visiblePages) * visiblePages + 1;
-            endPage = Math.min(startPage + visiblePages - 1, totalPages);
+        if (voucher == null) {
+            return ResponseEntity.notFound().build();
         }
 
-        if (voucherPage.isEmpty()){
-            model.addAttribute("voucherEmpty", "Voucher list is empty" );
-        }
-        model.addAttribute("voucherPage", voucherPage);
-        model.addAttribute("currentPage", currentPage);
-        model.addAttribute("startPage", startPage);
-        model.addAttribute("endPage", endPage);
-        model.addAttribute("totalPages", totalPages);
-
-        return "vouchers/voucher_list";
-    }
-    @GetMapping("/create")
-    public String newVoucher(Model model) {
-        model.addAttribute("voucher", new Voucher());
-        return "vouchers/voucher_create";
+        return ResponseEntity.ok(voucher);
     }
 
-    @PostMapping("/create")
-    public String createVoucher(Voucher voucher, Model model) {
-        if (voucher.getDiscountType().equalsIgnoreCase("amount")) {
-            voucher.setVoucherId(voucherService.generateAmountVoucherID());
-        } else {
-            voucher.setVoucherId(voucherService.generatePercentageVoucherID());
+    @PostMapping("/admin")
+    public ResponseEntity<?> createVoucher(@RequestBody Voucher voucher) {
+
+        Map<String, String> errors = voucherService.validateVoucher(voucher);
+        if (!errors.isEmpty()) {
+            return validationError(errors);
         }
 
-        boolean isValid = voucherService.validateVoucher(model, voucher);
-        if (!isValid) {
-            model.addAttribute("voucher", voucher);
-            return "vouchers/voucher_create";
+        Voucher savedVoucher = voucherService.createVoucher(voucher);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedVoucher);
+    }
+
+    @PutMapping("/admin/{id}")
+    public ResponseEntity<?> updateVoucher(@PathVariable String id, @RequestBody Voucher voucher) {
+        Voucher existingVoucher = voucherService.findVoucherById(id);
+
+        if (existingVoucher == null) {
+            return ResponseEntity.notFound().build();
         }
 
-        voucher.setVoucherName(voucher.getVoucherName().toUpperCase());
-        voucher.setCode(voucher.getCode().toUpperCase());
-        voucher.setUsedCount(0);
-        voucher.setStatus(true);
-        voucherService.save(voucher);
-        return "redirect:/vouchers";
-    }
+        voucher.setVoucherId(id);
 
-    @GetMapping("/update/{id}")
-    public String editVoucher(Model model, @PathVariable("id") String id) {
-        model.addAttribute("voucher", voucherService.findVoucherById(id));
-        return "vouchers/voucher_update";
-    }
-
-    @PostMapping("/update")
-    public String updateVoucher(Voucher voucher, Model model) {
-        boolean isValid = voucherService.validateVoucher(model, voucher);
-        if (!isValid) {
-            model.addAttribute("voucher", voucher);
-            return "vouchers/voucher_update";
+        Map<String, String> errors = voucherService.validateVoucher(voucher);
+        if (!errors.isEmpty()) {
+            return validationError(errors);
         }
 
-        voucher.setVoucherName(voucher.getVoucherName().toUpperCase());
-        voucher.setCode(voucher.getCode().toUpperCase());
-        voucherService.save(voucher);
-        return "redirect:/vouchers";
+
+        Voucher updatedVoucher = voucherService.updateVoucher(id, voucher);
+        return ResponseEntity.ok(updatedVoucher);
     }
 
-
-
-    @GetMapping("/detail/{id}")
-    public String detailVoucher(Model model, @PathVariable("id") String id) {
-        model.addAttribute("voucher", voucherService.findVoucherById(id));
-        return "vouchers/voucher_detail";
-    }
-
-
-    @PostMapping("/delete")
-    public String deleteVoucher(@RequestParam("voucherId") String id) {
+    @DeleteMapping("/admin/{id}")
+    public ResponseEntity<Void> deleteVoucher(@PathVariable String id) {
         voucherService.delete(id);
-        return "redirect:/vouchers";
+        return ResponseEntity.noContent().build();
+    }
+
+    private ResponseEntity<?> validationError(Map<String, String> errors) {
+        return ResponseEntity.unprocessableEntity().body(Map.of(
+                "error", Map.of(
+                        "code", "VALIDATION_ERROR",
+                        "message", "Invalid voucher data",
+                        "details", errors
+                )
+        ));
     }
 }
 

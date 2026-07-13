@@ -1,8 +1,11 @@
 package vn.edu.fpt.cinemamanagement.services;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import vn.edu.fpt.cinemamanagement.entities.Customer;
+import vn.edu.fpt.cinemamanagement.entities.Staff;
 import vn.edu.fpt.cinemamanagement.repositories.CustomerRepository;
+import vn.edu.fpt.cinemamanagement.repositories.StaffRepository;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -13,11 +16,13 @@ import java.util.regex.Pattern;
 public class CustomerService {
     private final CustomerRepository customerRepository;
     private final PasswordEncoder passwordEncoder;
+    private final StaffRepository staffRepository;
 
     // Inject PasswordEncoder through constructor
-    public CustomerService(CustomerRepository customerRepository, PasswordEncoder passwordEncoder) {
+    public CustomerService(CustomerRepository customerRepository, PasswordEncoder passwordEncoder, StaffRepository staffRepository) {
         this.customerRepository = customerRepository;
         this.passwordEncoder = passwordEncoder;  // Use BCryptPasswordEncoder for encoding passwords
+        this.staffRepository = staffRepository;
     }
 
     public Customer findCustomerById(String ID){
@@ -292,6 +297,7 @@ public class CustomerService {
     /**
      * Reset password and update to DB
      */
+    @Transactional
     public Map<String, String> resetPassword(String id, String newPassword, String confirmPassword) {
         Map<String, String> errors = validateResetPassword(newPassword, confirmPassword);
 
@@ -299,14 +305,23 @@ public class CustomerService {
             return errors;
         }
 
-        Customer customer = customerRepository.findById(id).orElse(null);
+        String encodedPassword = encodePassword(newPassword);
+        int updatedRows = customerRepository.updateResetPassword(id, encodedPassword);
+        System.out.println("UPDATED = " + updatedRows);
 
-        customer.setPassword(encodePassword(newPassword));
-        customer.setVerify("active");
-        customerRepository.save(customer);
+        staffRepository.flush();
+
+        Customer customer = customerRepository.findById(id).orElse(null);
+        System.out.println("CustomerName = " + customer.getUsername());
+        System.out.println("Password after update = " + customer.getPassword());
+        if (updatedRows == 0) {
+            errors.put("customer", "Customer not found.");
+            return errors;
+        }
 
         return errors; // empty map = success
     }
+
 
     // Change pass - Ngan
     private Map<String, String> validateChangePassword(String username, String currentPassword, String newPassword, String confirmPassword){
