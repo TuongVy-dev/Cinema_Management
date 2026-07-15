@@ -37,33 +37,33 @@ public class BankingPaymentApiController {
         this.paymentRepository = paymentRepository;
     }
 
-    @PostMapping("/ebanking/{bookingId}/{staffId}")
-    public ResponseEntity<?> createCashierBankingPayment(@PathVariable String bookingId,
-                                                         @PathVariable String staffId) {
-        Booking booking = bookingRepository.findById(bookingId);
-        if (booking == null) {
-            return notFound("BOOKING_NOT_FOUND", "Booking not found.");
-        }
-
-        Staff staff = staffRepository.findById(staffId).orElse(null);
-        if (staff == null) {
-            return notFound("STAFF_NOT_FOUND", "Staff not found.");
-        }
-
-        Payment payment = createPendingBankingPayment(booking, staff);
-        return ResponseEntity.ok(toBankingPaymentResponse(payment));
-    }
-
-    @PostMapping("/ebanking/{bookingId}")
-    public ResponseEntity<?> createCustomerBankingPayment(@PathVariable String bookingId) {
-        Booking booking = bookingRepository.findById(bookingId);
-        if (booking == null) {
-            return notFound("BOOKING_NOT_FOUND", "Booking not found.");
-        }
-
-        Payment payment = createPendingBankingPayment(booking, null);
-        return ResponseEntity.ok(toBankingPaymentResponse(payment));
-    }
+//    @PostMapping("/ebanking/{bookingId}/{staffId}")
+//    public ResponseEntity<?> createCashierBankingPayment(@PathVariable String bookingId,
+//                                                         @PathVariable String staffId) {
+//        Booking booking = bookingRepository.findById(bookingId);
+//        if (booking == null) {
+//            return notFound("BOOKING_NOT_FOUND", "Booking not found.");
+//        }
+//
+//        Staff staff = staffRepository.findById(staffId).orElse(null);
+//        if (staff == null) {
+//            return notFound("STAFF_NOT_FOUND", "Staff not found.");
+//        }
+//
+//        Payment payment = createPendingBankingPayment(booking, staff);
+//        return ResponseEntity.ok(toBankingPaymentResponse(payment));
+//    }
+//
+//    @PostMapping("/ebanking/{bookingId}")
+//    public ResponseEntity<?> createCustomerBankingPayment(@PathVariable String bookingId) {
+//        Booking booking = bookingRepository.findById(bookingId);
+//        if (booking == null) {
+//            return notFound("BOOKING_NOT_FOUND", "Booking not found.");
+//        }
+//
+//        Payment payment = createPendingBankingPayment(booking, null);
+//        return ResponseEntity.ok(toBankingPaymentResponse(payment));
+//    }
 
     private Payment createPendingBankingPayment(Booking booking, Staff staff) {
         Payment payment = new Payment();

@@ -90,7 +90,7 @@ return roomRepository.findAll();
                     .add(new SeatTemplateResponseDTO.Seat(
                             s.getRowLabel(),
                             s.getSeatNumber(),
-                            s.getSeatType(),
+                            s.getSeatType().name(),
                             s.getRowLabel() + s.getSeatNumber()));
         }
 
