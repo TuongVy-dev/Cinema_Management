@@ -35,9 +35,7 @@ public class ShowtimeService {
         this.timeSlotService = timeSlotService;
     }
 
-
-    @Transactional
-    public Showtime createShowtime(String movieId, String roomId, LocalDate showDate, LocalTime startTime) {
+    public void validateShowtime(String showtimeId, String movieId, String roomId, LocalDate showDate, LocalTime startTime) {
         Movie movie = movieService.findById(movieId);
         Room room = roomService.findById(roomId);
         if (movie == null || room == null)
@@ -62,15 +60,33 @@ public class ShowtimeService {
         int roundedDuration = (int) (Math.ceil(duration / 5.0) * 5);
         LocalTime endTime = startTime.plusMinutes(roundedDuration);
 
-        boolean overlap = repo.hasOverlapInRoom(roomId, showDate, startTime, endTime);
-        if (overlap) {
-            throw new IllegalArgumentException("This time slot is already taken for this room. Please select another start time.");
+        boolean overlap;
+        boolean sameMovieOtherRoom;
+        if (showtimeId != null && !showtimeId.isEmpty()) {
+            overlap = repo.hasOverlapInRoomExcludingShowtime(roomId, showDate, startTime, endTime, showtimeId);
+            sameMovieOtherRoom = repo.hasSameMovieInOtherRoomExcludingShowtime(movieId, roomId, showDate, startTime, endTime, showtimeId);
+        } else {
+            overlap = repo.hasOverlapInRoom(roomId, showDate, startTime, endTime);
+            sameMovieOtherRoom = repo.hasSameMovieInOtherRoom(movieId, roomId, showDate, startTime, endTime);
         }
 
-        boolean sameMovieInOtherRoom = repo.hasSameMovieInOtherRoom(movieId, roomId, showDate, startTime, endTime);
-        if (sameMovieInOtherRoom) {
+        if (overlap) {
+            throw new IllegalArgumentException(String.format("There is already a showtime at %s. Please choose another time slot.", startTime.toString()));
+        }
+        if (sameMovieOtherRoom) {
             throw new IllegalArgumentException("This movie is already scheduled in another room at this time. Please choose a different time or movie.");
         }
+    }
+
+    @Transactional
+    public Showtime createShowtime(String movieId, String roomId, LocalDate showDate, LocalTime startTime) {
+        validateShowtime(null, movieId, roomId, showDate, startTime);
+        Movie movie = movieService.findById(movieId);
+        Room room = roomService.findById(roomId);
+        
+        int duration = movie.getDuration();
+        int roundedDuration = (int) (Math.ceil(duration / 5.0) * 5);
+        LocalTime endTime = startTime.plusMinutes(roundedDuration);
 
         Showtime st = new Showtime();
         st.setShowtimeId(generateShowtimeId());
@@ -192,35 +208,13 @@ public class ShowtimeService {
         Showtime existing = repo.findById(showtimeId)
                 .orElseThrow(() -> new IllegalArgumentException("Showtime not found."));
 
+        validateShowtime(showtimeId, movieId, roomId, showDate, startTime);
+
         Movie movie = movieService.findById(movieId);
         Room room = roomService.findById(roomId);
-        if (movie == null || room == null)
-            throw new IllegalArgumentException("Movie or Room not found.");
-
-        LocalDate now = LocalDate.now();
-        if (showDate.isBefore(now.minusMonths(1)))
-            throw new IllegalArgumentException("Showtime date cannot be more than 1 months in the past.");
-        if (showDate.isAfter(now.plusMonths(1)))
-            throw new IllegalArgumentException("Showtime date cannot be more than 1 months in the future.");
-        if (showDate.isBefore(now.minusYears(1))) {
-            throw new IllegalArgumentException("Showtime date cannot be more than 1 year in the past.");
-        }
-        if (showDate.isAfter(now.plusYears(1))) {
-            throw new IllegalArgumentException("Showtime date cannot be more than 1 year in the future.");
-        }
-
         int duration = movie.getDuration();
         int roundedDuration = (int) (Math.ceil(duration / 5.0) * 5);
         LocalTime endTime = startTime.plusMinutes(roundedDuration);
-
-        boolean overlap = repo.hasOverlapInRoom(roomId, showDate, startTime, endTime);
-        if (overlap && !existing.getShowtimeId().equals(showtimeId)) {
-            throw new IllegalArgumentException("This time slot is already taken for this room.");
-        }
-
-        boolean sameMovieOtherRoom = repo.hasSameMovieInOtherRoom(movieId, roomId, showDate, startTime, endTime);
-        if (sameMovieOtherRoom)
-            throw new IllegalArgumentException("This movie is already scheduled in another room at this time.");
 
         existing.setMovie(movie);
         existing.setRoom(room);
