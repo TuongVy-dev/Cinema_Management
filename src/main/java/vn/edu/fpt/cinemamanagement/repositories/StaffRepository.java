@@ -1,5 +1,7 @@
 package vn.edu.fpt.cinemamanagement.repositories;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -28,4 +30,8 @@ public interface StaffRepository extends JpaRepository<Staff, String> {
     """)
     int updateResetPassword(@Param("id") String id,
                             @Param("password") String password);
+
+    // Dùng cho REST API: tìm kiếm theo fullName hoặc staffID
+    Page<Staff> findByFullNameContainingIgnoreCaseOrStaffIDContainingIgnoreCase(
+            String fullName, String staffID, Pageable pageable);
 }

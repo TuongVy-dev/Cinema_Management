@@ -43,7 +43,8 @@ public class CustomUserDetailsService implements UserDetailsService {
             // Là Staff
             Staff staff = staffRepository.findByUsername(username)
                     .orElseThrow(() -> new RuntimeException("Staff not found"));
-            String role = "ROLE_" + staff.getPosition().toUpperCase();
+            String pos = staff.getPosition().toUpperCase();
+            String role = pos.startsWith("ROLE_") ? pos : "ROLE_" + pos;
             return User.builder()
                     .username(staff.getUsername())
                     .password(staff.getPassword())

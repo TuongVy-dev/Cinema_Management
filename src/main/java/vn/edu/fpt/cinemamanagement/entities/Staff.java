@@ -1,5 +1,6 @@
 package vn.edu.fpt.cinemamanagement.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -19,6 +20,7 @@ public class Staff {
 
     private String username;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     private String phone;
