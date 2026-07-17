@@ -63,27 +63,80 @@ public class StaffHomeController {
     }
 
 
-    @GetMapping("/cashier/showtimes")
-    public String showShowtimesForCashier(
-            @RequestParam(required = false)
-            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
-            Model model) {
+//    @GetMapping("/cashier/showtimes")
+//    public String showShowtimesForCashier(
+//            @RequestParam(required = false)
+//            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
+//            @RequestParam(name = "page", defaultValue = "1") int page,
+//            @RequestParam(name = "size", defaultValue = "10") int size,
+//            Model model) {
+//
+//        if (date == null) date = LocalDate.now();
+//
+//        int pageIndex = Math.max(page, 1) - 1;
+//        int pageSize = Math.max(size, 1);
+//        Pageable pageable = PageRequest.of(pageIndex, pageSize);
+//
+//        // paginate showtimes within the same day
+//        Page<Showtime> showtimePage = showtimeService.getShowtimesPageByDateForCashier(date, pageable);
+//        List<Showtime> showtimes = showtimePage.getContent();
+//
+//        // build grouped data from page content
+//        Map<String, List<Map<String, Object>>> scheduleGroups = new LinkedHashMap<>();
+//        for (Showtime st : showtimes) {
+//            String movieId = st.getMovie().getMovieID();
+//
+//            String tempRoomName = "Unknown Room";
+//            if (st.getRoom() != null && st.getRoom().getTemplate() != null) {
+//                tempRoomName = st.getRoom().getTemplate().getName();
+//            } else if (st.getRoom() != null) {
+//                tempRoomName = st.getRoom().getId();
+//            }
+//
+//            final String roomName = tempRoomName;
+//            scheduleGroups.putIfAbsent(movieId, new ArrayList<>());
+//            List<Map<String, Object>> roomList = scheduleGroups.get(movieId);
+//
+//            Map<String, Object> roomGroup = roomList.stream()
+//                    .filter(r -> r.get("roomName").equals(roomName))
+//                    .findFirst()
+//                    .orElseGet(() -> {
+//                        Map<String, Object> newRoom = new HashMap<>();
+//                        newRoom.put("roomName", roomName);
+//                        newRoom.put("slots", new ArrayList<Map<String, Object>>());
+//                        roomList.add(newRoom);
+//                        return newRoom;
+//                    });
+//
+//            List<Map<String, Object>> slots = (List<Map<String, Object>>) roomGroup.get("slots");
+//            Map<String, Object> slot = new HashMap<>();
+//            slot.put("startTime", st.getStartTime());
+//            slot.put("endTime", st.getEndTime());
+//            slots.add(slot);
+//        }
+//
+//        // movie list only includes movies that appear in current page
+//        List<Movie> movieList = showtimes.stream()
+//                .map(Showtime::getMovie)
+//                .filter(Objects::nonNull)
+//                .distinct()
+//                .collect(Collectors.toList());
+//
+//        model.addAttribute("days", timeSlotService.getWeekDates(date));
+//        model.addAttribute("selectedDate", date);
+//        model.addAttribute("movieList", movieList);
+//        model.addAttribute("scheduleGroups", scheduleGroups);
+//        model.addAttribute("prevDate", date.minusDays(1));
+//        model.addAttribute("nextDate", date.plusDays(1));
+//
+//        model.addAttribute("currentPage", page);
+//        model.addAttribute("totalPages", showtimePage.getTotalPages());
+//        model.addAttribute("totalItems", showtimePage.getTotalElements());
+//        model.addAttribute("pageSize", pageSize);
+//
+//        return "cashier/showtime_for_cashier";
+//    }
 
-        if (date == null) date = LocalDate.now();
-
-        List<LocalDate> days = timeSlotService.getWeekDates(date);
-        Map<String, List<Map<String, Object>>> scheduleGroups = timeSlotService.getGroupedShowtimes(date);
-        List<Movie> movieList = showtimeService.getMoviesByDate(date);
-
-        model.addAttribute("days", days);
-        model.addAttribute("selectedDate", date);
-        model.addAttribute("movieList", movieList);
-        model.addAttribute("scheduleGroups", scheduleGroups);
-        model.addAttribute("prevDate", date.minusDays(1));
-        model.addAttribute("nextDate", date.plusDays(1));
-
-        return "cashier/showtime_for_cashier";
-    }
 
     @GetMapping("/cashier/booking/{movieId}")
     public String showSeatMap(

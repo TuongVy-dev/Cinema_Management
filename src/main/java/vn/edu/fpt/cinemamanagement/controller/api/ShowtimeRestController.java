@@ -1,5 +1,6 @@
 package vn.edu.fpt.cinemamanagement.controller.api;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.cinemamanagement.dto.request.ShowtimeRequestDTO;
@@ -44,7 +45,8 @@ public class ShowtimeRestController {
                     "showtimeId", show.getShowtimeId()
             ));
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", e.getMessage()));
         }
     }
 
@@ -87,4 +89,29 @@ public class ShowtimeRestController {
                 "endTime", showtime.getEndTime().toString()
         ));
     }
+
+    // ========================== GET ALL SHOWTIMES (ADMIN) ==========================
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllShowtimes() {
+        return ResponseEntity.ok(showtimeService.getAll());
+    }
+
+    // ========================== DELETE SHOWTIME ==========================
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteShowtime(@PathVariable String id) {
+        try {
+            showtimeService.deleteShowtime(id);
+            return ResponseEntity.ok(Map.of(
+                    "message", "Showtime deleted successfully",
+                    "showtimeId", id
+            ));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", e.getMessage()));
+        }
+    }
 }
+

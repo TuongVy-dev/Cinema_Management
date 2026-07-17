@@ -50,8 +50,24 @@
 <!--                   class="btn btn-outline-light rounded-circle px-3">&raquo;</a>-->
 <!--            </div>-->
 
+            <!-- 🔸 Pagination (by showtimes within the selected day) -->
+            <nav th:if="${totalPages != null and totalPages > 1}" class="d-flex justify-content-center mb-4" aria-label="Showtimes pagination">
+                <ul class="pagination pagination-sm">
+                    <li class="page-item" th:classappend="${currentPage <= 1} ? 'disabled'" >
+                        <a class="page-link" th:href="@{'/staffs/cashier/showtimes'(date=${#temporals.format(selectedDate,'yyyy-MM-dd')},page=${currentPage-1},size=${pageSize})}" tabindex="-1" aria-disabled="true">&laquo;</a>
+                    </li>
+                    <li class="page-item" th:each="p : ${#numbers.sequence(1, totalPages)}" th:classappend="${p == currentPage} ? 'active'">
+                        <a class="page-link" th:text="${p}" th:href="@{'/staffs/cashier/showtimes'(date=${#temporals.format(selectedDate,'yyyy-MM-dd')},page=${p},size=${pageSize})}"></a>
+                    </li>
+                    <li class="page-item" th:classappend="${currentPage >= totalPages} ? 'disabled'">
+                        <a class="page-link" th:href="@{'/staffs/cashier/showtimes'(date=${#temporals.format(selectedDate,'yyyy-MM-dd')},page=${currentPage+1},size=${pageSize})}">&raquo;</a>
+                    </li>
+                </ul>
+            </nav>
+
             <!-- 🔸 Movie & showtime listing -->
             <div th:each="movie : ${movieList}" class="border-top border-secondary py-5">
+
                 <div class="row align-items-start g-4">
                     <div class="col-md-3">
                         <div class="poster-card"><img th:src="@{${movie.img}}" alt=""></div>

@@ -1,6 +1,7 @@
 package vn.edu.fpt.cinemamanagement.services;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -22,6 +23,10 @@ public class VoucherService implements IVoucherService {
 
     public Page<Voucher> findAllVoucher(Pageable pageable) {
         return voucherRepo.findAll(pageable);
+    }
+
+    public List<Voucher> findAllVouchers() {
+        return voucherRepo.findAll();
     }
 
     public Voucher findVoucherById(String ID) {

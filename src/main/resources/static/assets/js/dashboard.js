@@ -325,6 +325,46 @@ function openDeleteModal(id, name) {
     new bootstrap.Modal(document.getElementById('deleteVoucherModal')).show();
 }
 
+// Delete voucher via REST API
+const confirmDeleteVoucherBtn = document.getElementById('confirmDeleteVoucherBtn');
+if (confirmDeleteVoucherBtn) {
+    confirmDeleteVoucherBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const voucherId = document.getElementById('deleteVoucherId').value;
+        
+        fetch(`/api/vouchers/${voucherId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Failed to delete voucher');
+            }
+        })
+        .then(data => {
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('deleteVoucherModal'));
+            modal.hide();
+            
+            // Show success message
+            alert('Voucher deleted successfully!');
+            
+            // Reload page after 1 second
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to delete voucher: ' + error.message);
+        });
+    });
+}
+
 // ===================================
 // IV. GLOBAL SEARCH FOR STAFF + MOVIE + VOUCHER
 // ===================================

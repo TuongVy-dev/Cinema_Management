@@ -108,13 +108,11 @@
                         historical
                         booking data).**</p>
                 </div>
-                <form th:action="@{/vouchers/delete}" method="post">
-                    <input type="hidden" id="deleteVoucherId" name="voucherId"  />
-                    <div class="modal-footer">
-                        <button class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                        <button class="btn btn-danger" id="confirmDeleteVoucherBtn">Delete</button>
-                    </div>
-                </form>
+                <input type="hidden" id="deleteVoucherId" />
+                <div class="modal-footer">
+                    <button class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                    <button class="btn btn-danger" id="confirmDeleteVoucherBtn">Delete</button>
+                </div>
             </div>
         </div>
     </div>

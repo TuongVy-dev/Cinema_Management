@@ -125,15 +125,20 @@ public class ShiftScheduleController {
         return "redirect:/shift-schedules";
     }
 
+
     @GetMapping("/schedule")
     public String viewMyShifts(
             Model model,
             Principal principal,
-            @RequestParam(name = "date", required = false) LocalDate date) {
+            @RequestParam(name = "date", required = false) LocalDate date,
+            @RequestParam(name = "page", defaultValue = "1") int page) {
 
         if (date == null) {
             date = LocalDate.now(); // mặc định hôm nay
         }
+
+        int size = 5; // số schedule mỗi trang
+        int pageIndex = page - 1; // Spring Data bắt đầu từ 0
 
         String username = principal.getName();
         Staff staff = staffService.findByAccountUsername(username);
@@ -142,16 +147,46 @@ public class ShiftScheduleController {
             return "error-page";
         }
 
-        List<ShiftSchedule> shifts = shiftScheduleService.findByStaffAndShiftDate(staff, date);
+        var pageable = org.springframework.data.domain.PageRequest.of(pageIndex, size);
+        var mySchedulePage = shiftScheduleService.findByStaffAndShiftDate(staff, date, pageable);
+
+        int totalPages = mySchedulePage.getTotalPages();
+        int currentPage = page;
+
+        int visiblePages = 5;
+        int startPage;
+        int endPage;
+
+        if (totalPages <= visiblePages) {
+            startPage = 1;
+            endPage = Math.max(totalPages, 1);
+        } else {
+            startPage = ((currentPage - 1) / visiblePages) * visiblePages + 1;
+            endPage = Math.min(startPage + visiblePages - 1, totalPages);
+        }
 
         model.addAttribute("staff", staff);
-        model.addAttribute("myShifts", shifts);
+        model.addAttribute("mySchedulePage", mySchedulePage);
         model.addAttribute("currentDate", date);
         model.addAttribute("prevDate", date.minusDays(1));
         model.addAttribute("nextDate", date.plusDays(1));
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+        model.addAttribute("totalPages", totalPages);
 
         return "schedules/my_schedule";
     }
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -175,4 +175,40 @@ public class MovieRestController {
             throw new RuntimeException("Failed to save image", e);
         }
     }
+
+    @GetMapping("/coming-soon")
+    public ResponseEntity<?> comingSoon(
+            @RequestParam(name = "page", defaultValue = "1") int page) {
+
+        int size = 8;
+
+        int pageIndex = page - 1;
+        Pageable pageable = PageRequest.of(pageIndex, size);
+
+        Page<Movie> comingSoonPage = movieService.findComingSoonMovies(pageable);
+
+        int totalPages = comingSoonPage.getTotalPages();
+        int currentPage = page;
+
+        int visiblePages = 5;
+        int startPage, endPage;
+
+        if (totalPages <= visiblePages) {
+            startPage = 1;
+            endPage = totalPages;
+        } else {
+            startPage = ((currentPage - 1) / visiblePages) * visiblePages + 1;
+            endPage = Math.min(startPage + visiblePages - 1, totalPages);
+        }
+
+        Map<String, Object> response = new HashMap<>();
+
+        response.put("movies", comingSoonPage.getContent());
+        response.put("currentPage", currentPage);
+        response.put("startPage", startPage);
+        response.put("endPage", endPage);
+        response.put("totalPages", totalPages);
+
+        return ResponseEntity.ok(response);
+    }
 }
