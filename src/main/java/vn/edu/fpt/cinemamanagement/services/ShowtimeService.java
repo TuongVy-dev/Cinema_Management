@@ -2,6 +2,10 @@ package vn.edu.fpt.cinemamanagement.services;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import vn.edu.fpt.cinemamanagement.dto.ShowtimeResponseDTO;
+import vn.edu.fpt.cinemamanagement.dto.ShowtimeResponseDetailDTO;
 import vn.edu.fpt.cinemamanagement.entities.Movie;
 import vn.edu.fpt.cinemamanagement.entities.Room;
 import vn.edu.fpt.cinemamanagement.entities.Showtime;
@@ -95,6 +99,55 @@ public class ShowtimeService {
 
     public List<Showtime> getAll() {
         return repo.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ShowtimeResponseDTO> getAdminShowtimes(Pageable pageable) {
+        return repo.findAllForAdmin(pageable).map(this::toShowtimeResponseDTO);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<ShowtimeResponseDetailDTO> getAdminShowtimeDetail(String showtimeId) {
+        return repo.findDetailByShowtimeId(showtimeId).map(this::toShowtimeResponseDetailDTO);
+    }
+
+    private ShowtimeResponseDTO toShowtimeResponseDTO(Showtime showtime) {
+        Movie movie = showtime.getMovie();
+        Room room = showtime.getRoom();
+        Template template = room != null ? room.getTemplate() : null;
+
+        return new ShowtimeResponseDTO(
+                showtime.getShowtimeId(),
+                movie != null ? movie.getMovieID() : null,
+                movie != null ? movie.getTitle() : null,
+                room != null ? room.getId() : null,
+                template != null ? template.getName() : null,
+                showtime.getShowDate(),
+                showtime.getStartTime(),
+                showtime.getEndTime(),
+                showtime.getDisplayStatus()
+        );
+    }
+
+    private ShowtimeResponseDetailDTO toShowtimeResponseDetailDTO(Showtime showtime) {
+        Movie movie = showtime.getMovie();
+        Room room = showtime.getRoom();
+        Template template = room != null ? room.getTemplate() : null;
+
+        return new ShowtimeResponseDetailDTO(
+                showtime.getShowtimeId(),
+                movie != null ? movie.getMovieID() : null,
+                movie != null ? movie.getTitle() : null,
+                movie != null ? movie.getGenre() : null,
+                movie != null ? movie.getDuration() : null,
+                room != null ? room.getId() : null,
+                template != null ? template.getName() : null,
+                room != null ? room.getStatus() : null,
+                showtime.getShowDate(),
+                showtime.getStartTime(),
+                showtime.getEndTime(),
+                showtime.getDisplayStatus()
+        );
     }
 
 

@@ -1,6 +1,8 @@
 package vn.edu.fpt.cinemamanagement.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import vn.edu.fpt.cinemamanagement.entities.Movie;
@@ -13,6 +15,29 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ShowtimeRepository extends JpaRepository<Showtime, String> {
+
+    @Query(
+            value = """
+                    SELECT s
+                    FROM Showtime s
+                    JOIN FETCH s.movie
+                    JOIN FETCH s.room r
+                    LEFT JOIN FETCH r.template
+                    ORDER BY s.showDate DESC, s.startTime DESC
+                    """,
+            countQuery = "SELECT COUNT(s) FROM Showtime s"
+    )
+    Page<Showtime> findAllForAdmin(Pageable pageable);
+
+    @Query("""
+            SELECT s
+            FROM Showtime s
+            JOIN FETCH s.movie
+            JOIN FETCH s.room r
+            LEFT JOIN FETCH r.template
+            WHERE s.showtimeId = :showtimeId
+            """)
+    Optional<Showtime> findDetailByShowtimeId(@Param("showtimeId") String showtimeId);
 
     List<Showtime> findByShowDate(LocalDate date);
     List<Showtime> findByRoom_IdAndShowDate(String roomId, LocalDate date);
