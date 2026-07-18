@@ -1,0 +1,224 @@
+package vn.edu.fpt.cinemamanagement.controller;
+
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.*;
+import vn.edu.fpt.cinemamanagement.entities.*;
+import vn.edu.fpt.cinemamanagement.enums.SeatStatus;
+import vn.edu.fpt.cinemamanagement.services.*;
+
+import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+@Controller
+@RequestMapping(value = "staffs")
+public class StaffHomeController {
+    @Autowired
+    private final ShowtimeService showtimeService;
+    private final TimeSlotService timeSlotService;
+    private final TemplateSeatService templateSeatService;
+    private CashierShowTimeSeatService cashierShowTimeSeatService;
+    @Autowired
+    private BookingService bookingService;
+    @Autowired
+    private TicketService ticketService;
+    @Autowired
+    private StaffService staffService;
+
+
+    public StaffHomeController(ShowtimeService showtimeService, TimeSlotService timeSlotService, TemplateSeatService templateSeatService, CashierShowTimeSeatService cashierShowTimeSeatService) {
+        this.showtimeService = showtimeService;
+        this.timeSlotService = timeSlotService;
+        this.templateSeatService = templateSeatService;
+        this.cashierShowTimeSeatService = cashierShowTimeSeatService;
+    }
+
+
+    @GetMapping("/staff_home")
+    public String staffHome(HttpServletRequest request, Model model) {
+        String role = "Staff";
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie c : cookies) {
+                if ("user_role".equals(c.getName())) {
+                    role = c.getValue().replace("%20", " ");
+                }
+            }
+        }
+        model.addAttribute("role", role);
+        return "dashboard/staff_home";
+    }
+
+
+//    @GetMapping("/cashier/showtimes")
+//    public String showShowtimesForCashier(
+//            @RequestParam(required = false)
+//            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
+//            @RequestParam(name = "page", defaultValue = "1") int page,
+//            @RequestParam(name = "size", defaultValue = "10") int size,
+//            Model model) {
+//
+//        if (date == null) date = LocalDate.now();
+//
+//        int pageIndex = Math.max(page, 1) - 1;
+//        int pageSize = Math.max(size, 1);
+//        Pageable pageable = PageRequest.of(pageIndex, pageSize);
+//
+//        // paginate showtimes within the same day
+//        Page<Showtime> showtimePage = showtimeService.getShowtimesPageByDateForCashier(date, pageable);
+//        List<Showtime> showtimes = showtimePage.getContent();
+//
+//        // build grouped data from page content
+//        Map<String, List<Map<String, Object>>> scheduleGroups = new LinkedHashMap<>();
+//        for (Showtime st : showtimes) {
+//            String movieId = st.getMovie().getMovieID();
+//
+//            String tempRoomName = "Unknown Room";
+//            if (st.getRoom() != null && st.getRoom().getTemplate() != null) {
+//                tempRoomName = st.getRoom().getTemplate().getName();
+//            } else if (st.getRoom() != null) {
+//                tempRoomName = st.getRoom().getId();
+//            }
+//
+//            final String roomName = tempRoomName;
+//            scheduleGroups.putIfAbsent(movieId, new ArrayList<>());
+//            List<Map<String, Object>> roomList = scheduleGroups.get(movieId);
+//
+//            Map<String, Object> roomGroup = roomList.stream()
+//                    .filter(r -> r.get("roomName").equals(roomName))
+//                    .findFirst()
+//                    .orElseGet(() -> {
+//                        Map<String, Object> newRoom = new HashMap<>();
+//                        newRoom.put("roomName", roomName);
+//                        newRoom.put("slots", new ArrayList<Map<String, Object>>());
+//                        roomList.add(newRoom);
+//                        return newRoom;
+//                    });
+//
+//            List<Map<String, Object>> slots = (List<Map<String, Object>>) roomGroup.get("slots");
+//            Map<String, Object> slot = new HashMap<>();
+//            slot.put("startTime", st.getStartTime());
+//            slot.put("endTime", st.getEndTime());
+//            slots.add(slot);
+//        }
+//
+//        // movie list only includes movies that appear in current page
+//        List<Movie> movieList = showtimes.stream()
+//                .map(Showtime::getMovie)
+//                .filter(Objects::nonNull)
+//                .distinct()
+//                .collect(Collectors.toList());
+//
+//        model.addAttribute("days", timeSlotService.getWeekDates(date));
+//        model.addAttribute("selectedDate", date);
+//        model.addAttribute("movieList", movieList);
+//        model.addAttribute("scheduleGroups", scheduleGroups);
+//        model.addAttribute("prevDate", date.minusDays(1));
+//        model.addAttribute("nextDate", date.plusDays(1));
+//
+//        model.addAttribute("currentPage", page);
+//        model.addAttribute("totalPages", showtimePage.getTotalPages());
+//        model.addAttribute("totalItems", showtimePage.getTotalElements());
+//        model.addAttribute("pageSize", pageSize);
+//
+//        return "cashier/showtime_for_cashier";
+//    }
+
+
+    @GetMapping("/cashier/booking/{movieId}")
+    public String showSeatMap(
+            @PathVariable String movieId,
+            @RequestParam String time,
+            @RequestParam String date,
+            Model model) {
+
+        // Lấy suất chiếu cụ thể dựa trên movieId, date, time
+        Showtime showtime = showtimeService.findByMovie(movieId, time, date);
+        if (showtime == null) {
+            return "redirect:/staffs/cashier/showtimes"; // fallback nếu không tìm thấy
+        }
+
+        // Lấy danh sách ghế (ShowtimeSeat) tương ứng
+        String showtimeId = showtime.getShowtimeId();
+        List<ShowtimeSeat> showtimeSeats = cashierShowTimeSeatService.createShowtimeSeats(showtimeId);
+
+        // Tạo map trạng thái ghế: TemplateSeatID → status
+        Map<String, SeatStatus> seatStatusMap = showtimeSeats.stream()
+                .collect(Collectors.toMap(
+                        s -> s.getTemplateSeat().getId(),
+                        ShowtimeSeat::getStatus
+                ));
+
+        // Gom nhóm theo hàng (A, B, C...) để hiển thị
+        Map<String, List<ShowtimeSeat>> groupedSeats = showtimeSeats.stream()
+                .sorted(Comparator.comparing(s -> s.getTemplateSeat().getSeatNumber()))
+                .collect(Collectors.groupingBy(
+                        s -> s.getTemplateSeat().getRowLabel(),
+                        LinkedHashMap::new,
+                        Collectors.toList()
+                ));
+
+        //  Truyền dữ liệu sang view
+        model.addAttribute("groupSeat", groupedSeats);
+        model.addAttribute("template", showtime.getRoom().getTemplate().getId());
+        model.addAttribute("showtime", showtime);
+        model.addAttribute("seatStatusMap", seatStatusMap); // thêm dòng này
+
+        return "cashier/cashier_seatMap";
+    }
+
+    @GetMapping("/cashier/concessions")
+    public String showConcessions(Model model) {
+        model.addAttribute("concessions", cashierShowTimeSeatService.findAll());
+        return "concession/concession_list_forCashier";
+    }
+
+    @PostMapping("/cashier/order")
+    @ResponseBody
+    public ResponseEntity<String> confirmOrder(@RequestParam MultiValueMap<String, String> formData) {
+        try {
+            String showtimeId = formData.getFirst("showtimeId");
+            List<String> seatIds = formData.get("seatIds");
+            List<String> concessionIds = formData.get("concessionIds");
+            List<String> qtyList = formData.get("qty");
+
+            bookingService.createBooking(showtimeId, seatIds, concessionIds, qtyList, "KH000000");
+
+            return ResponseEntity.ok("Order confirmed successfully!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/checkIn_Ticket")
+    public String checkInTicket(Model model) {
+        model.addAttribute("tickets", ticketService.displayData());
+        return "ticket/checkIn_Ticket";
+    }
+
+    @GetMapping("/checkIn_Ticket/{ticketId}")
+    public String checkInTicket(Model model, @PathVariable String ticketId) {
+        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Staff staff = staffService.findByAccountUsername(user.getUsername());
+        String error = ticketService.Checkin_Ticket(ticketId, staff);
+        if (error != null) {
+            model.addAttribute("error", error);
+        }
+        return "redirect:/staffs/checkIn_Ticket";
+    }
+
+}

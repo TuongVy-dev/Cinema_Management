@@ -68,7 +68,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/admin/staffs/me").authenticated()
                         .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers("/api/cashier/**").hasAnyAuthority("ROLE_CASHIER_STAFF", "ROLE_ADMIN")
-                        .requestMatchers("/api/vouchers/**").authenticated()
+                        .requestMatchers("/api/vouchers/**", "/api/staff-schedules/**").authenticated()
 
                         // Trang cho guest (không cần login)
                         .requestMatchers("/", "/homepage", "/homepage/**",
@@ -81,7 +81,7 @@ public class SecurityConfig {
                         .requestMatchers("/dashboard", "/api/vouchers/admin/**", "/api/admin/**" ).hasAuthority("ROLE_ADMIN")
                         .requestMatchers("/api/payments/**").authenticated()
                         // Lưu ý: sửa tên quyền cho đúng với DB của bạn
-                        .requestMatchers("/staff_home")
+                        .requestMatchers("/staff_home", "/cashier/**")
                         .hasAnyAuthority("ROLE_CASHIER_STAFF", "ROLE_REDEMPTION_STAFF")
                         .requestMatchers(HttpMethod.GET, "/api/concessions")
                         .hasAnyAuthority("ROLE_ADMIN", "ROLE_CASHIER_STAFF")
@@ -104,7 +104,7 @@ public class SecurityConfig {
                                 response.sendRedirect("/dashboard");
                             } else if (roles.contains("ROLE_STAFF")
                                     || roles.contains("ROLE_CASHIER_STAFF")) {
-                                response.sendRedirect("/staffs/cashier/showtimes");
+                                response.sendRedirect("/cashier/showtimes");
                             } else if (roles.contains("ROLE_REDEMPTION_STAFF")) {
                                 response.sendRedirect("/staffs/checkIn_Ticket");
                             } else {

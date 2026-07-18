@@ -159,8 +159,14 @@ public class ShowtimeService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
+    public Page<Showtime> getShowtimesPageByDateForCashier(LocalDate date, Pageable pageable) {
+        return repo.findByShowDateForCashier(date, pageable);
+    }
+
     public List<Showtime> getShowtimesByDate(LocalDate date) {
         List<Showtime> showtimes = repo.findByShowDate(date);
+
 
         showtimes.forEach(st -> {
             if (st.getRoom() != null && st.getRoom().getTemplate() != null) {

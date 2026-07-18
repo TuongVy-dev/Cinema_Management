@@ -128,37 +128,61 @@ public class ShiftScheduleService {
         }
     }
 
-    public void checkInShift(String shiftId) {
-        Optional<ShiftSchedule> optional = shiftScheduleRepository.findById(shiftId);
-        if(optional.isPresent()) {
-            ShiftSchedule shift = optional.get();
-            LocalDateTime now = LocalDateTime.now();
-            LocalDateTime shiftStart = LocalDateTime.of(shift.getShiftDate(), shift.getShiftStart());
+    public ShiftSchedule checkInShift(String shiftId) {
 
-            // Local variable để xử lý check-in
-            boolean isCheckIn = true;
+        ShiftSchedule shift = shiftScheduleRepository.findById(shiftId)
+                .orElseThrow(() -> new IllegalArgumentException("Shift schedule not found"));
+
+        LocalDateTime now = LocalDateTime.now();
+
+        LocalDateTime shiftStart = LocalDateTime.of(
+                shift.getShiftDate(),
+                shift.getShiftStart());
+
+        // Thời điểm bắt đầu được phép check in
+        LocalDateTime allowFrom = shiftStart.minusMinutes(15);
+
+        // Thời điểm kết thúc check in
+        LocalDateTime allowTo = shiftStart.plusMinutes(15);
+
+        // Chưa đến thời gian check in
+        if (now.isBefore(allowFrom)) {
+            throw new IllegalArgumentException("It's too early to check in.");
+        }
+
+        // Quá thời gian check in
+        if (now.isAfter(allowTo)) {
+            shift.setStatus("Absent");
+            shift.setLateMinutes(null);
+
+            return shiftScheduleRepository.save(shift);
+        }
+
+        // Đúng thời gian
+        if (now.isBefore(shiftStart)) {
+
+            shift.setStatus("Present");
+            shift.setLateMinutes(0);
+
+        } else {
 
             long minutesLate = ChronoUnit.MINUTES.between(shiftStart, now);
 
-            if(minutesLate <= 0) {
-                shift.setStatus("Present");
-                shift.setLateMinutes(null);
-            } else if(minutesLate <= 15) {
-                shift.setStatus("Late");
-                shift.setLateMinutes((int) minutesLate);
-            } else {
-                shift.setStatus("Absent");
-                shift.setLateMinutes(null);
-            }
-
-            // Lưu lại thay đổi
-            shiftScheduleRepository.save(shift);
+            shift.setStatus("Late");
+            shift.setLateMinutes((int) minutesLate);
         }
+
+        return shiftScheduleRepository.save(shift);
     }
 
     public List<ShiftSchedule> findByShiftDate(LocalDate date) {
         return shiftScheduleRepository.findByShiftDate(date);
     }
+
+    public Page<ShiftSchedule> findByShiftDate(LocalDate date, Pageable pageable) {
+        return shiftScheduleRepository.findByShiftDate(date, pageable);
+    }
+
 
     public Staff findByAccountUsername(String username) {
         return staffRepository.findByUsername(username).orElse(null);
@@ -168,9 +192,16 @@ public class ShiftScheduleService {
         return shiftScheduleRepository.findByStaff(staff);
     }
 
+
     public List<ShiftSchedule> findByStaffAndShiftDate(Staff staff, LocalDate date) {
         return shiftScheduleRepository.findByStaffAndShiftDate(staff, date);
     }
+
+    public Page<ShiftSchedule> findByStaffAndShiftDate(Staff staff, LocalDate date, Pageable pageable) {
+        return shiftScheduleRepository.findByStaffAndShiftDate(staff, date, pageable);
+    }
+
+
 
 
 
@@ -181,3 +212,4 @@ public class ShiftScheduleService {
 
 
 }
+

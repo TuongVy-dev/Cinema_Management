@@ -40,6 +40,21 @@ public interface ShowtimeRepository extends JpaRepository<Showtime, String> {
     Optional<Showtime> findDetailByShowtimeId(@Param("showtimeId") String showtimeId);
 
     List<Showtime> findByShowDate(LocalDate date);
+
+    @Query(
+            value = """
+                    SELECT s
+                    FROM Showtime s
+                    JOIN FETCH s.movie
+                    JOIN FETCH s.room r
+                    LEFT JOIN FETCH r.template
+                    WHERE s.showDate = :date
+                    ORDER BY s.showDate DESC, s.startTime DESC
+                    """,
+            countQuery = "SELECT COUNT(s) FROM Showtime s WHERE s.showDate = :date"
+    )
+    Page<Showtime> findByShowDateForCashier(@Param("date") LocalDate date, Pageable pageable);
+
     List<Showtime> findByRoom_IdAndShowDate(String roomId, LocalDate date);
     Optional<Showtime> findTopByOrderByShowtimeIdDesc();
     Showtime findByShowtimeId(String showtimeId);

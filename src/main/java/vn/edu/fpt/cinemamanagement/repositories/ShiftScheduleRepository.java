@@ -14,11 +14,16 @@ import java.util.List;
 public interface ShiftScheduleRepository extends JpaRepository<ShiftSchedule, String> {
     ShiftSchedule findTopByOrderByShiftScheduleIdDesc();
     List<ShiftSchedule> findByShiftDate(LocalDate date);
+    Page<ShiftSchedule> findByShiftDate(LocalDate date, Pageable pageable);
+
     List<ShiftSchedule> findByStaff(Staff staff);
     @Query("SELECT s FROM ShiftSchedule s WHERE s.staff.staffID = :staffID ORDER BY s.shiftDate ASC")
     List<ShiftSchedule> findByStaffID(@Param("staffID") String staffID);
 
+
     List<ShiftSchedule> findByStaffAndShiftDate(Staff staff, LocalDate shiftDate);
 
+    Page<ShiftSchedule> findByStaffAndShiftDate(Staff staff, LocalDate shiftDate, Pageable pageable);
 
 }
+
