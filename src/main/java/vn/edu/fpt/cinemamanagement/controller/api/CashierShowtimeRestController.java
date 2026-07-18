@@ -84,6 +84,7 @@ public class CashierShowtimeRestController {
 
             List<Map<String, Object>> slots = (List<Map<String, Object>>) roomGroup.get("slots");
             Map<String, Object> slot = new java.util.HashMap<>();
+            slot.put("showtimeId", st.getShowtimeId());
             slot.put("startTime", st.getStartTime());
             slot.put("endTime", st.getEndTime());
             slots.add(slot);
