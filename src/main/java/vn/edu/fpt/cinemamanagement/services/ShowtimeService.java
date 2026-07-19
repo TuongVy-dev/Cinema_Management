@@ -10,6 +10,7 @@ import vn.edu.fpt.cinemamanagement.entities.Movie;
 import vn.edu.fpt.cinemamanagement.entities.Room;
 import vn.edu.fpt.cinemamanagement.entities.Showtime;
 import vn.edu.fpt.cinemamanagement.entities.Template;
+import vn.edu.fpt.cinemamanagement.repositories.BookingDetailRepository;
 import vn.edu.fpt.cinemamanagement.repositories.ShowtimeRepository;
 
 import java.time.*;
@@ -24,16 +25,20 @@ public class ShowtimeService {
     private final MovieService movieService;
     private final RoomService roomService;
     private final TimeSlotService timeSlotService;
+    private final BookingDetailRepository bookingDetailRepository;
 
     public ShowtimeService(ShowtimeRepository repo,
                            MovieService movieService,
                            RoomService roomService,
-                           TimeSlotService timeSlotService) {
+                           TimeSlotService timeSlotService,
+                           BookingDetailRepository bookingDetailRepository) {
         this.repo = repo;
         this.movieService = movieService;
         this.roomService = roomService;
         this.timeSlotService = timeSlotService;
+        this.bookingDetailRepository = bookingDetailRepository;
     }
+
 
 
     @Transactional
@@ -301,6 +306,7 @@ public class ShowtimeService {
         // Hibernate sẽ tự xóa tất cả seat liên quan nhờ cascade
         repo.delete(showtime);
     }
+
 
     public List<Showtime> getShowtimesByDateRange(LocalDate start, LocalDate end) {
         return repo.findByShowDateBetween(start, end);
