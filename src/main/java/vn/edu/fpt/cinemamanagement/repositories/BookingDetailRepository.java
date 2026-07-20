@@ -16,4 +16,8 @@ public interface BookingDetailRepository extends JpaRepository<BookingDetail, St
     boolean existsByConcession_ConcessionId(String id);
     List<BookingDetail> findByBooking(Booking booking);
 
+    // Check whether a showtime is used in any booking detail.
+    // If ANY booking_detail references a ShowtimeSeat that belongs to this Showtime => do not delete the showtime.
+    boolean existsByShowtimeSeat_Showtime_ShowtimeId(String showtimeId);
 }
+
