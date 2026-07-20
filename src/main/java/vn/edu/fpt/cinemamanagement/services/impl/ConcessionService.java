@@ -8,6 +8,7 @@ import vn.edu.fpt.cinemamanagement.dto.response.ConcessionResponse;
 import vn.edu.fpt.cinemamanagement.dto.response.PageResponseDTO;
 import vn.edu.fpt.cinemamanagement.entities.Concession;
 import vn.edu.fpt.cinemamanagement.exception.ValidationException;
+import vn.edu.fpt.cinemamanagement.repositories.BookingDetailRepository;
 import vn.edu.fpt.cinemamanagement.repositories.ConcessionRepository;
 import vn.edu.fpt.cinemamanagement.services.IConcessionService;
 import vn.edu.fpt.cinemamanagement.dto.request.ConcessionRequestDTO;
@@ -22,9 +23,11 @@ import java.util.stream.Collectors;
 public class ConcessionService implements IConcessionService {
 
     private final ConcessionRepository repo;
+    private final BookingDetailRepository  bookingRepo;
 
-    public ConcessionService(ConcessionRepository repo) {
+    public ConcessionService(ConcessionRepository repo, BookingDetailRepository  bookingRepo) {
         this.repo = repo;
+        this.bookingRepo = bookingRepo;
     }
 
     /* ======================= PAGINATION ======================= */
@@ -106,7 +109,11 @@ public class ConcessionService implements IConcessionService {
         if (!repo.existsById(id)) {
             throw new NoSuchElementException("Concession not found: " + id);
         }
-
+        if (bookingRepo.existsByConcession_ConcessionId(id)) {
+            throw new IllegalStateException(
+                    "Cannot delete this concession because it has already been used in a booking."
+            );
+        }
         repo.deleteById(id);
     }
 

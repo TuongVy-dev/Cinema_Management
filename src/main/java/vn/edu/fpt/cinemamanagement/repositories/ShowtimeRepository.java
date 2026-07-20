@@ -86,6 +86,23 @@ public interface ShowtimeRepository extends JpaRepository<Showtime, String> {
             @Param("end") LocalTime end
     );
 
+    @Query(value = """
+        SELECT CASE WHEN COUNT(*) > 0 THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END
+        FROM showtime s
+        WHERE s.room_id = :roomId
+          AND s.show_date = :date
+          AND s.showtime_id <> :showtimeId
+          AND CAST(s.start_time AS time) < CAST(:end AS time)
+          AND CAST(:start AS time) < CAST(s.end_time AS time)
+    """, nativeQuery = true)
+    boolean hasOverlapInRoomExcludingShowtime(
+            @Param("roomId") String roomId,
+            @Param("date") LocalDate date,
+            @Param("start") LocalTime start,
+            @Param("end") LocalTime end,
+            @Param("showtimeId") String showtimeId
+    );
+
     /**
      * 🔹 Kiểm tra cùng phim chiếu ở phòng khác cùng khung giờ
      * (cấm 2 phòng chiếu cùng 1 phim cùng thời gian)
@@ -105,6 +122,25 @@ public interface ShowtimeRepository extends JpaRepository<Showtime, String> {
             @Param("date") LocalDate date,
             @Param("start") LocalTime start,
             @Param("end") LocalTime end
+    );
+
+    @Query(value = """
+        SELECT CASE WHEN COUNT(*) > 0 THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END
+        FROM showtime s
+        WHERE s.movie_id = :movieId
+          AND s.show_date = :date
+          AND s.room_id <> :roomId
+          AND s.showtime_id <> :showtimeId
+          AND CAST(s.start_time AS time) < CAST(:end AS time)
+          AND CAST(:start AS time) < CAST(s.end_time AS time)
+    """, nativeQuery = true)
+    boolean hasSameMovieInOtherRoomExcludingShowtime(
+            @Param("movieId") String movieId,
+            @Param("roomId") String roomId,
+            @Param("date") LocalDate date,
+            @Param("start") LocalTime start,
+            @Param("end") LocalTime end,
+            @Param("showtimeId") String showtimeId
     );
 
     @Query(value = """

@@ -1,5 +1,6 @@
 package vn.edu.fpt.cinemamanagement.exception;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -16,6 +17,15 @@ public class ApiExceptionHandler {
                 "code", "VALIDATION_ERROR",
                 "message", "Invalid concession data",
                 "fields", exception.getFieldErrors()
+        ));
+    }
+
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<Map<String, Object>> handleConflict(IllegalStateException exception) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of(
+                "code", "CONFLICT",
+                "message", exception.getMessage()
         ));
     }
 }

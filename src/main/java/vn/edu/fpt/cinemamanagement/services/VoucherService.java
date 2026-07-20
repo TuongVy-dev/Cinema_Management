@@ -199,6 +199,11 @@ public class VoucherService implements IVoucherService {
             errors.put("code", "Voucher code must be less than or equal to 10 characters");
         } else if (voucher.getCode().contains(" ")) {
             errors.put("code", "Voucher must be not have space");
+        } else {
+            Voucher existing = voucherRepo.findByVoucherCode(voucher.getCode().toUpperCase());
+            if (existing != null && (voucher.getVoucherId() == null || !existing.getVoucherId().equalsIgnoreCase(voucher.getVoucherId()))) {
+                errors.put("code", "Voucher code already exists");
+            }
         }
 
         if (voucher.getUsageLimit() == null) {

@@ -10,6 +10,11 @@ import vn.edu.fpt.cinemamanagement.services.ShowtimeSeatService;
 
 import java.util.Map;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import vn.edu.fpt.cinemamanagement.dto.ShowtimeResponseDTO;
+
 @RestController
 @RequestMapping("/api/admin/showtimes")
 public class ShowtimeRestController {
@@ -21,6 +26,42 @@ public class ShowtimeRestController {
                                   ShowtimeSeatService showtimeSeatService) {
         this.showtimeService = showtimeService;
         this.showtimeSeatService = showtimeSeatService;
+    }
+
+    // ========================== GET SHOWTIME LIST ==========================
+    @GetMapping
+    public ResponseEntity<Page<ShowtimeResponseDTO>> getShowtimes(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(showtimeService.getAdminShowtimes(pageable));
+    }
+
+    // ========================== VALIDATE SHOWTIME ==========================
+    @PostMapping("/validate")
+    public ResponseEntity<?> validateShowtime(@RequestBody Map<String, String> payload) {
+        String movieId = payload.get("movieId");
+        String roomId = payload.get("roomId");
+        String showDateStr = payload.get("showDate");
+        String startTimeStr = payload.get("startTime");
+        String showtimeId = payload.get("showtimeId");
+
+        if (movieId == null || roomId == null || showDateStr == null || startTimeStr == null ||
+            movieId.isEmpty() || roomId.isEmpty() || showDateStr.isEmpty() || startTimeStr.isEmpty()) {
+            return ResponseEntity.ok(Map.of("valid", true));
+        }
+
+        try {
+            java.time.LocalDate showDate = java.time.LocalDate.parse(showDateStr);
+            java.time.LocalTime startTime = java.time.LocalTime.parse(startTimeStr);
+            showtimeService.validateShowtime(showtimeId, movieId, roomId, showDate, startTime);
+            return ResponseEntity.ok(Map.of("valid", true));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.ok(Map.of("valid", false, "message", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.ok(Map.of("valid", false, "message", "Invalid format"));
+        }
     }
 
     // ========================== CREATE SHOWTIME ==========================
@@ -45,8 +86,7 @@ public class ShowtimeRestController {
                     "showtimeId", show.getShowtimeId()
             ));
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest()
-                    .body(Map.of("error", e.getMessage()));
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
         }
     }
 
@@ -67,7 +107,7 @@ public class ShowtimeRestController {
                     "showtimeId", updated.getShowtimeId()
             ));
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
         }
     }
 

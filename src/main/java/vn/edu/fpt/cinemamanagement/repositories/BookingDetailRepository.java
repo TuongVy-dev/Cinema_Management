@@ -13,7 +13,7 @@ import java.util.List;
 public interface BookingDetailRepository extends JpaRepository<BookingDetail, String> {
     BookingDetail findTopByOrderByBookingDetailIdDesc();
     List<BookingDetail> findByBookingId(String bookingId);
-
+    boolean existsByConcession_ConcessionId(String id);
     List<BookingDetail> findByBooking(Booking booking);
 
 }
