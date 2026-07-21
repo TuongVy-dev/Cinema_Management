@@ -104,42 +104,162 @@ public class MovieRestController {
         return ResponseEntity.status(HttpStatus.CREATED).body(MovieResponseDTO.fromEntity(movie));
     }
 
-    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//    public ResponseEntity<?> updateMovie(
+//            @PathVariable String id,
+//            @Valid @ModelAttribute MovieRequestDTO request,
+//            BindingResult bindingResult,
+//            @RequestParam(value = "image", required = false) MultipartFile image) {
+//
+//        Movie existing = movieService.findById(id);
+//        if (existing == null) {
+//            return ResponseEntity.notFound().build();
+//        }
+//
+//        // 1️⃣ FORMAT validate (Bean Validation)
+//        if (bindingResult.hasErrors()) {
+//            return ResponseEntity.badRequest().body(toErrorMap(bindingResult));
+//        }
+//
+//        // 2️⃣ Map DTO → entity (giữ ảnh cũ nếu không upload ảnh mới)
+//        existing.setTitle(request.title().trim());
+//        existing.setGenre(request.genre());
+//        existing.setSummary(request.summary() != null ? request.summary().trim() : "");
+//        existing.setDuration(request.duration());
+//        existing.setReleaseDate(request.releaseDate());
+//        existing.setAgeRating(request.ageRating());
+//        existing.setTrailer(request.trailer() != null ? request.trailer().trim() : "");
+//        if (image != null && !image.isEmpty()) {
+//            existing.setImg(saveImage(image));
+//        }
+//
+//        // 3️⃣ BUSINESS validate + save (trong service)
+//        Map<String, String> errors = movieService.updateMovieBusiness(existing);
+//        if (!errors.isEmpty()) {
+//            return ResponseEntity.badRequest().body(errors);
+//        }
+//
+//        return ResponseEntity.ok(MovieResponseDTO.fromEntity(existing));
+//    }
+
+    @PutMapping(
+            value = "/{id}",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
     public ResponseEntity<?> updateMovie(
             @PathVariable String id,
             @Valid @ModelAttribute MovieRequestDTO request,
             BindingResult bindingResult,
             @RequestParam(value = "image", required = false) MultipartFile image) {
 
+        // ==========================================
+        // 1. KIỂM TRA MOVIE CÓ TỒN TẠI KHÔNG
+        // ==========================================
+
         Movie existing = movieService.findById(id);
+
         if (existing == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity
+                    .notFound()
+                    .build();
         }
 
-        // 1️⃣ FORMAT validate (Bean Validation)
+        // ==========================================
+        // 2. FORMAT VALIDATION
+        // ==========================================
+
         if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().body(toErrorMap(bindingResult));
+            return ResponseEntity
+                    .badRequest()
+                    .body(toErrorMap(bindingResult));
         }
 
-        // 2️⃣ Map DTO → entity (giữ ảnh cũ nếu không upload ảnh mới)
-        existing.setTitle(request.title().trim());
-        existing.setGenre(request.genre());
-        existing.setSummary(request.summary() != null ? request.summary().trim() : "");
-        existing.setDuration(request.duration());
-        existing.setReleaseDate(request.releaseDate());
-        existing.setAgeRating(request.ageRating());
-        existing.setTrailer(request.trailer() != null ? request.trailer().trim() : "");
+        // ==========================================
+        // 3. TẠO OBJECT CHỨA DỮ LIỆU MỚI
+        // ==========================================
+
+        Movie movie = new Movie();
+
+        movie.setMovieID(id);
+
+        movie.setTitle(
+                request.title().trim()
+        );
+
+        movie.setGenre(
+                request.genre()
+        );
+
+        movie.setSummary(
+                request.summary() != null
+                        ? request.summary().trim()
+                        : ""
+        );
+
+        movie.setDuration(
+                request.duration()
+        );
+
+        movie.setReleaseDate(
+                request.releaseDate()
+        );
+
+        movie.setAgeRating(
+                request.ageRating()
+        );
+
+        movie.setTrailer(
+                request.trailer() != null
+                        ? request.trailer().trim()
+                        : ""
+        );
+
+        // ==========================================
+        // 4. XỬ LÝ ẢNH
+        // ==========================================
+
         if (image != null && !image.isEmpty()) {
-            existing.setImg(saveImage(image));
+
+            movie.setImg(
+                    saveImage(image)
+            );
+
+        } else {
+
+            // Không upload ảnh mới
+            // Giữ ảnh cũ
+            movie.setImg(
+                    existing.getImg()
+            );
         }
 
-        // 3️⃣ BUSINESS validate + save (trong service)
-        Map<String, String> errors = movieService.updateMovieBusiness(existing);
+        // ==========================================
+        // 5. BUSINESS VALIDATION + SAVE
+        // ==========================================
+
+        Map<String, String> errors =
+                movieService.updateMovieBusiness(movie);
+
         if (!errors.isEmpty()) {
-            return ResponseEntity.badRequest().body(errors);
+
+            return ResponseEntity
+                    .badRequest()
+                    .body(errors);
         }
 
-        return ResponseEntity.ok(MovieResponseDTO.fromEntity(existing));
+        // ==========================================
+        // 6. RESPONSE
+        // ==========================================
+
+        Movie updatedMovie =
+                movieService.findById(id);
+
+        return ResponseEntity
+                .ok(
+                        MovieResponseDTO.fromEntity(
+                                updatedMovie
+                        )
+                );
     }
 
     /**
